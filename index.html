@@ -1059,7 +1059,7 @@
                     <div class="model-icon" id="model-icon">🤖</div>
                     <div class="model-info">
                         <div class="model-label">Current Model</div>
-                        <div class="model-name" id="model-name">DeepSeek Chat</div>
+                        <div class="model-name" id="model-name">Gemini 3 Flash</div>
                         <div class="model-meta" id="model-meta">Thinking: None</div>
                     </div>
                     <div class="model-arrow">
@@ -1240,8 +1240,10 @@
         tg?.ready();
 
         const MODELS = [
+            { id: 'gemini-flash', name: 'Gemini 3 Flash', badge: 'Fast', icon: '⚡' },
+            { id: 'gemini-pro', name: 'Gemini 3 Pro', badge: 'Advanced', icon: '💎' },
             { id: 'deepseek', name: 'DeepSeek Chat', badge: 'Default', icon: '🤖' },
-            { id: 'claude', name: 'Claude 3.5 Sonnet', badge: 'Advanced', icon: '🧠' },
+            { id: 'claude', name: 'Claude 3.5 Sonnet', badge: 'Premium', icon: '🧠' },
             { id: 'gpt4o', name: 'GPT-4o', badge: 'Versatile', icon: '✨' },
             { id: 'llama', name: 'Llama 3.1 70B', badge: 'Open', icon: '🦙' }
         ];
@@ -1264,7 +1266,7 @@
         ];
 
         const State = {
-            data: { model: 'deepseek', thinking: 'none', prompt: '', push: true, summary: false },
+            data: { model: 'gemini-flash', thinking: 'none', prompt: '', push: true, summary: false },
             load() {
                 try {
                     const s = localStorage.getItem('openclaw_v3');
