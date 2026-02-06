@@ -1236,6 +1236,9 @@
 
     <script>
         const tg = window.Telegram?.WebApp;
+        const API_URL = 'https://openclaw-production-ef1e.up.railway.app/chat';
+        const SESSION_KEY = 'agent:main:main';
+
         tg?.expand();
         tg?.ready();
 
@@ -1333,7 +1336,36 @@
         const Haptic = {
             light: () => tg?.HapticFeedback?.impactOccurred('light'),
             medium: () => tg?.HapticFeedback?.impactOccurred('medium'),
-            success: () => tg?.HapticFeedback?.notificationOccurred('success')
+            success: () => tg?.HapticFeedback?.notificationOccurred('success'),
+            error: () => tg?.HapticFeedback?.notificationOccurred('error')
+        };
+
+        const API = {
+            async sendCommand(command) {
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            message: command,
+                            sessionKey: SESSION_KEY
+                        })
+                    });
+                    const data = await response.json();
+                    return { success: true, data };
+                } catch (error) {
+                    console.error('API Error:', error);
+                    return { success: false, error };
+                }
+            },
+
+            async setModel(modelId) {
+                return this.sendCommand('/model ' + modelId);
+            },
+
+            async setThinking(mode) {
+                return this.sendCommand('/thinking ' + mode);
+            }
         };
 
         const Nav = {
@@ -1508,13 +1540,25 @@
                 document.getElementById('char-count').textContent = el.value.length + ' / 4000';
             },
 
-            selectModel(id) {
+            async selectModel(id) {
                 const m = MODELS.find(x => x.id === id);
-                Haptic.success();
+                Haptic.light();
+
+                // Update UI immediately
                 State.set('model', id);
                 this.renderModels();
                 Dashboard.updateModel();
-                Toast.show(m ? m.icon + ' ' + m.name + ' synced' : 'Model synced', 'success');
+                Toast.show('Applying ' + (m ? m.icon + ' ' + m.name : 'model') + '...');
+
+                // Send to API
+                const result = await API.setModel(id);
+                if (result.success) {
+                    Haptic.success();
+                    Toast.show(m ? m.icon + ' ' + m.name + ' applied!' : 'Model applied!', 'success');
+                } else {
+                    Haptic.error();
+                    Toast.show('Failed to apply model', 'error');
+                }
             },
 
             selectThinking(id) {
@@ -1584,13 +1628,25 @@
                 tg?.BackButton?.hide();
             },
 
-            select(id) {
+            async select(id) {
                 const m = MODELS.find(x => x.id === id);
-                Haptic.success();
+                Haptic.light();
+
+                // Update UI immediately
                 State.set('model', id);
                 Dashboard.updateModel();
                 this.close();
-                Toast.show(m ? m.icon + ' ' + m.name + ' synced' : 'Model synced', 'success');
+                Toast.show('Applying ' + (m ? m.icon + ' ' + m.name : 'model') + '...');
+
+                // Send to API
+                const result = await API.setModel(id);
+                if (result.success) {
+                    Haptic.success();
+                    Toast.show(m ? m.icon + ' ' + m.name + ' applied!' : 'Model applied!', 'success');
+                } else {
+                    Haptic.error();
+                    Toast.show('Failed to apply model', 'error');
+                }
             }
         };
 
