@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>OpenClaw</title>
+    <title>OpenClaw Dashboard</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
@@ -15,13 +15,20 @@
         :root {
             --bg-primary: #1a1a1a;
             --bg-secondary: #2a2a2a;
-            --bg-input: #2f2f2f;
+            --bg-card: #2a2a2a;
             --text-primary: #ffffff;
             --text-secondary: #a0a0a0;
             --accent: #20b2aa;
             --accent-hover: #3ccec6;
-            --user-bubble: #3a3a3a;
-            --bot-bubble: transparent;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+            --gradient-teal: linear-gradient(135deg, #20b2aa, #1a8a84);
+            --gradient-gold: linear-gradient(135deg, #ffd700, #ffb347);
+            --gradient-purple: linear-gradient(135deg, #667eea, #764ba2);
+            --gradient-green: linear-gradient(135deg, #4caf50, #2e7d32);
+            --gradient-orange: linear-gradient(135deg, #ff9800, #f57c00);
+            --gradient-red: linear-gradient(135deg, #f44336, #c62828);
         }
 
         body {
@@ -34,13 +41,74 @@
             overflow: hidden;
         }
 
-        /* Header */
+        /* ========== Animations ========== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(32, 178, 170, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(32, 178, 170, 0.8); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes progressBar {
+            from { width: 0%; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: ripple-effect 0.6s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-effect {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* ========== Header ========== */
         .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 12px 16px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: var(--bg-primary);
+            flex-shrink: 0;
         }
 
         .header-left {
@@ -49,16 +117,40 @@
             gap: 12px;
         }
 
-        .avatar {
-            width: 36px;
-            height: 36px;
+        .status-dot {
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #1a8a84);
+            background: var(--success);
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.offline {
+            background: var(--error);
+            box-shadow: 0 0 8px rgba(244, 67, 54, 0.5);
+        }
+
+        .header-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-title-main {
+            font-size: 16px;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 14px;
+            gap: 8px;
+        }
+
+        .header-title-main span {
+            color: var(--accent);
+        }
+
+        .header-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
         }
 
         .header-right {
@@ -74,271 +166,856 @@
             color: var(--text-primary);
             cursor: pointer;
             font-size: 14px;
-        }
-
-        /* Chat area */
-        .chat-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Welcome screen */
-        .welcome {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .welcome.hidden {
-            display: none;
-        }
-
-        .logo {
-            font-size: 32px;
-            font-weight: 300;
-            margin-bottom: 8px;
-            letter-spacing: -1px;
-        }
-
-        .logo span {
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        .welcome-subtitle {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        /* Messages */
-        .messages {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .messages.hidden {
-            display: none;
-        }
-
-        .message {
-            max-width: 85%;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .message.user {
-            align-self: flex-end;
-        }
-
-        .message.bot {
-            align-self: flex-start;
-        }
-
-        .message-content {
-            padding: 12px 16px;
-            border-radius: 18px;
-            line-height: 1.5;
-            font-size: 15px;
-        }
-
-        .message.user .message-content {
-            background: var(--user-bubble);
-            border-bottom-right-radius: 4px;
-        }
-
-        .message.bot .message-content {
-            background: var(--bot-bubble);
-            border-bottom-left-radius: 4px;
-        }
-
-        /* Typing indicator */
-        .typing {
-            display: flex;
-            gap: 4px;
-            padding: 12px 16px;
-        }
-
-        .typing.hidden {
-            display: none;
-        }
-
-        .typing span {
-            width: 8px;
-            height: 8px;
-            background: var(--accent);
-            border-radius: 50%;
-            animation: bounce 1.4s infinite ease-in-out;
-        }
-
-        .typing span:nth-child(1) { animation-delay: -0.32s; }
-        .typing span:nth-child(2) { animation-delay: -0.16s; }
-
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
-        }
-
-        /* Input area */
-        .input-area {
-            padding: 12px 16px 24px;
-            background: var(--bg-primary);
-        }
-
-        .input-container {
-            background: var(--bg-input);
-            border-radius: 24px;
-            padding: 8px 12px;
-            display: flex;
-            align-items: flex-end;
-            gap: 8px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .input-container:focus-within {
-            border-color: var(--accent);
-        }
-
-        .input-actions-left {
-            display: flex;
-            gap: 4px;
-        }
-
-        .input-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
         }
 
-        .input-btn:hover {
-            background: rgba(255,255,255,0.1);
-            color: var(--text-primary);
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
         }
 
-        .input-btn svg {
-            width: 20px;
-            height: 20px;
+        .header-btn:active {
+            transform: scale(0.95);
         }
 
-        #message-input {
+        .header-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .header-btn.refreshing svg {
+            animation: spin 1s linear infinite;
+        }
+
+        /* ========== Main Content ========== */
+        .main-content {
             flex: 1;
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 16px;
-            resize: none;
-            max-height: 120px;
-            min-height: 24px;
-            line-height: 24px;
-            outline: none;
-            font-family: inherit;
+            overflow-y: auto;
+            overflow-x: hidden;
+            overscroll-behavior: contain;
         }
 
-        #message-input::placeholder {
-            color: var(--text-secondary);
+        .page {
+            display: none;
+            padding: 16px;
+            animation: fadeIn 0.3s ease;
         }
 
-        .input-actions-right {
-            display: flex;
-            gap: 4px;
+        .page.active {
+            display: block;
         }
 
-        .voice-btn {
-            background: var(--accent);
-            color: white;
-        }
-
-        .voice-btn:hover {
-            background: var(--accent-hover);
-        }
-
-        .voice-btn.recording {
-            background: #ff4444;
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .send-btn {
-            background: var(--accent);
-            color: white;
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .send-btn.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .send-btn.active:hover {
-            background: var(--accent-hover);
-        }
-
-        /* Audio message */
-        .audio-player {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 0;
-        }
-
-        .audio-player button {
-            background: var(--accent);
-            border: none;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            color: white;
-            cursor: pointer;
+        /* ========== Pull to Refresh ========== */
+        .ptr-indicator {
             display: flex;
             align-items: center;
             justify-content: center;
+            height: 0;
+            overflow: hidden;
+            transition: height 0.2s;
         }
 
-        .audio-player button svg {
-            width: 16px;
-            height: 16px;
+        .ptr-indicator.pulling {
+            height: 50px;
         }
 
-        /* Scrollbar */
-        .chat-container::-webkit-scrollbar {
-            width: 6px;
+        .ptr-spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--accent);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        .chat-container::-webkit-scrollbar-track {
+        /* ========== Statistics Cards ========== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 16px 12px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.3s ease;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-teal);
+        }
+
+        .stat-card:nth-child(2)::before {
+            background: var(--gradient-purple);
+        }
+
+        .stat-card:nth-child(3)::before {
+            background: var(--gradient-gold);
+        }
+
+        .stat-card:active {
+            transform: scale(0.98);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-trend {
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .stat-trend.up {
+            color: var(--success);
+        }
+
+        .stat-trend.down {
+            color: var(--error);
+        }
+
+        .stat-trend svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* Skeleton Loading */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-card) 25%, rgba(255,255,255,0.1) 50%, var(--bg-card) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        .stat-value.skeleton {
+            width: 60px;
+            height: 28px;
+            margin: 0 auto 4px;
+        }
+
+        /* ========== Balance Card ========== */
+        .balance-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            animation: fadeIn 0.3s ease 0.1s both;
+        }
+
+        .balance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .balance-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .balance-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .balance-progress {
+            position: relative;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .balance-progress-bar {
+            height: 100%;
+            border-radius: 4px;
+            background: var(--gradient-teal);
+            transition: width 1s ease-out;
+            animation: progressBar 1s ease-out;
+        }
+
+        .balance-progress-bar.warning {
+            background: var(--gradient-orange);
+            animation: glow 2s infinite;
+        }
+
+        .balance-progress-bar.danger {
+            background: var(--gradient-red);
+            animation: glow 1s infinite;
+        }
+
+        .balance-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== Model Card ========== */
+        .model-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            animation: fadeIn 0.3s ease 0.2s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .model-card:active {
+            transform: scale(0.98);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .model-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--gradient-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .model-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .model-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .model-name {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .model-mode {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .model-arrow {
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+
+        /* ========== Active Tasks ========== */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-link {
+            font-size: 13px;
+            color: var(--accent);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .tasks-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            animation: fadeIn 0.3s ease 0.3s both;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.2s;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-item:active {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .task-status {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 12px;
+        }
+
+        .task-status.in-progress {
+            background: rgba(32, 178, 170, 0.2);
+            color: var(--accent);
+            animation: pulse 1.5s infinite;
+        }
+
+        .task-status.completed {
+            background: rgba(76, 175, 80, 0.2);
+            color: var(--success);
+        }
+
+        .task-status.pending {
+            background: rgba(255, 152, 0, 0.2);
+            color: var(--warning);
+        }
+
+        .task-status.error {
+            background: rgba(244, 67, 54, 0.2);
+            color: var(--error);
+        }
+
+        .task-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .task-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .task-progress-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .task-progress {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .task-progress-bar {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .task-progress-text {
+            font-size: 11px;
+            color: var(--text-secondary);
+            min-width: 32px;
+            text-align: right;
+        }
+
+        .task-meta {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .tasks-empty {
+            padding: 32px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* ========== Quick Actions ========== */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+            animation: fadeIn 0.3s ease 0.4s both;
+        }
+
+        .quick-action {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 16px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-action:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .quick-action-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .quick-action-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== Bottom Navigation ========== */
+        .bottom-nav {
+            display: flex;
+            background: var(--bg-secondary);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px 24px;
+            flex-shrink: 0;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 32px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 0 0 3px 3px;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* ========== Tasks Page ========== */
+        .tasks-filter {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .filter-chip {
+            background: var(--bg-card);
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .filter-chip.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .filter-chip:active {
+            transform: scale(0.95);
+        }
+
+        .tasks-group {
+            margin-bottom: 24px;
+        }
+
+        .tasks-group-title {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            padding-left: 4px;
+        }
+
+        .task-action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            color: var(--text-primary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .task-action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .task-action-btn.cancel {
+            color: var(--error);
+        }
+
+        .task-action-btn.retry {
+            color: var(--accent);
+        }
+
+        /* ========== Settings Page ========== */
+        .settings-section {
+            margin-bottom: 24px;
+        }
+
+        .settings-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .settings-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+
+        .settings-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-item:active {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .settings-item.selected {
+            background: rgba(32, 178, 170, 0.1);
+        }
+
+        .settings-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .settings-item.selected .settings-radio {
+            border-color: var(--accent);
+        }
+
+        .settings-radio::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            transform: scale(0);
+            transition: transform 0.2s;
+        }
+
+        .settings-item.selected .settings-radio::after {
+            transform: scale(1);
+        }
+
+        .settings-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .settings-item-title {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .settings-item-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .settings-badge {
+            font-size: 10px;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        /* Segmented Control */
+        .segmented-control {
+            display: flex;
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .segment {
+            flex: 1;
+            padding: 10px 8px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
             background: transparent;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .chat-container::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.2);
-            border-radius: 3px;
+        .segment:hover {
+            color: var(--text-primary);
         }
 
-        /* ========== Settings Panel Styles ========== */
+        .segment.active {
+            background: var(--accent);
+            color: white;
+        }
 
-        /* Bottom Sheet */
+        /* Text Area Settings */
+        .settings-textarea-container {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .settings-textarea {
+            width: 100%;
+            min-height: 120px;
+            background: var(--bg-primary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .settings-textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .settings-textarea-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
+
+        .char-count {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .settings-btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .settings-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: var(--text-primary);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .settings-btn:active {
+            transform: scale(0.95);
+        }
+
+        .settings-btn.primary {
+            background: var(--accent);
+        }
+
+        /* Toggle Switch */
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .toggle-item:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-switch {
+            width: 50px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch.active {
+            background: var(--accent);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(20px);
+        }
+
+        /* Session Card */
+        .session-info {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .session-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+        }
+
+        .session-action {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .session-action:last-child {
+            border-bottom: none;
+        }
+
+        .session-action:active {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .session-action.danger {
+            color: var(--error);
+        }
+
+        .session-action-icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* ========== Bottom Sheet ========== */
         .bottom-sheet {
             position: fixed;
             inset: 0;
@@ -372,7 +1049,7 @@
             right: 0;
             background: var(--tg-theme-secondary-bg-color, var(--bg-secondary));
             border-radius: 20px 20px 0 0;
-            max-height: 85vh;
+            max-height: 70vh;
             transform: translateY(100%);
             transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
             display: flex;
@@ -432,242 +1109,13 @@
             overscroll-behavior: contain;
         }
 
-        /* Settings Sections */
-        .settings-section {
-            margin-bottom: 24px;
-        }
-
-        .settings-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .section-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            padding-left: 4px;
-        }
-
-        .section-card {
-            background: var(--tg-theme-bg-color, var(--bg-primary));
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        /* Model Selector */
-        .model-option {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            cursor: pointer;
-            transition: background 0.2s;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .model-option:last-child {
-            border-bottom: none;
-        }
-
-        .model-option:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .model-option.selected {
-            background: rgba(32, 178, 170, 0.1);
-        }
-
-        .model-radio {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--text-secondary);
-            border-radius: 50%;
-            margin-right: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: all 0.2s;
-        }
-
-        .model-option.selected .model-radio {
-            border-color: var(--accent);
-        }
-
-        .model-radio::after {
-            content: '';
-            width: 10px;
-            height: 10px;
-            background: var(--accent);
-            border-radius: 50%;
-            transform: scale(0);
-            transition: transform 0.2s;
-        }
-
-        .model-option.selected .model-radio::after {
-            transform: scale(1);
-        }
-
-        .model-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .model-name {
-            font-size: 15px;
-            font-weight: 500;
-            margin-bottom: 2px;
-        }
-
-        .model-badge {
-            font-size: 11px;
-            color: var(--text-secondary);
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2px 8px;
-            border-radius: 10px;
-            margin-left: 8px;
-        }
-
-        /* Segmented Control */
-        .segmented-control {
-            display: flex;
-            background: var(--tg-theme-bg-color, var(--bg-primary));
-            border-radius: 12px;
-            padding: 4px;
-        }
-
-        .segment {
-            flex: 1;
-            padding: 10px 8px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            background: transparent;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .segment:hover {
-            color: var(--text-primary);
-        }
-
-        .segment.active {
-            background: var(--accent);
-            color: white;
-        }
-
-        /* Command Cards */
-        .command-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            cursor: pointer;
-            transition: background 0.2s;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .command-item:last-child {
-            border-bottom: none;
-        }
-
-        .command-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .command-item:active {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .command-emoji {
-            font-size: 20px;
-            margin-right: 12px;
-            width: 28px;
-            text-align: center;
-        }
-
-        .command-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .command-name {
-            font-size: 15px;
-            font-weight: 500;
-            margin-bottom: 2px;
-        }
-
-        .command-desc {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .command-arrow {
-            color: var(--text-secondary);
-            margin-left: 8px;
-        }
-
-        /* Session Info */
-        .session-status {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .status-indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #4caf50;
-            margin-right: 12px;
-            box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
-        }
-
-        .status-indicator.disconnected {
-            background: #f44336;
-            box-shadow: 0 0 8px rgba(244, 67, 54, 0.5);
-        }
-
-        .session-action {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            cursor: pointer;
-            transition: background 0.2s;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .session-action:last-child {
-            border-bottom: none;
-        }
-
-        .session-action:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .session-action.danger {
-            color: #ff6b6b;
-        }
-
-        .session-action-icon {
-            font-size: 18px;
-            margin-right: 12px;
-            width: 24px;
-            text-align: center;
-        }
-
-        /* Toast Notification */
+        /* ========== Toast ========== */
         .toast {
             position: fixed;
             bottom: 100px;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
-            background: var(--tg-theme-bg-color, var(--bg-primary));
+            background: var(--bg-card);
             color: var(--text-primary);
             padding: 12px 24px;
             border-radius: 24px;
@@ -686,36 +1134,32 @@
         }
 
         .toast.success {
-            background: #4caf50;
-            color: white;
+            background: var(--success);
         }
 
         .toast.error {
-            background: #f44336;
-            color: white;
+            background: var(--error);
         }
 
-        /* Settings Button in Header */
-        .settings-btn {
-            background: var(--bg-secondary);
-            border: none;
-            border-radius: 8px;
-            padding: 8px 12px;
-            color: var(--text-primary);
-            cursor: pointer;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* ========== Scrollbar ========== */
+        .main-content::-webkit-scrollbar {
+            width: 4px;
         }
 
-        .settings-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
+        .main-content::-webkit-scrollbar-track {
+            background: transparent;
         }
 
-        .settings-btn svg {
-            width: 18px;
-            height: 18px;
+        .main-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+
+        /* ========== Safe Area ========== */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .bottom-nav {
+                padding-bottom: calc(8px + env(safe-area-inset-bottom));
+            }
         }
     </style>
 </head>
@@ -723,15 +1167,20 @@
     <!-- Header -->
     <div class="header">
         <div class="header-left">
-            <div class="avatar" id="user-avatar">U</div>
+            <div class="status-dot" id="status-dot"></div>
+            <div class="header-title">
+                <div class="header-title-main">Open<span>Claw</span> Bot</div>
+                <div class="header-subtitle" id="uptime">Online 0d 0h 0m</div>
+            </div>
         </div>
         <div class="header-right">
-            <button class="header-btn" onclick="clearChat()" title="Новый чат">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 5v14M5 12h14"/>
+            <button class="header-btn" id="refresh-btn" onclick="Dashboard.refresh()" title="Refresh">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 4v6h-6M1 20v-6h6"/>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
                 </svg>
             </button>
-            <button class="settings-btn" onclick="BottomSheet.open()" title="Настройки">
+            <button class="header-btn" onclick="Navigation.goTo('settings')" title="Settings">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="3"/>
                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -740,368 +1189,359 @@
         </div>
     </div>
 
-    <!-- Chat -->
-    <div class="chat-container" id="chat-container">
-        <div class="welcome" id="welcome">
-            <div class="logo">Open<span>Claw</span></div>
-            <p class="welcome-subtitle">Спросите что угодно...</p>
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Dashboard Page -->
+        <div class="page active" id="page-dashboard">
+            <!-- Pull to Refresh Indicator -->
+            <div class="ptr-indicator" id="ptr-indicator">
+                <div class="ptr-spinner"></div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Messages</div>
+                    <div class="stat-value" id="stat-messages">0</div>
+                    <div class="stat-trend up" id="trend-messages">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                            <polyline points="17 6 23 6 23 12"/>
+                        </svg>
+                        <span>+0%</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Users</div>
+                    <div class="stat-value" id="stat-users">0</div>
+                    <div class="stat-trend up" id="trend-users">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                            <polyline points="17 6 23 6 23 12"/>
+                        </svg>
+                        <span>+0%</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Tokens</div>
+                    <div class="stat-value" id="stat-tokens">0</div>
+                    <div class="stat-trend down" id="trend-tokens">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
+                            <polyline points="17 18 23 18 23 12"/>
+                        </svg>
+                        <span>-0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Balance Card -->
+            <div class="balance-card">
+                <div class="balance-header">
+                    <span class="balance-title">Balance & Limits</span>
+                    <span class="balance-amount" id="balance-amount">$0.00</span>
+                </div>
+                <div class="balance-progress">
+                    <div class="balance-progress-bar" id="balance-progress" style="width: 0%"></div>
+                </div>
+                <div class="balance-info">
+                    <span id="balance-used">0 / 0 tokens</span>
+                    <span id="balance-reset">Resets in 0d</span>
+                </div>
+            </div>
+
+            <!-- Model Card -->
+            <div class="model-card" onclick="ModelSheet.open()">
+                <div class="model-icon" id="model-icon">🤖</div>
+                <div class="model-info">
+                    <div class="model-label">Current Model</div>
+                    <div class="model-name" id="current-model-name">Loading...</div>
+                    <div class="model-mode" id="current-model-mode">Thinking: None</div>
+                </div>
+                <div class="model-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Active Tasks -->
+            <div class="section-header">
+                <span class="section-title">Active Tasks</span>
+                <span class="section-link" onclick="Navigation.goTo('tasks')">
+                    View All
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </span>
+            </div>
+            <div class="tasks-card" id="active-tasks">
+                <div class="tasks-empty">No active tasks</div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="section-header">
+                <span class="section-title">Quick Actions</span>
+            </div>
+            <div class="quick-actions">
+                <div class="quick-action" onclick="QuickActions.clearContext()">
+                    <div class="quick-action-icon">🔄</div>
+                    <div class="quick-action-label">Clear</div>
+                </div>
+                <div class="quick-action" onclick="QuickActions.exportData()">
+                    <div class="quick-action-icon">📤</div>
+                    <div class="quick-action-label">Export</div>
+                </div>
+                <div class="quick-action" onclick="QuickActions.runDiagnostics()">
+                    <div class="quick-action-icon">🔍</div>
+                    <div class="quick-action-label">Diagnose</div>
+                </div>
+                <div class="quick-action" onclick="QuickActions.viewLogs()">
+                    <div class="quick-action-icon">📋</div>
+                    <div class="quick-action-label">Logs</div>
+                </div>
+            </div>
         </div>
-        <div class="messages hidden" id="messages"></div>
+
+        <!-- Tasks Page -->
+        <div class="page" id="page-tasks">
+            <!-- Filter Chips -->
+            <div class="tasks-filter">
+                <button class="filter-chip active" data-filter="all" onclick="TasksPage.filter('all')">All</button>
+                <button class="filter-chip" data-filter="in_progress" onclick="TasksPage.filter('in_progress')">In Progress</button>
+                <button class="filter-chip" data-filter="pending" onclick="TasksPage.filter('pending')">Pending</button>
+                <button class="filter-chip" data-filter="completed" onclick="TasksPage.filter('completed')">Completed</button>
+                <button class="filter-chip" data-filter="error" onclick="TasksPage.filter('error')">Failed</button>
+            </div>
+
+            <!-- Tasks List -->
+            <div id="tasks-list"></div>
+        </div>
+
+        <!-- Settings Page -->
+        <div class="page" id="page-settings">
+            <!-- AI Model Section -->
+            <div class="settings-section">
+                <div class="settings-section-title">AI Model</div>
+                <div class="settings-card" id="settings-models"></div>
+            </div>
+
+            <!-- Thinking Mode Section -->
+            <div class="settings-section">
+                <div class="settings-section-title">Thinking Mode</div>
+                <div class="segmented-control" id="thinking-control"></div>
+            </div>
+
+            <!-- System Prompt Section -->
+            <div class="settings-section">
+                <div class="settings-section-title">System Prompt</div>
+                <div class="settings-textarea-container">
+                    <textarea class="settings-textarea" id="system-prompt" placeholder="Enter system prompt..."></textarea>
+                    <div class="settings-textarea-footer">
+                        <span class="char-count" id="prompt-char-count">0 / 4000</span>
+                        <div class="settings-btn-group">
+                            <button class="settings-btn" onclick="SettingsPage.resetPrompt()">Reset</button>
+                            <button class="settings-btn primary" onclick="SettingsPage.savePrompt()">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Section -->
+            <div class="settings-section">
+                <div class="settings-section-title">Notifications</div>
+                <div class="settings-card">
+                    <div class="toggle-item">
+                        <div class="settings-item-info">
+                            <div class="settings-item-title">Push Notifications</div>
+                            <div class="settings-item-desc">Get notified about task completions</div>
+                        </div>
+                        <div class="toggle-switch" id="toggle-push" onclick="SettingsPage.togglePush()"></div>
+                    </div>
+                    <div class="toggle-item">
+                        <div class="settings-item-info">
+                            <div class="settings-item-title">Daily Summary</div>
+                            <div class="settings-item-desc">Receive daily usage report</div>
+                        </div>
+                        <div class="toggle-switch" id="toggle-summary" onclick="SettingsPage.toggleSummary()"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Session Section -->
+            <div class="settings-section">
+                <div class="settings-section-title">Session</div>
+                <div class="settings-card">
+                    <div class="session-info">
+                        <span class="session-dot"></span>
+                        <span>Connection: Active</span>
+                    </div>
+                    <div class="session-action" onclick="SettingsPage.resetSession()">
+                        <span class="session-action-icon">🔄</span>
+                        <span>Reset Session</span>
+                    </div>
+                    <div class="session-action" onclick="SettingsPage.clearHistory()">
+                        <span class="session-action-icon">🗑️</span>
+                        <span>Clear History</span>
+                    </div>
+                    <div class="session-action danger" onclick="SettingsPage.exportAllData()">
+                        <span class="session-action-icon">📦</span>
+                        <span>Export All Data</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Input -->
-    <div class="input-area">
-        <div class="input-container">
-            <div class="input-actions-left">
-                <button class="input-btn" onclick="handleAttachment()" title="Прикрепить">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 5v14M5 12h14"/>
-                    </svg>
-                </button>
-            </div>
-            <textarea
-                id="message-input"
-                placeholder="Спросите что угодно..."
-                rows="1"
-                onkeydown="handleKeydown(event)"
-                oninput="autoResize(this); toggleSendButton()"
-            ></textarea>
-            <div class="input-actions-right">
-                <button class="input-btn voice-btn" id="voice-btn" onclick="toggleVoiceRecording()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                        <line x1="12" y1="19" x2="12" y2="23"/>
-                        <line x1="8" y1="23" x2="16" y2="23"/>
-                    </svg>
-                </button>
-                <button class="input-btn send-btn" id="send-btn" onclick="sendMessage()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="22" y1="2" x2="11" y2="13"/>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                    </svg>
-                </button>
-            </div>
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" data-page="dashboard" onclick="Navigation.goTo('dashboard')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="9"/>
+                <rect x="14" y="3" width="7" height="5"/>
+                <rect x="14" y="12" width="7" height="9"/>
+                <rect x="3" y="16" width="7" height="5"/>
+            </svg>
+            <span class="nav-label">Dashboard</span>
+        </div>
+        <div class="nav-item" data-page="tasks" onclick="Navigation.goTo('tasks')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 11l3 3L22 4"/>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+            <span class="nav-label">Tasks</span>
+        </div>
+        <div class="nav-item" data-page="settings" onclick="Navigation.goTo('settings')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <span class="nav-label">Settings</span>
         </div>
     </div>
+
+    <!-- Model Selection Bottom Sheet -->
+    <div class="bottom-sheet" id="model-sheet">
+        <div class="sheet-backdrop"></div>
+        <div class="sheet-container">
+            <div class="sheet-handle"></div>
+            <div class="sheet-header">
+                <span class="sheet-title">Select Model</span>
+                <button class="sheet-close" onclick="ModelSheet.close()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="sheet-content" id="model-sheet-content"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
 
     <script>
-        // Telegram WebApp
+        // ========== Telegram WebApp ==========
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.ready();
 
-        // Config
-        const API_URL = 'https://openclaw-production-ef1e.up.railway.app/chat';
-        const SESSION_KEY = 'agent:main:main';
-
-        // State
-        let isRecording = false;
-        let mediaRecorder = null;
-        let audioChunks = [];
-        let chatHistory = JSON.parse(localStorage.getItem('openclaw_history') || '[]');
-
-        // Init
-        document.addEventListener('DOMContentLoaded', () => {
-            initUser();
-            loadHistory();
-        });
-
-        function initUser() {
-            const user = tg.initDataUnsafe?.user;
-            const avatar = document.getElementById('user-avatar');
-            if (user) {
-                avatar.textContent = user.first_name?.charAt(0) || 'U';
-            }
-        }
-
-        function loadHistory() {
-            if (chatHistory.length > 0) {
-                document.getElementById('welcome').classList.add('hidden');
-                document.getElementById('messages').classList.remove('hidden');
-                chatHistory.forEach(msg => addMessageToUI(msg.role, msg.content, false));
-                scrollToBottom();
-            }
-        }
-
-        function saveHistory() {
-            localStorage.setItem('openclaw_history', JSON.stringify(chatHistory));
-        }
-
-        function clearChat() {
-            chatHistory = [];
-            saveHistory();
-            document.getElementById('messages').innerHTML = '';
-            document.getElementById('messages').classList.add('hidden');
-            document.getElementById('welcome').classList.remove('hidden');
-        }
-
-        // Input handling
-        function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
-        }
-
-        function toggleSendButton() {
-            const input = document.getElementById('message-input');
-            const sendBtn = document.getElementById('send-btn');
-            if (input.value.trim()) {
-                sendBtn.classList.add('active');
-            } else {
-                sendBtn.classList.remove('active');
-            }
-        }
-
-        function handleKeydown(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        }
-
-        // Send message
-        async function sendMessage() {
-            const input = document.getElementById('message-input');
-            const text = input.value.trim();
-            if (!text) return;
-
-            input.value = '';
-            autoResize(input);
-            toggleSendButton();
-
-            // Show welcome -> chat
-            document.getElementById('welcome').classList.add('hidden');
-            document.getElementById('messages').classList.remove('hidden');
-
-            // Add user message
-            addMessageToUI('user', text);
-            chatHistory.push({ role: 'user', content: text });
-            saveHistory();
-
-            // Show typing
-            showTyping(true);
-
-            try {
-                const settings = SettingsManager.get();
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Gateway-Token': 'Aarrcc11Aarrcc11'
-                    },
-                    body: JSON.stringify({
-                        message: text,
-                        sessionKey: SESSION_KEY,
-                        model: settings.model,
-                        thinkingMode: settings.thinkingMode
-                    })
-                });
-
-                const data = await response.json();
-                showTyping(false);
-
-                const botMessage = data.response || data.message || data.text || 'Ошибка получения ответа';
-                addMessageToUI('bot', botMessage);
-                chatHistory.push({ role: 'bot', content: botMessage });
-                saveHistory();
-
-            } catch (error) {
-                showTyping(false);
-                console.error('API Error:', error);
-                console.error('Error name:', error.name);
-                console.error('Error message:', error.message);
-
-                let errorMsg = 'Ошибка соединения. ';
-                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-                    errorMsg += 'Возможно проблема с CORS или сервер недоступен.';
-                } else {
-                    errorMsg += error.message || 'Попробуйте позже.';
-                }
-                addMessageToUI('bot', errorMsg);
-            }
-        }
-
-        function addMessageToUI(role, content, animate = true) {
-            const messagesEl = document.getElementById('messages');
-            const messageEl = document.createElement('div');
-            messageEl.className = `message ${role}`;
-            if (!animate) messageEl.style.animation = 'none';
-
-            messageEl.innerHTML = `
-                <div class="message-content">${formatMessage(content)}</div>
-            `;
-            messagesEl.appendChild(messageEl);
-            scrollToBottom();
-        }
-
-        function formatMessage(text) {
-            // Basic markdown-like formatting
-            return text
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/\n/g, '<br>')
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/`(.*?)`/g, '<code style="background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;">$1</code>');
-        }
-
-        function showTyping(show) {
-            let typing = document.querySelector('.typing');
-            if (show) {
-                if (!typing) {
-                    typing = document.createElement('div');
-                    typing.className = 'typing';
-                    typing.innerHTML = '<span></span><span></span><span></span>';
-                    document.getElementById('messages').appendChild(typing);
-                }
-                typing.classList.remove('hidden');
-                scrollToBottom();
-            } else if (typing) {
-                typing.remove();
-            }
-        }
-
-        function scrollToBottom() {
-            const container = document.getElementById('chat-container');
-            container.scrollTop = container.scrollHeight;
-        }
-
-        // Voice recording
-        async function toggleVoiceRecording() {
-            const voiceBtn = document.getElementById('voice-btn');
-
-            if (!isRecording) {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    mediaRecorder = new MediaRecorder(stream);
-                    audioChunks = [];
-
-                    mediaRecorder.ondataavailable = (e) => {
-                        audioChunks.push(e.data);
-                    };
-
-                    mediaRecorder.onstop = async () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        stream.getTracks().forEach(track => track.stop());
-                        await processVoiceMessage(audioBlob);
-                    };
-
-                    mediaRecorder.start();
-                    isRecording = true;
-                    voiceBtn.classList.add('recording');
-                    tg.HapticFeedback?.impactOccurred('medium');
-                } catch (err) {
-                    console.error('Microphone error:', err);
-                    alert('Не удалось получить доступ к микрофону');
-                }
-            } else {
-                mediaRecorder.stop();
-                isRecording = false;
-                voiceBtn.classList.remove('recording');
-                tg.HapticFeedback?.impactOccurred('light');
-            }
-        }
-
-        async function processVoiceMessage(audioBlob) {
-            // For now, show a placeholder - voice processing needs backend support
-            document.getElementById('welcome').classList.add('hidden');
-            document.getElementById('messages').classList.remove('hidden');
-
-            addMessageToUI('user', '🎤 Голосовое сообщение');
-            showTyping(true);
-
-            // TODO: Send audio to backend for speech-to-text
-            // For now, we'll just show a message
-            setTimeout(() => {
-                showTyping(false);
-                addMessageToUI('bot', 'Голосовые сообщения скоро будут поддерживаться. Пока используйте текст.');
-            }, 1000);
-        }
-
-        function handleAttachment() {
-            // TODO: Implement file attachment
-            tg.HapticFeedback?.impactOccurred('light');
-            alert('Вложения скоро будут доступны');
-        }
-
-        // ========== Settings Configuration ==========
+        // ========== Configuration ==========
+        const CONFIG = {
+            API_URL: 'https://openclaw-production-ef1e.up.railway.app',
+            SESSION_KEY: 'agent:main:main',
+            STORAGE_KEY: 'openclaw_dashboard'
+        };
 
         const AVAILABLE_MODELS = [
-            { id: 'openrouter/deepseek/deepseek-chat', name: 'DeepSeek Chat', badge: 'Default' },
-            { id: 'openrouter/anthropic/claude-3.5-sonnet', name: 'Claude 3.5 Sonnet', badge: 'Advanced' },
-            { id: 'openrouter/openai/gpt-4o', name: 'GPT-4o', badge: 'Versatile' },
-            { id: 'openrouter/meta-llama/llama-3.1-70b-instruct', name: 'Llama 3.1 70B', badge: 'Open' }
-        ];
-
-        const BOT_COMMANDS = [
-            { cmd: '/status', name: 'Статус', desc: 'Информация о сессии', emoji: '📊' },
-            { cmd: '/reset', name: 'Сброс', desc: 'Очистить контекст', emoji: '🔄' },
-            { cmd: '/model', name: 'Модель', desc: 'Текущая модель', emoji: '🤖' },
-            { cmd: '/help', name: 'Помощь', desc: 'Список команд', emoji: '❓' },
-            { cmd: '/compact', name: 'Компакт', desc: 'Сжать историю', emoji: '📦' }
+            { id: 'openrouter/deepseek/deepseek-chat', name: 'DeepSeek Chat', badge: 'Default', icon: '🤖' },
+            { id: 'openrouter/anthropic/claude-3.5-sonnet', name: 'Claude 3.5 Sonnet', badge: 'Advanced', icon: '🧠' },
+            { id: 'openrouter/openai/gpt-4o', name: 'GPT-4o', badge: 'Versatile', icon: '✨' },
+            { id: 'openrouter/meta-llama/llama-3.1-70b-instruct', name: 'Llama 3.1 70B', badge: 'Open', icon: '🦙' }
         ];
 
         const THINKING_MODES = [
-            { id: 'none', name: 'Нет' },
-            { id: 'low', name: 'Мин' },
-            { id: 'medium', name: 'Сред' },
-            { id: 'high', name: 'Макс' }
+            { id: 'none', name: 'None' },
+            { id: 'low', name: 'Min' },
+            { id: 'medium', name: 'Med' },
+            { id: 'high', name: 'Max' }
         ];
 
-        // ========== Settings Manager ==========
-
-        const SettingsManager = {
-            STORAGE_KEY: 'openclaw_settings',
-
-            defaults: {
-                model: AVAILABLE_MODELS[0].id,
-                thinkingMode: 'none'
+        // ========== Mock Data (until backend is ready) ==========
+        const MOCK_DATA = {
+            dashboard: {
+                status: 'online',
+                uptime: { days: 2, hours: 14, minutes: 32 },
+                stats: {
+                    messages: 1247,
+                    messagesTrend: 12,
+                    users: 89,
+                    usersTrend: 5,
+                    tokens: 125400,
+                    tokensTrend: -3
+                }
             },
+            balance: {
+                used: 125400,
+                limit: 200000,
+                amount: 12.45,
+                resetDays: 12
+            },
+            tasks: [
+                { id: 1, name: 'Generating report...', status: 'in_progress', progress: 45 },
+                { id: 2, name: 'Image analysis', status: 'completed', completedAt: '2m ago' },
+                { id: 3, name: 'Data processing', status: 'in_progress', progress: 78 },
+                { id: 4, name: 'Text extraction', status: 'pending' },
+                { id: 5, name: 'API sync', status: 'pending' },
+                { id: 6, name: 'Failed task', status: 'error', error: 'Timeout' },
+                { id: 7, name: 'Summary generation', status: 'completed', completedAt: '15m ago' },
+                { id: 8, name: 'Chat response', status: 'completed', completedAt: '1h ago' }
+            ]
+        };
+
+        // ========== State Management ==========
+        const State = {
+            data: null,
+            settings: null,
 
             load() {
                 try {
-                    const stored = localStorage.getItem(this.STORAGE_KEY);
-                    return stored ? { ...this.defaults, ...JSON.parse(stored) } : { ...this.defaults };
+                    const stored = localStorage.getItem(CONFIG.STORAGE_KEY);
+                    this.settings = stored ? JSON.parse(stored) : this.getDefaults();
                 } catch {
-                    return { ...this.defaults };
+                    this.settings = this.getDefaults();
                 }
+                return this.settings;
             },
 
-            save(settings) {
-                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(settings));
+            save() {
+                localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(this.settings));
             },
 
-            get() {
-                return this.load();
+            getDefaults() {
+                return {
+                    model: AVAILABLE_MODELS[0].id,
+                    thinkingMode: 'none',
+                    systemPrompt: '',
+                    pushNotifications: true,
+                    dailySummary: false
+                };
             },
 
-            setModel(modelId) {
-                const settings = this.load();
-                settings.model = modelId;
-                this.save(settings);
-                tg.HapticFeedback?.selectionChanged();
-                Toast.show('Модель изменена');
+            get(key) {
+                if (!this.settings) this.load();
+                return this.settings[key];
             },
 
-            setThinkingMode(mode) {
-                const settings = this.load();
-                settings.thinkingMode = mode;
-                this.save(settings);
-                tg.HapticFeedback?.selectionChanged();
-            },
-
-            getModel() {
-                return this.load().model;
-            },
-
-            getThinkingMode() {
-                return this.load().thinkingMode;
+            set(key, value) {
+                if (!this.settings) this.load();
+                this.settings[key] = value;
+                this.save();
             }
         };
 
         // ========== Toast Notifications ==========
-
         const Toast = {
             show(message, type = 'default', duration = 2000) {
                 const toast = document.getElementById('toast');
@@ -1118,33 +1558,524 @@
             }
         };
 
-        // ========== Bottom Sheet Controller ==========
+        // ========== Haptic Feedback ==========
+        const Haptic = {
+            light() { tg.HapticFeedback?.impactOccurred('light'); },
+            medium() { tg.HapticFeedback?.impactOccurred('medium'); },
+            heavy() { tg.HapticFeedback?.impactOccurred('heavy'); },
+            selection() { tg.HapticFeedback?.selectionChanged(); },
+            success() { tg.HapticFeedback?.notificationOccurred('success'); },
+            error() { tg.HapticFeedback?.notificationOccurred('error'); }
+        };
 
-        const BottomSheet = {
-            sheet: null,
-            backdrop: null,
-            container: null,
-            startY: 0,
-            currentY: 0,
-            isDragging: false,
+        // ========== Navigation ==========
+        const Navigation = {
+            currentPage: 'dashboard',
+
+            goTo(page) {
+                if (this.currentPage === page) return;
+
+                Haptic.light();
+                this.currentPage = page;
+
+                // Update pages
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById(`page-${page}`).classList.add('active');
+
+                // Update nav
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+
+                // Initialize page
+                if (page === 'tasks') TasksPage.init();
+                if (page === 'settings') SettingsPage.init();
+            }
+        };
+
+        // ========== Dashboard ==========
+        const Dashboard = {
+            startTime: Date.now() - (2 * 24 * 60 * 60 * 1000 + 14 * 60 * 60 * 1000 + 32 * 60 * 1000),
 
             init() {
-                this.sheet = document.getElementById('settings-sheet');
-                this.backdrop = this.sheet.querySelector('.sheet-backdrop');
-                this.container = this.sheet.querySelector('.sheet-container');
+                this.loadData();
+                this.startUptimeTimer();
+                this.initPullToRefresh();
+            },
 
-                this.backdrop.addEventListener('click', () => this.close());
+            async loadData() {
+                // Use mock data for now
+                this.data = MOCK_DATA;
+                this.render();
+            },
 
-                const handle = this.sheet.querySelector('.sheet-handle');
-                const header = this.sheet.querySelector('.sheet-header');
+            async refresh() {
+                const btn = document.getElementById('refresh-btn');
+                btn.classList.add('refreshing');
+                Haptic.medium();
 
-                [handle, header].forEach(el => {
-                    el.addEventListener('touchstart', (e) => this.onTouchStart(e), { passive: true });
-                    el.addEventListener('touchmove', (e) => this.onTouchMove(e), { passive: false });
-                    el.addEventListener('touchend', () => this.onTouchEnd());
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // Refresh with slightly different data
+                MOCK_DATA.dashboard.stats.messages += Math.floor(Math.random() * 10);
+                MOCK_DATA.dashboard.stats.users += Math.floor(Math.random() * 3);
+                MOCK_DATA.dashboard.stats.tokens += Math.floor(Math.random() * 1000);
+
+                this.render();
+                btn.classList.remove('refreshing');
+                Toast.show('Data refreshed', 'success');
+                Haptic.success();
+            },
+
+            render() {
+                const data = this.data;
+
+                // Animate stats
+                this.animateNumber('stat-messages', data.dashboard.stats.messages);
+                this.animateNumber('stat-users', data.dashboard.stats.users);
+                this.animateNumber('stat-tokens', this.formatTokens(data.dashboard.stats.tokens));
+
+                // Update trends
+                this.updateTrend('trend-messages', data.dashboard.stats.messagesTrend);
+                this.updateTrend('trend-users', data.dashboard.stats.usersTrend);
+                this.updateTrend('trend-tokens', data.dashboard.stats.tokensTrend);
+
+                // Balance
+                const balancePercent = (data.balance.used / data.balance.limit) * 100;
+                document.getElementById('balance-amount').textContent = `$${data.balance.amount.toFixed(2)}`;
+                document.getElementById('balance-used').textContent =
+                    `${this.formatTokens(data.balance.used)} / ${this.formatTokens(data.balance.limit)} tokens`;
+                document.getElementById('balance-reset').textContent = `Resets in ${data.balance.resetDays}d`;
+
+                const progressBar = document.getElementById('balance-progress');
+                progressBar.style.width = `${balancePercent}%`;
+                progressBar.className = 'balance-progress-bar';
+                if (balancePercent > 80) progressBar.classList.add('danger');
+                else if (balancePercent > 60) progressBar.classList.add('warning');
+
+                // Current model
+                const settings = State.load();
+                const model = AVAILABLE_MODELS.find(m => m.id === settings.model) || AVAILABLE_MODELS[0];
+                const thinkingMode = THINKING_MODES.find(m => m.id === settings.thinkingMode) || THINKING_MODES[0];
+
+                document.getElementById('model-icon').textContent = model.icon;
+                document.getElementById('current-model-name').textContent = model.name;
+                document.getElementById('current-model-mode').textContent = `Thinking: ${thinkingMode.name}`;
+
+                // Active tasks
+                this.renderActiveTasks();
+            },
+
+            renderActiveTasks() {
+                const tasks = this.data.tasks.filter(t => t.status === 'in_progress' || t.status === 'completed')
+                    .slice(0, 3);
+
+                const container = document.getElementById('active-tasks');
+
+                if (tasks.length === 0) {
+                    container.innerHTML = '<div class="tasks-empty">No active tasks</div>';
+                    return;
+                }
+
+                container.innerHTML = tasks.map(task => this.renderTaskItem(task)).join('');
+            },
+
+            renderTaskItem(task) {
+                const statusIcon = {
+                    'in_progress': '~',
+                    'completed': '✓',
+                    'pending': '○',
+                    'error': '✗'
+                };
+
+                let content = '';
+                if (task.status === 'in_progress') {
+                    content = `
+                        <div class="task-progress-container">
+                            <div class="task-progress">
+                                <div class="task-progress-bar" style="width: ${task.progress}%"></div>
+                            </div>
+                            <span class="task-progress-text">${task.progress}%</span>
+                        </div>
+                    `;
+                } else if (task.status === 'completed') {
+                    content = `<div class="task-meta">${task.completedAt}</div>`;
+                } else if (task.status === 'error') {
+                    content = `<div class="task-meta" style="color: var(--error)">${task.error}</div>`;
+                } else {
+                    content = `<div class="task-meta">Queued</div>`;
+                }
+
+                return `
+                    <div class="task-item">
+                        <div class="task-status ${task.status.replace('_', '-')}">${statusIcon[task.status]}</div>
+                        <div class="task-info">
+                            <div class="task-name">${task.name}</div>
+                            ${content}
+                        </div>
+                    </div>
+                `;
+            },
+
+            animateNumber(elementId, targetValue) {
+                const element = document.getElementById(elementId);
+                const isString = typeof targetValue === 'string';
+                const target = isString ? parseFloat(targetValue.replace(/[^0-9.]/g, '')) : targetValue;
+                const suffix = isString ? targetValue.replace(/[0-9.]/g, '') : '';
+
+                let current = 0;
+                const duration = 1000;
+                const steps = 30;
+                const increment = target / steps;
+                const stepDuration = duration / steps;
+
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    element.textContent = Math.floor(current).toLocaleString() + suffix;
+                }, stepDuration);
+            },
+
+            updateTrend(elementId, value) {
+                const element = document.getElementById(elementId);
+                const isUp = value >= 0;
+                element.className = `stat-trend ${isUp ? 'up' : 'down'}`;
+                element.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        ${isUp ?
+                            '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>' :
+                            '<polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/>'
+                        }
+                    </svg>
+                    <span>${isUp ? '+' : ''}${value}%</span>
+                `;
+            },
+
+            formatTokens(num) {
+                if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+                if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+                return num.toString();
+            },
+
+            startUptimeTimer() {
+                const updateUptime = () => {
+                    const elapsed = Date.now() - this.startTime;
+                    const days = Math.floor(elapsed / (24 * 60 * 60 * 1000));
+                    const hours = Math.floor((elapsed % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+                    const minutes = Math.floor((elapsed % (60 * 60 * 1000)) / (60 * 1000));
+                    document.getElementById('uptime').textContent = `Online ${days}d ${hours}h ${minutes}m`;
+                };
+
+                updateUptime();
+                setInterval(updateUptime, 60000);
+            },
+
+            initPullToRefresh() {
+                const mainContent = document.getElementById('main-content');
+                const indicator = document.getElementById('ptr-indicator');
+                let startY = 0;
+                let isPulling = false;
+
+                mainContent.addEventListener('touchstart', (e) => {
+                    if (mainContent.scrollTop === 0) {
+                        startY = e.touches[0].clientY;
+                    }
+                }, { passive: true });
+
+                mainContent.addEventListener('touchmove', (e) => {
+                    if (mainContent.scrollTop === 0 && startY > 0) {
+                        const currentY = e.touches[0].clientY;
+                        const diff = currentY - startY;
+
+                        if (diff > 50 && !isPulling) {
+                            isPulling = true;
+                            indicator.classList.add('pulling');
+                        }
+                    }
+                }, { passive: true });
+
+                mainContent.addEventListener('touchend', async () => {
+                    if (isPulling) {
+                        await this.refresh();
+                        indicator.classList.remove('pulling');
+                        isPulling = false;
+                    }
+                    startY = 0;
+                });
+            }
+        };
+
+        // ========== Tasks Page ==========
+        const TasksPage = {
+            currentFilter: 'all',
+
+            init() {
+                this.render();
+            },
+
+            filter(filterType) {
+                Haptic.selection();
+                this.currentFilter = filterType;
+
+                document.querySelectorAll('.filter-chip').forEach(chip => {
+                    chip.classList.toggle('active', chip.dataset.filter === filterType);
                 });
 
-                // Telegram Back Button
+                this.render();
+            },
+
+            render() {
+                const tasks = MOCK_DATA.tasks.filter(task => {
+                    if (this.currentFilter === 'all') return true;
+                    return task.status === this.currentFilter;
+                });
+
+                const grouped = {
+                    in_progress: tasks.filter(t => t.status === 'in_progress'),
+                    pending: tasks.filter(t => t.status === 'pending'),
+                    completed: tasks.filter(t => t.status === 'completed'),
+                    error: tasks.filter(t => t.status === 'error')
+                };
+
+                let html = '';
+
+                if (grouped.in_progress.length > 0) {
+                    html += this.renderGroup('In Progress', grouped.in_progress);
+                }
+                if (grouped.pending.length > 0) {
+                    html += this.renderGroup('Pending', grouped.pending);
+                }
+                if (grouped.completed.length > 0) {
+                    html += this.renderGroup('Completed', grouped.completed);
+                }
+                if (grouped.error.length > 0) {
+                    html += this.renderGroup('Failed', grouped.error);
+                }
+
+                if (!html) {
+                    html = '<div class="tasks-empty" style="padding: 48px 0;">No tasks found</div>';
+                }
+
+                document.getElementById('tasks-list').innerHTML = html;
+            },
+
+            renderGroup(title, tasks) {
+                return `
+                    <div class="tasks-group">
+                        <div class="tasks-group-title">${title} (${tasks.length})</div>
+                        <div class="tasks-card">
+                            ${tasks.map(t => this.renderTask(t)).join('')}
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderTask(task) {
+                const statusIcon = {
+                    'in_progress': '~',
+                    'completed': '✓',
+                    'pending': '○',
+                    'error': '✗'
+                };
+
+                let content = '';
+                let actionBtn = '';
+
+                if (task.status === 'in_progress') {
+                    content = `
+                        <div class="task-progress-container">
+                            <div class="task-progress">
+                                <div class="task-progress-bar" style="width: ${task.progress}%"></div>
+                            </div>
+                            <span class="task-progress-text">${task.progress}%</span>
+                        </div>
+                    `;
+                    actionBtn = `<button class="task-action-btn cancel" onclick="TasksPage.cancelTask(${task.id})">Cancel</button>`;
+                } else if (task.status === 'completed') {
+                    content = `<div class="task-meta">${task.completedAt}</div>`;
+                } else if (task.status === 'error') {
+                    content = `<div class="task-meta" style="color: var(--error)">${task.error}</div>`;
+                    actionBtn = `<button class="task-action-btn retry" onclick="TasksPage.retryTask(${task.id})">Retry</button>`;
+                } else {
+                    content = `<div class="task-meta">Queued</div>`;
+                }
+
+                return `
+                    <div class="task-item">
+                        <div class="task-status ${task.status.replace('_', '-')}">${statusIcon[task.status]}</div>
+                        <div class="task-info">
+                            <div class="task-name">${task.name}</div>
+                            ${content}
+                        </div>
+                        ${actionBtn}
+                    </div>
+                `;
+            },
+
+            cancelTask(id) {
+                Haptic.medium();
+                Toast.show('Task cancelled');
+                // TODO: API call
+            },
+
+            retryTask(id) {
+                Haptic.medium();
+                Toast.show('Task restarted');
+                // TODO: API call
+            }
+        };
+
+        // ========== Settings Page ==========
+        const SettingsPage = {
+            init() {
+                this.renderModels();
+                this.renderThinkingModes();
+                this.renderToggles();
+                this.initPrompt();
+            },
+
+            renderModels() {
+                const currentModel = State.get('model');
+                const html = AVAILABLE_MODELS.map(model => `
+                    <div class="settings-item ${model.id === currentModel ? 'selected' : ''}"
+                         onclick="SettingsPage.selectModel('${model.id}')">
+                        <div class="settings-radio"></div>
+                        <div class="settings-item-info">
+                            <div class="settings-item-title">${model.name}</div>
+                        </div>
+                        <span class="settings-badge">${model.badge}</span>
+                    </div>
+                `).join('');
+
+                document.getElementById('settings-models').innerHTML = html;
+            },
+
+            renderThinkingModes() {
+                const currentMode = State.get('thinkingMode');
+                const html = THINKING_MODES.map(mode => `
+                    <button class="segment ${mode.id === currentMode ? 'active' : ''}"
+                            onclick="SettingsPage.selectThinkingMode('${mode.id}')">
+                        ${mode.name}
+                    </button>
+                `).join('');
+
+                document.getElementById('thinking-control').innerHTML = html;
+            },
+
+            renderToggles() {
+                document.getElementById('toggle-push').classList.toggle('active', State.get('pushNotifications'));
+                document.getElementById('toggle-summary').classList.toggle('active', State.get('dailySummary'));
+            },
+
+            initPrompt() {
+                const textarea = document.getElementById('system-prompt');
+                textarea.value = State.get('systemPrompt') || '';
+                this.updateCharCount();
+
+                textarea.addEventListener('input', () => this.updateCharCount());
+            },
+
+            updateCharCount() {
+                const textarea = document.getElementById('system-prompt');
+                document.getElementById('prompt-char-count').textContent =
+                    `${textarea.value.length} / 4000`;
+            },
+
+            selectModel(modelId) {
+                Haptic.selection();
+                State.set('model', modelId);
+                this.renderModels();
+                Dashboard.render();
+                Toast.show('Model updated');
+            },
+
+            selectThinkingMode(mode) {
+                Haptic.selection();
+                State.set('thinkingMode', mode);
+                this.renderThinkingModes();
+                Dashboard.render();
+            },
+
+            togglePush() {
+                Haptic.light();
+                State.set('pushNotifications', !State.get('pushNotifications'));
+                this.renderToggles();
+            },
+
+            toggleSummary() {
+                Haptic.light();
+                State.set('dailySummary', !State.get('dailySummary'));
+                this.renderToggles();
+            },
+
+            savePrompt() {
+                Haptic.success();
+                State.set('systemPrompt', document.getElementById('system-prompt').value);
+                Toast.show('Prompt saved', 'success');
+            },
+
+            resetPrompt() {
+                Haptic.medium();
+                document.getElementById('system-prompt').value = '';
+                this.updateCharCount();
+            },
+
+            resetSession() {
+                Haptic.medium();
+                if (tg.showConfirm) {
+                    tg.showConfirm('Reset session? Bot context will be cleared.', (confirmed) => {
+                        if (confirmed) {
+                            Toast.show('Session reset');
+                        }
+                    });
+                } else if (confirm('Reset session? Bot context will be cleared.')) {
+                    Toast.show('Session reset');
+                }
+            },
+
+            clearHistory() {
+                Haptic.medium();
+                if (tg.showConfirm) {
+                    tg.showConfirm('Clear all history?', (confirmed) => {
+                        if (confirmed) {
+                            localStorage.clear();
+                            Toast.show('History cleared', 'success');
+                        }
+                    });
+                } else if (confirm('Clear all history?')) {
+                    localStorage.clear();
+                    Toast.show('History cleared', 'success');
+                }
+            },
+
+            exportAllData() {
+                Haptic.medium();
+                const data = {
+                    settings: State.settings,
+                    exportedAt: new Date().toISOString()
+                };
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'openclaw-export.json';
+                a.click();
+                URL.revokeObjectURL(url);
+                Toast.show('Data exported', 'success');
+            }
+        };
+
+        // ========== Model Sheet ==========
+        const ModelSheet = {
+            sheet: null,
+
+            init() {
+                this.sheet = document.getElementById('model-sheet');
+                this.sheet.querySelector('.sheet-backdrop').addEventListener('click', () => this.close());
+
                 tg.BackButton?.onClick(() => {
                     if (this.sheet.classList.contains('open')) {
                         this.close();
@@ -1153,261 +2084,114 @@
             },
 
             open() {
+                Haptic.light();
                 this.render();
                 this.sheet.classList.add('open');
-                tg.HapticFeedback?.impactOccurred('light');
                 tg.BackButton?.show();
-                document.body.style.overflow = 'hidden';
             },
 
             close() {
+                Haptic.light();
                 this.sheet.classList.remove('open');
-                this.container.style.transform = '';
-                tg.HapticFeedback?.impactOccurred('light');
                 tg.BackButton?.hide();
-                document.body.style.overflow = '';
-            },
-
-            onTouchStart(e) {
-                this.startY = e.touches[0].clientY;
-                this.isDragging = true;
-                this.container.style.transition = 'none';
-            },
-
-            onTouchMove(e) {
-                if (!this.isDragging) return;
-
-                this.currentY = e.touches[0].clientY;
-                const deltaY = this.currentY - this.startY;
-
-                if (deltaY > 0) {
-                    e.preventDefault();
-                    this.container.style.transform = `translateY(${deltaY}px)`;
-                }
-            },
-
-            onTouchEnd() {
-                if (!this.isDragging) return;
-                this.isDragging = false;
-
-                const deltaY = this.currentY - this.startY;
-                this.container.style.transition = '';
-
-                if (deltaY > 100) {
-                    this.close();
-                } else {
-                    this.container.style.transform = '';
-                }
             },
 
             render() {
-                const content = this.sheet.querySelector('.sheet-content');
-                const settings = SettingsManager.get();
-
-                content.innerHTML = `
-                    ${this.renderModelSection(settings)}
-                    ${this.renderThinkingSection(settings)}
-                    ${this.renderCommandsSection()}
-                    ${this.renderSessionSection()}
-                `;
-
-                this.attachEventListeners();
-            },
-
-            renderModelSection(settings) {
-                const modelsHTML = AVAILABLE_MODELS.map(model => `
-                    <div class="model-option ${settings.model === model.id ? 'selected' : ''}"
-                         data-model="${model.id}">
-                        <div class="model-radio"></div>
-                        <div class="model-info">
-                            <span class="model-name">${model.name}</span>
-                            <span class="model-badge">${model.badge}</span>
+                const currentModel = State.get('model');
+                const html = AVAILABLE_MODELS.map(model => `
+                    <div class="settings-item ${model.id === currentModel ? 'selected' : ''}"
+                         onclick="ModelSheet.selectModel('${model.id}')">
+                        <div class="settings-radio"></div>
+                        <div class="settings-item-info">
+                            <div class="settings-item-title">${model.icon} ${model.name}</div>
+                            <div class="settings-item-desc">${model.badge}</div>
                         </div>
                     </div>
                 `).join('');
 
-                return `
-                    <div class="settings-section">
-                        <div class="section-title">Модель</div>
-                        <div class="section-card">
-                            ${modelsHTML}
-                        </div>
-                    </div>
+                document.getElementById('model-sheet-content').innerHTML = `
+                    <div class="settings-card">${html}</div>
                 `;
             },
 
-            renderThinkingSection(settings) {
-                const segmentsHTML = THINKING_MODES.map(mode => `
-                    <button class="segment ${settings.thinkingMode === mode.id ? 'active' : ''}"
-                            data-thinking="${mode.id}">
-                        ${mode.name}
-                    </button>
-                `).join('');
-
-                return `
-                    <div class="settings-section">
-                        <div class="section-title">Режим мышления</div>
-                        <div class="segmented-control">
-                            ${segmentsHTML}
-                        </div>
-                    </div>
-                `;
-            },
-
-            renderCommandsSection() {
-                const commandsHTML = BOT_COMMANDS.map(cmd => `
-                    <div class="command-item" data-command="${cmd.cmd}">
-                        <span class="command-emoji">${cmd.emoji}</span>
-                        <div class="command-info">
-                            <div class="command-name">${cmd.name}</div>
-                            <div class="command-desc">${cmd.desc}</div>
-                        </div>
-                        <span class="command-arrow">→</span>
-                    </div>
-                `).join('');
-
-                return `
-                    <div class="settings-section">
-                        <div class="section-title">Быстрые команды</div>
-                        <div class="section-card">
-                            ${commandsHTML}
-                        </div>
-                    </div>
-                `;
-            },
-
-            renderSessionSection() {
-                return `
-                    <div class="settings-section">
-                        <div class="section-title">Сессия</div>
-                        <div class="section-card">
-                            <div class="session-status">
-                                <span class="status-indicator"></span>
-                                <span>Подключение: Активно</span>
-                            </div>
-                            <div class="session-action" data-action="reset-session">
-                                <span class="session-action-icon">🔄</span>
-                                <span>Сбросить сессию</span>
-                            </div>
-                            <div class="session-action danger" data-action="clear-history">
-                                <span class="session-action-icon">🗑</span>
-                                <span>Очистить историю</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            },
-
-            attachEventListeners() {
-                // Model selection
-                this.sheet.querySelectorAll('.model-option').forEach(el => {
-                    el.addEventListener('click', () => {
-                        const modelId = el.dataset.model;
-                        SettingsManager.setModel(modelId);
-                        this.render();
-                    });
-                });
-
-                // Thinking mode
-                this.sheet.querySelectorAll('.segment').forEach(el => {
-                    el.addEventListener('click', () => {
-                        const mode = el.dataset.thinking;
-                        SettingsManager.setThinkingMode(mode);
-                        this.render();
-                    });
-                });
-
-                // Commands
-                this.sheet.querySelectorAll('.command-item').forEach(el => {
-                    el.addEventListener('click', () => {
-                        const cmd = el.dataset.command;
-                        this.close();
-                        sendCommand(cmd);
-                    });
-                });
-
-                // Session actions
-                this.sheet.querySelectorAll('.session-action').forEach(el => {
-                    el.addEventListener('click', () => {
-                        const action = el.dataset.action;
-                        if (action === 'reset-session') {
-                            this.confirmResetSession();
-                        } else if (action === 'clear-history') {
-                            this.confirmClearHistory();
-                        }
-                    });
-                });
-
-                // Close button
-                const closeBtn = this.sheet.querySelector('.sheet-close');
-                if (closeBtn) {
-                    closeBtn.addEventListener('click', () => this.close());
-                }
-            },
-
-            confirmResetSession() {
-                if (tg.showConfirm) {
-                    tg.showConfirm('Сбросить сессию? Контекст бота будет очищен.', (confirmed) => {
-                        if (confirmed) {
-                            sendCommand('/reset');
-                            this.close();
-                        }
-                    });
-                } else if (confirm('Сбросить сессию? Контекст бота будет очищен.')) {
-                    sendCommand('/reset');
-                    this.close();
-                }
-            },
-
-            confirmClearHistory() {
-                if (tg.showConfirm) {
-                    tg.showConfirm('Очистить историю чата?', (confirmed) => {
-                        if (confirmed) {
-                            clearChat();
-                            this.close();
-                            Toast.show('История очищена');
-                        }
-                    });
-                } else if (confirm('Очистить историю чата?')) {
-                    clearChat();
-                    this.close();
-                    Toast.show('История очищена');
-                }
+            selectModel(modelId) {
+                Haptic.selection();
+                State.set('model', modelId);
+                Dashboard.render();
+                this.close();
+                Toast.show('Model updated');
             }
         };
 
-        // Send command helper
-        function sendCommand(cmd) {
-            const input = document.getElementById('message-input');
-            input.value = cmd;
-            sendMessage();
+        // ========== Quick Actions ==========
+        const QuickActions = {
+            clearContext() {
+                Haptic.medium();
+                if (tg.showConfirm) {
+                    tg.showConfirm('Clear bot context?', (confirmed) => {
+                        if (confirmed) {
+                            Toast.show('Context cleared', 'success');
+                        }
+                    });
+                } else if (confirm('Clear bot context?')) {
+                    Toast.show('Context cleared', 'success');
+                }
+            },
+
+            exportData() {
+                Haptic.medium();
+                Toast.show('Preparing export...');
+                setTimeout(() => {
+                    Toast.show('Export ready', 'success');
+                }, 1000);
+            },
+
+            runDiagnostics() {
+                Haptic.medium();
+                Toast.show('Running diagnostics...');
+                setTimeout(() => {
+                    Toast.show('All systems operational', 'success');
+                }, 2000);
+            },
+
+            viewLogs() {
+                Haptic.medium();
+                Toast.show('Opening logs...');
+            }
+        };
+
+        // ========== Ripple Effect ==========
+        function addRipple(event) {
+            const button = event.currentTarget;
+            const ripple = document.createElement('span');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            ripple.className = 'ripple';
+
+            button.appendChild(ripple);
+            ripple.addEventListener('animationend', () => ripple.remove());
         }
 
-        // Initialize Bottom Sheet
+        // Add ripple to interactive elements
+        document.addEventListener('click', (e) => {
+            const target = e.target.closest('.quick-action, .header-btn');
+            if (target) {
+                addRipple(e);
+            }
+        });
+
+        // ========== Initialize ==========
         document.addEventListener('DOMContentLoaded', () => {
-            BottomSheet.init();
+            State.load();
+            Dashboard.init();
+            ModelSheet.init();
         });
     </script>
-
-    <!-- Settings Bottom Sheet -->
-    <div class="bottom-sheet" id="settings-sheet">
-        <div class="sheet-backdrop"></div>
-        <div class="sheet-container">
-            <div class="sheet-handle"></div>
-            <div class="sheet-header">
-                <span class="sheet-title">Настройки</span>
-                <button class="sheet-close">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
-                    </svg>
-                </button>
-            </div>
-            <div class="sheet-content"></div>
-        </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
 </body>
 </html>
