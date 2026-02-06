@@ -1341,17 +1341,33 @@
         };
 
         const API = {
-            async sendCommand(command) {
+            async sendCommand(command, model = null, thinking = null) {
                 try {
+                    const body = {
+                        message: command,
+                        sessionKey: SESSION_KEY
+                    };
+                    if (model) body.model = model;
+                    if (thinking) body.thinkingMode = thinking;
+
+                    console.log('API Request:', body);
+
                     const response = await fetch(API_URL, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            message: command,
-                            sessionKey: SESSION_KEY
-                        })
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Gateway-Token': 'Aarrcc11Aarrcc11'
+                        },
+                        body: JSON.stringify(body)
                     });
+
+                    if (!response.ok) {
+                        console.error('API Response not OK:', response.status);
+                        return { success: false, error: 'HTTP ' + response.status };
+                    }
+
                     const data = await response.json();
+                    console.log('API Response:', data);
                     return { success: true, data };
                 } catch (error) {
                     console.error('API Error:', error);
@@ -1360,7 +1376,8 @@
             },
 
             async setModel(modelId) {
-                return this.sendCommand('/model ' + modelId);
+                // Send command with model parameter in body
+                return this.sendCommand('/model ' + modelId, modelId, State.get('thinking'));
             },
 
             async setThinking(mode) {
