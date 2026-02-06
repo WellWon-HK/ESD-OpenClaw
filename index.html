@@ -17,235 +17,108 @@
         }
 
         :root {
-            /* Primary Colors - Professional Blue */
-            --primary: #3B82F6;
-            --primary-light: #60A5FA;
-            --primary-dark: #2563EB;
-            --primary-subtle: rgba(59, 130, 246, 0.12);
+            /* Primary - Teal/Green Accent */
+            --primary: #20B2AA;
+            --primary-light: #3CCEC6;
+            --primary-dark: #1A9A94;
+            --primary-subtle: rgba(32, 178, 170, 0.15);
 
-            /* Neutrals - Refined Dark Theme */
-            --bg-primary: #0F0F0F;
-            --bg-secondary: #171717;
-            --bg-card: #1C1C1E;
-            --bg-elevated: #232326;
-            --bg-input: #2C2C2E;
+            /* Dark Theme */
+            --bg-primary: #0A0A0A;
+            --bg-secondary: #111111;
+            --bg-card: #1A1A1A;
+            --bg-elevated: #222222;
+            --bg-input: #2A2A2A;
 
-            /* Text Colors */
+            /* Text */
             --text-primary: #FFFFFF;
-            --text-secondary: #8E8E93;
-            --text-tertiary: #636366;
+            --text-secondary: #999999;
+            --text-tertiary: #666666;
 
             /* Borders */
-            --border-primary: rgba(255, 255, 255, 0.08);
-            --border-secondary: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.1);
 
-            /* Status Colors */
-            --success: #34C759;
-            --success-subtle: rgba(52, 199, 89, 0.12);
-            --warning: #FF9F0A;
-            --warning-subtle: rgba(255, 159, 10, 0.12);
-            --error: #FF453A;
-            --error-subtle: rgba(255, 69, 58, 0.12);
-
-            /* Shadows */
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
-            --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.3);
-
-            /* Spacing - 8px base */
-            --space-1: 4px;
-            --space-2: 8px;
-            --space-3: 12px;
-            --space-4: 16px;
-            --space-5: 20px;
-            --space-6: 24px;
-            --space-8: 32px;
-
-            /* Border Radius */
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 20px;
-            --radius-full: 9999px;
-
-            /* Transitions */
-            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+            /* Status */
+            --success: #4ADE80;
+            --success-bg: rgba(74, 222, 128, 0.15);
+            --warning: #FBBF24;
+            --warning-bg: rgba(251, 191, 36, 0.15);
+            --error: #F87171;
+            --error-bg: rgba(248, 113, 113, 0.15);
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-            background-color: var(--tg-theme-bg-color, var(--bg-primary));
-            color: var(--tg-theme-text-color, var(--text-primary));
-            height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            font-size: 15px;
-            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* ========== Typography ========== */
-        .text-xs { font-size: 11px; line-height: 1.4; }
-        .text-sm { font-size: 13px; line-height: 1.4; }
-        .text-base { font-size: 15px; line-height: 1.5; }
-        .text-lg { font-size: 17px; line-height: 1.4; }
-        .text-xl { font-size: 20px; line-height: 1.3; }
-        .text-2xl { font-size: 24px; line-height: 1.2; }
-        .text-3xl { font-size: 32px; line-height: 1.1; }
-
-        .font-medium { font-weight: 500; }
-        .font-semibold { font-weight: 600; }
-        .font-bold { font-weight: 700; }
-
-        /* ========== Animations ========== */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes countUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes progressFill {
-            from { transform: scaleX(0); }
-            to { transform: scaleX(1); }
-        }
-
-        @keyframes breathe {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
-            50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
-        }
-
-        .animate-fadeIn {
-            animation: fadeIn var(--transition-normal) ease-out forwards;
-        }
-
-        .animate-stagger-1 { animation-delay: 50ms; }
-        .animate-stagger-2 { animation-delay: 100ms; }
-        .animate-stagger-3 { animation-delay: 150ms; }
-        .animate-stagger-4 { animation-delay: 200ms; }
-
-        /* ========== Header ========== */
+        /* Header */
         .header {
+            background: var(--bg-secondary);
+            padding: 16px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: var(--space-4) var(--space-5);
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-primary);
-            flex-shrink: 0;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 50;
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: var(--space-3);
-        }
-
-        .status-indicator {
-            position: relative;
-            width: 10px;
-            height: 10px;
+            gap: 12px;
         }
 
         .status-dot {
             width: 10px;
             height: 10px;
-            border-radius: var(--radius-full);
             background: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--success);
         }
 
-        .status-dot.online {
-            animation: breathe 2s ease-in-out infinite;
-        }
-
-        .status-dot.offline {
-            background: var(--error);
-        }
-
-        .header-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .header-title {
+        .header-info h1 {
             font-size: 17px;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-            letter-spacing: -0.3px;
         }
 
-        .header-title .brand {
+        .header-info h1 span {
             color: var(--primary);
         }
 
-        .header-subtitle {
+        .header-info p {
             font-size: 12px;
             color: var(--text-tertiary);
-            font-weight: 500;
         }
 
         .header-actions {
             display: flex;
-            gap: var(--space-2);
+            gap: 8px;
         }
 
         .icon-btn {
             width: 40px;
             height: 40px;
-            border-radius: var(--radius-md);
             background: var(--bg-card);
-            border: 1px solid var(--border-primary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
             color: var(--text-secondary);
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all var(--transition-fast);
-        }
-
-        .icon-btn:hover {
-            background: var(--bg-elevated);
-            color: var(--text-primary);
+            cursor: pointer;
         }
 
         .icon-btn:active {
             transform: scale(0.95);
+            background: var(--bg-elevated);
         }
 
         .icon-btn svg {
@@ -257,42 +130,41 @@
             animation: spin 1s linear infinite;
         }
 
-        /* ========== Main Content ========== */
-        .main-content {
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Main */
+        .main {
             flex: 1;
             overflow-y: auto;
-            overflow-x: hidden;
-            overscroll-behavior: contain;
-            scroll-behavior: smooth;
+            padding-bottom: 90px;
         }
 
         .page {
             display: none;
-            padding: var(--space-5);
-            padding-bottom: calc(var(--space-5) + 80px);
+            padding: 20px;
         }
 
         .page.active {
             display: block;
         }
 
-        /* ========== Stats Grid ========== */
+        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-3);
-            margin-bottom: var(--space-5);
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
         .stat-card {
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: var(--space-4);
-            border: 1px solid var(--border-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
             position: relative;
             overflow: hidden;
-            opacity: 0;
-            animation: fadeIn var(--transition-normal) ease-out forwards;
         }
 
         .stat-card::before {
@@ -301,16 +173,16 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
+            height: 3px;
             background: var(--primary);
         }
 
         .stat-card:nth-child(2)::before {
-            background: linear-gradient(90deg, #A855F7, #7C3AED);
+            background: linear-gradient(90deg, #A78BFA, #8B5CF6);
         }
 
         .stat-card:nth-child(3)::before {
-            background: linear-gradient(90deg, #F59E0B, #D97706);
+            background: linear-gradient(90deg, #FBBF24, #F59E0B);
         }
 
         .stat-label {
@@ -319,202 +191,139 @@
             color: var(--text-tertiary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: var(--space-2);
+            margin-bottom: 8px;
         }
 
         .stat-value {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
-            letter-spacing: -1px;
-            margin-bottom: var(--space-1);
-            font-variant-numeric: tabular-nums;
+            margin-bottom: 4px;
         }
 
         .stat-trend {
             display: inline-flex;
             align-items: center;
-            gap: var(--space-1);
+            gap: 4px;
             font-size: 12px;
             font-weight: 600;
             padding: 2px 8px;
-            border-radius: var(--radius-full);
+            border-radius: 20px;
         }
 
         .stat-trend.up {
             color: var(--success);
-            background: var(--success-subtle);
+            background: var(--success-bg);
         }
 
         .stat-trend.down {
             color: var(--error);
-            background: var(--error-subtle);
+            background: var(--error-bg);
         }
 
-        .stat-trend svg {
-            width: 12px;
-            height: 12px;
-        }
-
-        /* ========== Cards ========== */
+        /* Card */
         .card {
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 16px;
             overflow: hidden;
-            opacity: 0;
-            animation: fadeIn var(--transition-normal) ease-out forwards;
-        }
-
-        .card + .card {
-            margin-top: var(--space-4);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: var(--space-4) var(--space-5);
-            border-bottom: 1px solid var(--border-secondary);
-        }
-
-        .card-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .card-action {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--primary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: var(--space-1);
-            transition: opacity var(--transition-fast);
-        }
-
-        .card-action:hover {
-            opacity: 0.8;
-        }
-
-        .card-action svg {
-            width: 16px;
-            height: 16px;
         }
 
         .card-body {
-            padding: var(--space-5);
+            padding: 20px;
         }
 
-        .card-body.no-padding {
+        .card-body.flush {
             padding: 0;
         }
 
-        /* ========== Balance Card ========== */
-        .balance-card {
-            margin-bottom: var(--space-5);
-        }
-
+        /* Balance */
         .balance-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: var(--space-5);
+            margin-bottom: 20px;
         }
 
         .balance-label {
             font-size: 13px;
             color: var(--text-tertiary);
-            margin-bottom: var(--space-1);
+            margin-bottom: 4px;
         }
 
         .balance-value {
             font-size: 32px;
             font-weight: 700;
-            letter-spacing: -1px;
         }
 
         .balance-badge {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: var(--space-2);
-            padding: var(--space-2) var(--space-3);
+            gap: 6px;
             background: var(--primary-subtle);
-            border-radius: var(--radius-full);
+            color: var(--primary);
+            padding: 8px 12px;
+            border-radius: 20px;
             font-size: 13px;
             font-weight: 600;
-            color: var(--primary);
-        }
-
-        .progress-container {
-            margin-bottom: var(--space-4);
         }
 
         .progress-bar {
             height: 8px;
             background: var(--bg-elevated);
-            border-radius: var(--radius-full);
+            border-radius: 4px;
             overflow: hidden;
+            margin-bottom: 12px;
         }
 
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--primary), var(--primary-light));
-            border-radius: var(--radius-full);
-            transform-origin: left;
-            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 4px;
+            transition: width 0.8s ease;
         }
 
         .progress-fill.warning {
-            background: linear-gradient(90deg, var(--warning), #FBBF24);
+            background: linear-gradient(90deg, var(--warning), #FCD34D);
         }
 
         .progress-fill.danger {
-            background: linear-gradient(90deg, var(--error), #F87171);
+            background: linear-gradient(90deg, var(--error), #FCA5A5);
         }
 
         .progress-info {
             display: flex;
             justify-content: space-between;
-            margin-top: var(--space-3);
             font-size: 13px;
             color: var(--text-tertiary);
         }
 
-        /* ========== Model Card ========== */
-        .model-card {
+        /* Model Card */
+        .model-row {
             display: flex;
             align-items: center;
-            gap: var(--space-4);
-            padding: var(--space-4) var(--space-5);
+            gap: 16px;
+            padding: 16px 20px;
             cursor: pointer;
-            transition: background var(--transition-fast);
-            margin-bottom: var(--space-5);
         }
 
-        .model-card:active {
+        .model-row:active {
             background: var(--bg-elevated);
         }
 
         .model-icon {
             width: 52px;
             height: 52px;
-            border-radius: var(--radius-md);
-            background: linear-gradient(135deg, var(--primary), #7C3AED);
+            background: linear-gradient(135deg, var(--primary), #0D9488);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            flex-shrink: 0;
-            box-shadow: var(--shadow-md);
         }
 
         .model-info {
             flex: 1;
-            min-width: 0;
         }
 
         .model-label {
@@ -527,9 +336,6 @@
             font-size: 16px;
             font-weight: 600;
             margin-bottom: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         .model-meta {
@@ -541,53 +347,73 @@
             color: var(--text-tertiary);
         }
 
-        /* ========== Task Items ========== */
+        /* Section */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0 12px;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-link {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        /* Task Item */
         .task-item {
             display: flex;
             align-items: center;
-            gap: var(--space-3);
-            padding: var(--space-4) var(--space-5);
-            border-bottom: 1px solid var(--border-secondary);
-            transition: background var(--transition-fast);
+            gap: 12px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
         }
 
         .task-item:last-child {
             border-bottom: none;
         }
 
-        .task-item:active {
-            background: var(--bg-elevated);
-        }
-
-        .task-status-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: var(--radius-full);
+        .task-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
             font-size: 14px;
             font-weight: 600;
         }
 
-        .task-status-icon.in-progress {
+        .task-icon.in-progress {
             background: var(--primary-subtle);
             color: var(--primary);
         }
 
-        .task-status-icon.completed {
-            background: var(--success-subtle);
+        .task-icon.completed {
+            background: var(--success-bg);
             color: var(--success);
         }
 
-        .task-status-icon.pending {
-            background: var(--warning-subtle);
+        .task-icon.pending {
+            background: var(--warning-bg);
             color: var(--warning);
         }
 
-        .task-status-icon.error {
-            background: var(--error-subtle);
+        .task-icon.error {
+            background: var(--error-bg);
             color: var(--error);
         }
 
@@ -599,31 +425,26 @@
         .task-title {
             font-size: 15px;
             font-weight: 500;
-            margin-bottom: var(--space-1);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            margin-bottom: 4px;
         }
 
         .task-progress {
             display: flex;
             align-items: center;
-            gap: var(--space-3);
+            gap: 10px;
         }
 
         .task-progress-bar {
             flex: 1;
             height: 4px;
             background: var(--bg-elevated);
-            border-radius: var(--radius-full);
-            overflow: hidden;
+            border-radius: 2px;
         }
 
         .task-progress-fill {
             height: 100%;
             background: var(--primary);
-            border-radius: var(--radius-full);
-            transition: width var(--transition-normal);
+            border-radius: 2px;
         }
 
         .task-progress-text {
@@ -631,7 +452,6 @@
             font-weight: 600;
             color: var(--text-tertiary);
             min-width: 36px;
-            text-align: right;
         }
 
         .task-meta {
@@ -639,87 +459,67 @@
             color: var(--text-tertiary);
         }
 
-        .task-action {
-            padding: var(--space-2) var(--space-3);
-            border-radius: var(--radius-sm);
+        .task-btn {
+            padding: 6px 12px;
             background: var(--bg-elevated);
             border: none;
+            border-radius: 8px;
             font-size: 12px;
             font-weight: 600;
+            color: var(--text-primary);
             cursor: pointer;
-            transition: all var(--transition-fast);
-            flex-shrink: 0;
         }
 
-        .task-action:active {
-            transform: scale(0.95);
-        }
-
-        .task-action.cancel {
-            color: var(--error);
-        }
-
-        .task-action.retry {
-            color: var(--primary);
-        }
+        .task-btn.cancel { color: var(--error); }
+        .task-btn.retry { color: var(--primary); }
 
         .empty-state {
-            padding: var(--space-8) var(--space-5);
+            padding: 48px 20px;
             text-align: center;
-            color: var(--text-tertiary);
         }
 
         .empty-state-icon {
             font-size: 48px;
-            margin-bottom: var(--space-4);
+            margin-bottom: 16px;
             opacity: 0.5;
         }
 
         .empty-state-text {
             font-size: 15px;
+            color: var(--text-tertiary);
         }
 
-        /* ========== Quick Actions ========== */
+        /* Quick Actions */
         .quick-actions {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: var(--space-3);
-            opacity: 0;
-            animation: fadeIn var(--transition-normal) ease-out forwards;
-            animation-delay: 200ms;
+            gap: 12px;
         }
 
         .quick-action {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--space-2);
-            padding: var(--space-4) var(--space-2);
             background: var(--bg-card);
-            border: 1px solid var(--border-primary);
-            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px 8px;
+            text-align: center;
             cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-
-        .quick-action:hover {
-            background: var(--bg-elevated);
-            border-color: var(--border-primary);
         }
 
         .quick-action:active {
             transform: scale(0.95);
+            background: var(--bg-elevated);
         }
 
         .quick-action-icon {
             width: 44px;
             height: 44px;
-            border-radius: var(--radius-md);
             background: var(--bg-elevated);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 20px;
+            margin: 0 auto 8px;
         }
 
         .quick-action-label {
@@ -728,44 +528,17 @@
             color: var(--text-secondary);
         }
 
-        /* ========== Section Header ========== */
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: var(--space-4);
-            margin-top: var(--space-5);
-        }
-
-        .section-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .section-action {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--primary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: var(--space-1);
-        }
-
-        /* ========== Bottom Navigation ========== */
+        /* Bottom Nav */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            display: flex;
             background: var(--bg-secondary);
-            border-top: 1px solid var(--border-primary);
-            padding: var(--space-2) var(--space-4);
-            padding-bottom: max(var(--space-2), env(safe-area-inset-bottom));
+            border-top: 1px solid var(--border);
+            display: flex;
+            padding: 8px 16px;
+            padding-bottom: max(8px, env(safe-area-inset-bottom));
             z-index: 100;
         }
 
@@ -774,12 +547,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: var(--space-1);
-            padding: var(--space-2);
-            cursor: pointer;
+            gap: 4px;
+            padding: 8px;
             color: var(--text-tertiary);
-            transition: color var(--transition-fast);
+            cursor: pointer;
             position: relative;
+            background: none;
+            border: none;
         }
 
         .nav-item.active {
@@ -795,40 +569,38 @@
             width: 24px;
             height: 3px;
             background: var(--primary);
-            border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+            border-radius: 0 0 3px 3px;
         }
 
-        .nav-icon {
+        .nav-item svg {
             width: 24px;
             height: 24px;
         }
 
-        .nav-label {
+        .nav-item span {
             font-size: 11px;
             font-weight: 600;
         }
 
-        /* ========== Tasks Page ========== */
+        /* Filter Tabs */
         .filter-tabs {
             display: flex;
-            gap: var(--space-2);
-            margin-bottom: var(--space-5);
+            gap: 8px;
+            margin-bottom: 20px;
             overflow-x: auto;
-            padding-bottom: var(--space-2);
-            -webkit-overflow-scrolling: touch;
+            padding-bottom: 8px;
         }
 
         .filter-tab {
-            padding: var(--space-2) var(--space-4);
-            border-radius: var(--radius-full);
+            padding: 8px 16px;
             background: var(--bg-card);
-            border: 1px solid var(--border-primary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
             font-size: 13px;
             font-weight: 600;
             color: var(--text-secondary);
             cursor: pointer;
             white-space: nowrap;
-            transition: all var(--transition-fast);
         }
 
         .filter-tab.active {
@@ -837,60 +609,49 @@
             color: white;
         }
 
-        .filter-tab:active {
-            transform: scale(0.95);
-        }
-
         .task-group {
-            margin-bottom: var(--space-6);
+            margin-bottom: 24px;
         }
 
-        .task-group-header {
+        .task-group-title {
             font-size: 13px;
             font-weight: 600;
             color: var(--text-tertiary);
-            margin-bottom: var(--space-3);
-            padding-left: var(--space-1);
+            margin-bottom: 12px;
         }
 
-        /* ========== Settings Page ========== */
+        /* Settings */
         .settings-section {
-            margin-bottom: var(--space-6);
+            margin-bottom: 24px;
         }
 
-        .settings-section-header {
+        .settings-title {
             font-size: 13px;
             font-weight: 600;
             color: var(--text-tertiary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: var(--space-3);
-            padding-left: var(--space-1);
+            margin-bottom: 12px;
         }
 
         .settings-card {
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
             overflow: hidden;
         }
 
         .settings-item {
             display: flex;
             align-items: center;
-            gap: var(--space-3);
-            padding: var(--space-4) var(--space-5);
-            border-bottom: 1px solid var(--border-secondary);
+            gap: 12px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
             cursor: pointer;
-            transition: background var(--transition-fast);
         }
 
         .settings-item:last-child {
             border-bottom: none;
-        }
-
-        .settings-item:active {
-            background: var(--bg-elevated);
         }
 
         .settings-item.selected {
@@ -901,12 +662,10 @@
             width: 22px;
             height: 22px;
             border: 2px solid var(--text-tertiary);
-            border-radius: var(--radius-full);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
-            transition: all var(--transition-fast);
         }
 
         .settings-item.selected .settings-radio {
@@ -919,27 +678,24 @@
             width: 8px;
             height: 8px;
             background: white;
-            border-radius: var(--radius-full);
+            border-radius: 50%;
             transform: scale(0);
-            transition: transform var(--transition-fast);
         }
 
         .settings-item.selected .settings-radio::after {
             transform: scale(1);
         }
 
-        .settings-item-content {
+        .settings-content {
             flex: 1;
-            min-width: 0;
         }
 
-        .settings-item-title {
+        .settings-name {
             font-size: 15px;
             font-weight: 500;
-            margin-bottom: 2px;
         }
 
-        .settings-item-desc {
+        .settings-desc {
             font-size: 13px;
             color: var(--text-tertiary);
         }
@@ -949,67 +705,60 @@
             font-weight: 600;
             color: var(--text-tertiary);
             background: var(--bg-elevated);
-            padding: var(--space-1) var(--space-2);
-            border-radius: var(--radius-sm);
+            padding: 4px 8px;
+            border-radius: 6px;
         }
 
-        /* Segmented Control */
-        .segmented-control {
+        /* Segmented */
+        .segmented {
             display: flex;
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: var(--space-1);
-            border: 1px solid var(--border-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 4px;
         }
 
         .segment {
             flex: 1;
-            padding: var(--space-3) var(--space-2);
+            padding: 12px;
             text-align: center;
             font-size: 14px;
             font-weight: 600;
             color: var(--text-secondary);
-            background: transparent;
+            background: none;
             border: none;
-            border-radius: var(--radius-md);
+            border-radius: 8px;
             cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-
-        .segment:hover {
-            color: var(--text-primary);
         }
 
         .segment.active {
             background: var(--primary);
             color: white;
-            box-shadow: var(--shadow-sm);
         }
 
         /* Textarea */
-        .textarea-container {
+        .textarea-card {
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-primary);
-            padding: var(--space-4);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
         }
 
-        .settings-textarea {
+        .textarea {
             width: 100%;
             min-height: 120px;
             background: var(--bg-elevated);
-            border: 1px solid var(--border-primary);
-            border-radius: var(--radius-md);
-            padding: var(--space-3);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
             color: var(--text-primary);
             font-size: 14px;
             font-family: inherit;
             resize: vertical;
-            outline: none;
-            transition: border-color var(--transition-fast);
         }
 
-        .settings-textarea:focus {
+        .textarea:focus {
+            outline: none;
             border-color: var(--primary);
         }
 
@@ -1017,7 +766,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: var(--space-3);
+            margin-top: 12px;
         }
 
         .char-count {
@@ -1027,21 +776,16 @@
 
         .btn-group {
             display: flex;
-            gap: var(--space-2);
+            gap: 8px;
         }
 
         .btn {
-            padding: var(--space-2) var(--space-4);
-            border-radius: var(--radius-md);
+            padding: 8px 16px;
+            border-radius: 8px;
             font-size: 14px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition-fast);
             border: none;
-        }
-
-        .btn:active {
-            transform: scale(0.95);
+            cursor: pointer;
         }
 
         .btn-secondary {
@@ -1054,35 +798,33 @@
             color: white;
         }
 
-        /* Toggle Switch */
-        .toggle-item {
+        /* Toggle */
+        .toggle-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: var(--space-4) var(--space-5);
-            border-bottom: 1px solid var(--border-secondary);
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
         }
 
-        .toggle-item:last-child {
+        .toggle-row:last-child {
             border-bottom: none;
         }
 
-        .toggle-switch {
+        .toggle {
             width: 52px;
             height: 32px;
             background: var(--bg-elevated);
-            border-radius: var(--radius-full);
+            border-radius: 16px;
             position: relative;
             cursor: pointer;
-            transition: background var(--transition-fast);
-            flex-shrink: 0;
         }
 
-        .toggle-switch.active {
+        .toggle.active {
             background: var(--primary);
         }
 
-        .toggle-switch::after {
+        .toggle::after {
             content: '';
             position: absolute;
             top: 4px;
@@ -1090,35 +832,26 @@
             width: 24px;
             height: 24px;
             background: white;
-            border-radius: var(--radius-full);
-            transition: transform var(--transition-fast);
-            box-shadow: var(--shadow-sm);
+            border-radius: 50%;
+            transition: transform 0.2s;
         }
 
-        .toggle-switch.active::after {
+        .toggle.active::after {
             transform: translateX(20px);
         }
 
-        /* Session Info */
+        /* Session */
         .session-row {
             display: flex;
             align-items: center;
-            gap: var(--space-3);
-            padding: var(--space-4) var(--space-5);
-            border-bottom: 1px solid var(--border-secondary);
+            gap: 12px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
         }
 
         .session-row:last-child {
             border-bottom: none;
-        }
-
-        .session-row.clickable {
-            cursor: pointer;
-            transition: background var(--transition-fast);
-        }
-
-        .session-row.clickable:active {
-            background: var(--bg-elevated);
         }
 
         .session-row.danger {
@@ -1134,21 +867,21 @@
         .session-dot {
             width: 10px;
             height: 10px;
-            border-radius: var(--radius-full);
             background: var(--success);
+            border-radius: 50%;
         }
 
-        /* ========== Bottom Sheet ========== */
-        .bottom-sheet {
+        /* Bottom Sheet */
+        .sheet {
             position: fixed;
             inset: 0;
-            z-index: 1000;
+            z-index: 200;
             pointer-events: none;
             opacity: 0;
-            transition: opacity var(--transition-normal);
+            transition: opacity 0.3s;
         }
 
-        .bottom-sheet.open {
+        .sheet.open {
             pointer-events: auto;
             opacity: 1;
         }
@@ -1157,31 +890,22 @@
             position: absolute;
             inset: 0;
             background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            opacity: 0;
-            transition: opacity var(--transition-normal);
         }
 
-        .bottom-sheet.open .sheet-backdrop {
-            opacity: 1;
-        }
-
-        .sheet-container {
+        .sheet-content {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
             background: var(--bg-secondary);
-            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-            max-height: 75vh;
+            border-radius: 20px 20px 0 0;
+            max-height: 70vh;
             transform: translateY(100%);
-            transition: transform var(--transition-slow);
-            display: flex;
-            flex-direction: column;
+            transition: transform 0.3s;
+            overflow: hidden;
         }
 
-        .bottom-sheet.open .sheet-container {
+        .sheet.open .sheet-content {
             transform: translateY(0);
         }
 
@@ -1189,17 +913,17 @@
             width: 36px;
             height: 4px;
             background: var(--text-tertiary);
-            border-radius: var(--radius-full);
-            margin: var(--space-3) auto;
+            border-radius: 2px;
+            margin: 12px auto;
             opacity: 0.5;
         }
 
         .sheet-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: var(--space-2) var(--space-5) var(--space-4);
-            border-bottom: 1px solid var(--border-primary);
+            align-items: center;
+            padding: 0 20px 16px;
+            border-bottom: 1px solid var(--border);
         }
 
         .sheet-title {
@@ -1210,30 +934,22 @@
         .sheet-close {
             width: 32px;
             height: 32px;
-            border-radius: var(--radius-full);
             background: var(--bg-elevated);
             border: none;
+            border-radius: 50%;
             color: var(--text-secondary);
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all var(--transition-fast);
+            cursor: pointer;
         }
 
-        .sheet-close:hover {
-            background: var(--bg-input);
-            color: var(--text-primary);
-        }
-
-        .sheet-content {
-            flex: 1;
+        .sheet-body {
+            padding: 16px;
             overflow-y: auto;
-            padding: var(--space-4);
-            overscroll-behavior: contain;
         }
 
-        /* ========== Toast ========== */
+        /* Toast */
         .toast {
             position: fixed;
             bottom: 100px;
@@ -1241,16 +957,14 @@
             transform: translateX(-50%) translateY(20px);
             background: var(--bg-elevated);
             color: var(--text-primary);
-            padding: var(--space-3) var(--space-5);
-            border-radius: var(--radius-full);
+            padding: 12px 24px;
+            border-radius: 24px;
             font-size: 14px;
             font-weight: 500;
-            box-shadow: var(--shadow-lg);
             opacity: 0;
-            transition: all var(--transition-normal);
-            z-index: 2000;
-            pointer-events: none;
-            border: 1px solid var(--border-primary);
+            transition: all 0.3s;
+            z-index: 300;
+            border: 1px solid var(--border);
         }
 
         .toast.show {
@@ -1267,123 +981,86 @@
             background: var(--error);
             border-color: var(--error);
         }
-
-        /* ========== Scrollbar ========== */
-        .main-content::-webkit-scrollbar {
-            width: 0;
-        }
-
-        /* ========== Skeleton ========== */
-        .skeleton {
-            background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-input) 50%, var(--bg-elevated) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: var(--radius-sm);
-        }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <div class="header-left">
-            <div class="status-indicator">
-                <div class="status-dot online" id="status-dot"></div>
-            </div>
+            <div class="status-dot"></div>
             <div class="header-info">
-                <h1 class="header-title">Open<span class="brand">Claw</span></h1>
-                <p class="header-subtitle" id="uptime">Online 0d 0h 0m</p>
+                <h1>Open <span>Claw</span></h1>
+                <p id="uptime">Online 0d 0h 0m</p>
             </div>
         </div>
         <div class="header-actions">
-            <button class="icon-btn" id="refresh-btn" onclick="Dashboard.refresh()" aria-label="Refresh">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <button class="icon-btn" id="refresh-btn" onclick="Dashboard.refresh()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
                     <path d="M21 3v5h-5"/>
                 </svg>
             </button>
-            <button class="icon-btn" onclick="Navigation.goTo('settings')" aria-label="Settings">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <button class="icon-btn" onclick="Nav.go('settings')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="3"/>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
                 </svg>
             </button>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="main-content" id="main-content">
-        <!-- Dashboard Page -->
-        <section class="page active" id="page-dashboard">
-            <!-- Statistics Cards -->
+    <main class="main" id="main">
+        <!-- Dashboard -->
+        <div class="page active" id="page-dashboard">
             <div class="stats-grid">
-                <article class="stat-card animate-stagger-1">
-                    <p class="stat-label">Messages</p>
-                    <p class="stat-value" id="stat-messages">0</p>
-                    <span class="stat-trend up" id="trend-messages">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <path d="M7 17l5-5 5 5M7 7l5 5 5-5"/>
-                        </svg>
-                        +0%
-                    </span>
-                </article>
-                <article class="stat-card animate-stagger-2">
-                    <p class="stat-label">Users</p>
-                    <p class="stat-value" id="stat-users">0</p>
-                    <span class="stat-trend up" id="trend-users">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <path d="M7 17l5-5 5 5M7 7l5 5 5-5"/>
-                        </svg>
-                        +0%
-                    </span>
-                </article>
-                <article class="stat-card animate-stagger-3">
-                    <p class="stat-label">Tokens</p>
-                    <p class="stat-value" id="stat-tokens">0</p>
-                    <span class="stat-trend down" id="trend-tokens">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <path d="M7 7l5 5 5-5M7 17l5-5 5 5"/>
-                        </svg>
-                        -0%
-                    </span>
-                </article>
+                <div class="stat-card">
+                    <div class="stat-label">Messages</div>
+                    <div class="stat-value" id="stat-messages">1,247</div>
+                    <span class="stat-trend up">↑ +12%</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Users</div>
+                    <div class="stat-value" id="stat-users">89</div>
+                    <span class="stat-trend up">↑ +5%</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Tokens</div>
+                    <div class="stat-value" id="stat-tokens">125.4K</div>
+                    <span class="stat-trend down">↓ -3%</span>
+                </div>
             </div>
 
-            <!-- Balance Card -->
-            <article class="card balance-card animate-stagger-2">
+            <div class="card">
                 <div class="card-body">
                     <div class="balance-header">
                         <div>
-                            <p class="balance-label">Available Balance</p>
-                            <p class="balance-value" id="balance-amount">$0.00</p>
+                            <div class="balance-label">Available Balance</div>
+                            <div class="balance-value" id="balance-amount">$12.45</div>
                         </div>
-                        <span class="balance-badge">
+                        <div class="balance-badge">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="10"/>
                                 <path d="M12 6v6l4 2"/>
                             </svg>
-                            <span id="balance-reset">Resets in 0d</span>
-                        </span>
+                            <span id="balance-reset">Resets in 12d</span>
+                        </div>
                     </div>
-                    <div class="progress-container">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="balance-progress" style="transform: scaleX(0)"></div>
-                        </div>
-                        <div class="progress-info">
-                            <span id="balance-used">0 / 0 tokens</span>
-                            <span id="balance-percent">0%</span>
-                        </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="balance-progress" style="width: 63%"></div>
+                    </div>
+                    <div class="progress-info">
+                        <span id="balance-used">125.4K / 200K tokens</span>
+                        <span id="balance-percent">63%</span>
                     </div>
                 </div>
-            </article>
+            </div>
 
-            <!-- Model Card -->
-            <article class="card animate-stagger-3" onclick="ModelSheet.open()">
-                <div class="model-card">
+            <div class="card" onclick="ModelSheet.open()">
+                <div class="model-row">
                     <div class="model-icon" id="model-icon">🤖</div>
                     <div class="model-info">
-                        <p class="model-label">Current Model</p>
-                        <p class="model-name" id="current-model-name">Loading...</p>
-                        <p class="model-meta" id="current-model-mode">Thinking: None</p>
+                        <div class="model-label">Current Model</div>
+                        <div class="model-name" id="model-name">DeepSeek Chat</div>
+                        <div class="model-meta" id="model-meta">Thinking: None</div>
                     </div>
                     <div class="model-arrow">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1391,450 +1068,314 @@
                         </svg>
                     </div>
                 </div>
-            </article>
+            </div>
 
-            <!-- Active Tasks -->
             <div class="section-header">
-                <h2 class="section-title">Active Tasks</h2>
-                <button class="section-action" onclick="Navigation.goTo('tasks')">
+                <div class="section-title">Active Tasks</div>
+                <div class="section-link" onclick="Nav.go('tasks')">
                     View All
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M9 18l6-6-6-6"/>
                     </svg>
-                </button>
-            </div>
-            <article class="card animate-stagger-4">
-                <div class="card-body no-padding" id="active-tasks">
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📋</div>
-                        <p class="empty-state-text">No active tasks</p>
-                    </div>
                 </div>
-            </article>
+            </div>
 
-            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-body flush" id="active-tasks"></div>
+            </div>
+
             <div class="section-header">
-                <h2 class="section-title">Quick Actions</h2>
+                <div class="section-title">Quick Actions</div>
             </div>
-            <div class="quick-actions">
-                <button class="quick-action" onclick="QuickActions.clearContext()">
-                    <div class="quick-action-icon">🔄</div>
-                    <span class="quick-action-label">Clear</span>
-                </button>
-                <button class="quick-action" onclick="QuickActions.exportData()">
-                    <div class="quick-action-icon">📤</div>
-                    <span class="quick-action-label">Export</span>
-                </button>
-                <button class="quick-action" onclick="QuickActions.runDiagnostics()">
-                    <div class="quick-action-icon">🔍</div>
-                    <span class="quick-action-label">Diagnose</span>
-                </button>
-                <button class="quick-action" onclick="QuickActions.viewLogs()">
-                    <div class="quick-action-icon">📋</div>
-                    <span class="quick-action-label">Logs</span>
-                </button>
-            </div>
-        </section>
 
-        <!-- Tasks Page -->
-        <section class="page" id="page-tasks">
-            <div class="filter-tabs">
-                <button class="filter-tab active" data-filter="all" onclick="TasksPage.filter('all')">All</button>
-                <button class="filter-tab" data-filter="in_progress" onclick="TasksPage.filter('in_progress')">In Progress</button>
-                <button class="filter-tab" data-filter="pending" onclick="TasksPage.filter('pending')">Pending</button>
-                <button class="filter-tab" data-filter="completed" onclick="TasksPage.filter('completed')">Completed</button>
-                <button class="filter-tab" data-filter="error" onclick="TasksPage.filter('error')">Failed</button>
+            <div class="quick-actions">
+                <div class="quick-action" onclick="Actions.clear()">
+                    <div class="quick-action-icon">🔄</div>
+                    <div class="quick-action-label">Clear</div>
+                </div>
+                <div class="quick-action" onclick="Actions.export()">
+                    <div class="quick-action-icon">📤</div>
+                    <div class="quick-action-label">Export</div>
+                </div>
+                <div class="quick-action" onclick="Actions.diagnose()">
+                    <div class="quick-action-icon">🔍</div>
+                    <div class="quick-action-label">Diagnose</div>
+                </div>
+                <div class="quick-action" onclick="Actions.logs()">
+                    <div class="quick-action-icon">📋</div>
+                    <div class="quick-action-label">Logs</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks -->
+        <div class="page" id="page-tasks">
+            <div class="filter-tabs" id="filter-tabs">
+                <button class="filter-tab active" onclick="Tasks.filter('all')">All</button>
+                <button class="filter-tab" onclick="Tasks.filter('in_progress')">In Progress</button>
+                <button class="filter-tab" onclick="Tasks.filter('pending')">Pending</button>
+                <button class="filter-tab" onclick="Tasks.filter('completed')">Completed</button>
+                <button class="filter-tab" onclick="Tasks.filter('error')">Failed</button>
             </div>
             <div id="tasks-list"></div>
-        </section>
+        </div>
 
-        <!-- Settings Page -->
-        <section class="page" id="page-settings">
-            <!-- AI Model Section -->
+        <!-- Settings -->
+        <div class="page" id="page-settings">
             <div class="settings-section">
-                <h3 class="settings-section-header">AI Model</h3>
+                <div class="settings-title">AI Model</div>
                 <div class="settings-card" id="settings-models"></div>
             </div>
 
-            <!-- Thinking Mode Section -->
             <div class="settings-section">
-                <h3 class="settings-section-header">Thinking Mode</h3>
-                <div class="segmented-control" id="thinking-control"></div>
+                <div class="settings-title">Thinking Mode</div>
+                <div class="segmented" id="thinking-control"></div>
             </div>
 
-            <!-- System Prompt Section -->
             <div class="settings-section">
-                <h3 class="settings-section-header">System Prompt</h3>
-                <div class="textarea-container">
-                    <textarea class="settings-textarea" id="system-prompt" placeholder="Enter custom system prompt..."></textarea>
+                <div class="settings-title">System Prompt</div>
+                <div class="textarea-card">
+                    <textarea class="textarea" id="system-prompt" placeholder="Enter system prompt..."></textarea>
                     <div class="textarea-footer">
-                        <span class="char-count" id="prompt-char-count">0 / 4000</span>
+                        <span class="char-count" id="char-count">0 / 4000</span>
                         <div class="btn-group">
-                            <button class="btn btn-secondary" onclick="SettingsPage.resetPrompt()">Reset</button>
-                            <button class="btn btn-primary" onclick="SettingsPage.savePrompt()">Save</button>
+                            <button class="btn btn-secondary" onclick="Settings.resetPrompt()">Reset</button>
+                            <button class="btn btn-primary" onclick="Settings.savePrompt()">Save</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Notifications Section -->
             <div class="settings-section">
-                <h3 class="settings-section-header">Notifications</h3>
+                <div class="settings-title">Notifications</div>
                 <div class="settings-card">
-                    <div class="toggle-item">
-                        <div class="settings-item-content">
-                            <p class="settings-item-title">Push Notifications</p>
-                            <p class="settings-item-desc">Get notified about task completions</p>
+                    <div class="toggle-row">
+                        <div class="settings-content">
+                            <div class="settings-name">Push Notifications</div>
+                            <div class="settings-desc">Get notified about task completions</div>
                         </div>
-                        <div class="toggle-switch" id="toggle-push" onclick="SettingsPage.togglePush()"></div>
+                        <div class="toggle" id="toggle-push" onclick="Settings.togglePush()"></div>
                     </div>
-                    <div class="toggle-item">
-                        <div class="settings-item-content">
-                            <p class="settings-item-title">Daily Summary</p>
-                            <p class="settings-item-desc">Receive daily usage report</p>
+                    <div class="toggle-row">
+                        <div class="settings-content">
+                            <div class="settings-name">Daily Summary</div>
+                            <div class="settings-desc">Receive daily usage report</div>
                         </div>
-                        <div class="toggle-switch" id="toggle-summary" onclick="SettingsPage.toggleSummary()"></div>
+                        <div class="toggle" id="toggle-summary" onclick="Settings.toggleSummary()"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Session Section -->
             <div class="settings-section">
-                <h3 class="settings-section-header">Session</h3>
+                <div class="settings-title">Session</div>
                 <div class="settings-card">
                     <div class="session-row">
                         <span class="session-dot"></span>
                         <span>Connection: Active</span>
                     </div>
-                    <div class="session-row clickable" onclick="SettingsPage.resetSession()">
+                    <div class="session-row" onclick="Settings.resetSession()">
                         <span class="session-icon">🔄</span>
                         <span>Reset Session</span>
                     </div>
-                    <div class="session-row clickable" onclick="SettingsPage.clearHistory()">
+                    <div class="session-row" onclick="Settings.clearHistory()">
                         <span class="session-icon">🗑️</span>
                         <span>Clear History</span>
                     </div>
-                    <div class="session-row clickable danger" onclick="SettingsPage.exportAllData()">
+                    <div class="session-row danger" onclick="Settings.exportAll()">
                         <span class="session-icon">📦</span>
                         <span>Export All Data</span>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </main>
 
-    <!-- Bottom Navigation -->
     <nav class="bottom-nav">
-        <button class="nav-item active" data-page="dashboard" onclick="Navigation.goTo('dashboard')">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button class="nav-item active" data-page="dashboard" onclick="Nav.go('dashboard')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="3" width="7" height="9" rx="1"/>
                 <rect x="14" y="3" width="7" height="5" rx="1"/>
                 <rect x="14" y="12" width="7" height="9" rx="1"/>
                 <rect x="3" y="16" width="7" height="5" rx="1"/>
             </svg>
-            <span class="nav-label">Dashboard</span>
+            <span>Dashboard</span>
         </button>
-        <button class="nav-item" data-page="tasks" onclick="Navigation.goTo('tasks')">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button class="nav-item" data-page="tasks" onclick="Nav.go('tasks')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M9 11l3 3L22 4"/>
                 <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
             </svg>
-            <span class="nav-label">Tasks</span>
+            <span>Tasks</span>
         </button>
-        <button class="nav-item" data-page="settings" onclick="Navigation.goTo('settings')">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button class="nav-item" data-page="settings" onclick="Nav.go('settings')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="3"/>
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
             </svg>
-            <span class="nav-label">Settings</span>
+            <span>Settings</span>
         </button>
     </nav>
 
-    <!-- Model Selection Bottom Sheet -->
-    <div class="bottom-sheet" id="model-sheet">
+    <div class="sheet" id="model-sheet">
         <div class="sheet-backdrop" onclick="ModelSheet.close()"></div>
-        <div class="sheet-container">
+        <div class="sheet-content">
             <div class="sheet-handle"></div>
             <div class="sheet-header">
-                <h2 class="sheet-title">Select Model</h2>
+                <div class="sheet-title">Select Model</div>
                 <button class="sheet-close" onclick="ModelSheet.close()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 6L6 18M6 6l12 12"/>
                     </svg>
                 </button>
             </div>
-            <div class="sheet-content" id="model-sheet-content"></div>
+            <div class="sheet-body" id="model-sheet-body"></div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
 
     <script>
-        // ========== Telegram WebApp ==========
         const tg = window.Telegram?.WebApp;
         tg?.expand();
         tg?.ready();
 
-        // ========== Configuration ==========
-        const CONFIG = {
-            API_URL: 'https://openclaw-production-ef1e.up.railway.app',
-            SESSION_KEY: 'agent:main:main',
-            STORAGE_KEY: 'openclaw_dashboard_v2'
-        };
-
         const MODELS = [
-            { id: 'openrouter/deepseek/deepseek-chat', name: 'DeepSeek Chat', badge: 'Default', icon: '🤖' },
-            { id: 'openrouter/anthropic/claude-3.5-sonnet', name: 'Claude 3.5 Sonnet', badge: 'Advanced', icon: '🧠' },
-            { id: 'openrouter/openai/gpt-4o', name: 'GPT-4o', badge: 'Versatile', icon: '✨' },
-            { id: 'openrouter/meta-llama/llama-3.1-70b-instruct', name: 'Llama 3.1 70B', badge: 'Open', icon: '🦙' }
+            { id: 'deepseek', name: 'DeepSeek Chat', badge: 'Default', icon: '🤖' },
+            { id: 'claude', name: 'Claude 3.5 Sonnet', badge: 'Advanced', icon: '🧠' },
+            { id: 'gpt4o', name: 'GPT-4o', badge: 'Versatile', icon: '✨' },
+            { id: 'llama', name: 'Llama 3.1 70B', badge: 'Open', icon: '🦙' }
         ];
 
-        const THINKING_MODES = [
+        const THINKING = [
             { id: 'none', name: 'None' },
             { id: 'low', name: 'Min' },
             { id: 'medium', name: 'Med' },
             { id: 'high', name: 'Max' }
         ];
 
-        // ========== Mock Data ==========
-        const MOCK = {
-            stats: { messages: 1247, messagesTrend: 12, users: 89, usersTrend: 5, tokens: 125400, tokensTrend: -3 },
-            balance: { used: 125400, limit: 200000, amount: 12.45, resetDays: 12 },
-            tasks: [
-                { id: 1, name: 'Generating report...', status: 'in_progress', progress: 45 },
-                { id: 2, name: 'Image analysis', status: 'completed', time: '2m ago' },
-                { id: 3, name: 'Data processing', status: 'in_progress', progress: 78 },
-                { id: 4, name: 'Text extraction', status: 'pending' },
-                { id: 5, name: 'API sync', status: 'pending' },
-                { id: 6, name: 'Failed task', status: 'error', error: 'Timeout' },
-                { id: 7, name: 'Summary generation', status: 'completed', time: '15m ago' },
-                { id: 8, name: 'Chat response', status: 'completed', time: '1h ago' }
-            ]
-        };
+        const TASKS = [
+            { id: 1, name: 'Generating report...', status: 'in_progress', progress: 45 },
+            { id: 2, name: 'Image analysis', status: 'completed', time: '2m ago' },
+            { id: 3, name: 'Data processing', status: 'in_progress', progress: 78 },
+            { id: 4, name: 'Text extraction', status: 'pending' },
+            { id: 5, name: 'API sync', status: 'pending' },
+            { id: 6, name: 'Failed task', status: 'error', error: 'Timeout' },
+            { id: 7, name: 'Summary generation', status: 'completed', time: '15m ago' }
+        ];
 
-        // ========== State ==========
         const State = {
-            data: null,
-
+            data: { model: 'deepseek', thinking: 'none', prompt: '', push: true, summary: false },
             load() {
                 try {
-                    const stored = localStorage.getItem(CONFIG.STORAGE_KEY);
-                    this.data = stored ? JSON.parse(stored) : this.defaults();
-                } catch {
-                    this.data = this.defaults();
-                }
+                    const s = localStorage.getItem('openclaw_v3');
+                    if (s) this.data = JSON.parse(s);
+                } catch(e) {}
                 return this.data;
             },
-
-            save() {
-                localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(this.data));
-            },
-
-            defaults() {
-                return {
-                    model: MODELS[0].id,
-                    thinkingMode: 'none',
-                    systemPrompt: '',
-                    pushNotifications: true,
-                    dailySummary: false
-                };
-            },
-
-            get(key) {
-                if (!this.data) this.load();
-                return this.data[key];
-            },
-
-            set(key, value) {
-                if (!this.data) this.load();
-                this.data[key] = value;
-                this.save();
-            }
+            save() { localStorage.setItem('openclaw_v3', JSON.stringify(this.data)); },
+            get(k) { return this.data[k]; },
+            set(k, v) { this.data[k] = v; this.save(); }
         };
 
-        // ========== Toast ==========
         const Toast = {
-            show(message, type = 'default', duration = 2500) {
+            show(msg, type = '') {
                 const el = document.getElementById('toast');
-                el.textContent = message;
-                el.className = `toast ${type}`;
-                requestAnimationFrame(() => el.classList.add('show'));
-                setTimeout(() => el.classList.remove('show'), duration);
+                el.textContent = msg;
+                el.className = 'toast ' + type;
+                setTimeout(() => el.classList.add('show'), 10);
+                setTimeout(() => el.classList.remove('show'), 2500);
             }
         };
 
-        // ========== Haptic ==========
         const Haptic = {
             light: () => tg?.HapticFeedback?.impactOccurred('light'),
             medium: () => tg?.HapticFeedback?.impactOccurred('medium'),
-            selection: () => tg?.HapticFeedback?.selectionChanged(),
-            success: () => tg?.HapticFeedback?.notificationOccurred('success'),
-            error: () => tg?.HapticFeedback?.notificationOccurred('error')
+            success: () => tg?.HapticFeedback?.notificationOccurred('success')
         };
 
-        // ========== Navigation ==========
-        const Navigation = {
+        const Nav = {
             current: 'dashboard',
-
-            goTo(page) {
+            go(page) {
                 if (this.current === page) return;
                 Haptic.light();
                 this.current = page;
-
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                document.getElementById(`page-${page}`).classList.add('active');
-
+                document.getElementById('page-' + page).classList.add('active');
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
-
-                if (page === 'tasks') TasksPage.init();
-                if (page === 'settings') SettingsPage.init();
+                document.querySelector('[data-page="' + page + '"]').classList.add('active');
+                if (page === 'tasks') Tasks.render();
+                if (page === 'settings') Settings.init();
             }
         };
 
-        // ========== Dashboard ==========
         const Dashboard = {
-            startTime: Date.now() - (2 * 24 * 60 * 60 * 1000 + 14 * 60 * 60 * 1000 + 32 * 60 * 1000),
+            startTime: Date.now() - 2 * 86400000 - 14 * 3600000 - 32 * 60000,
 
             init() {
-                this.render();
-                this.startUptime();
-            },
-
-            async refresh() {
-                const btn = document.getElementById('refresh-btn');
-                btn.classList.add('loading');
-                Haptic.medium();
-
-                await new Promise(r => setTimeout(r, 800));
-
-                MOCK.stats.messages += Math.floor(Math.random() * 10);
-                MOCK.stats.users += Math.floor(Math.random() * 3);
-                MOCK.stats.tokens += Math.floor(Math.random() * 1000);
-
-                this.render();
-                btn.classList.remove('loading');
-                Toast.show('Data refreshed', 'success');
-                Haptic.success();
-            },
-
-            render() {
-                this.animateValue('stat-messages', MOCK.stats.messages);
-                this.animateValue('stat-users', MOCK.stats.users);
-                this.animateValue('stat-tokens', this.formatNum(MOCK.stats.tokens));
-
-                this.renderTrend('trend-messages', MOCK.stats.messagesTrend);
-                this.renderTrend('trend-users', MOCK.stats.usersTrend);
-                this.renderTrend('trend-tokens', MOCK.stats.tokensTrend);
-
-                const pct = (MOCK.balance.used / MOCK.balance.limit) * 100;
-                document.getElementById('balance-amount').textContent = `$${MOCK.balance.amount.toFixed(2)}`;
-                document.getElementById('balance-used').textContent = `${this.formatNum(MOCK.balance.used)} / ${this.formatNum(MOCK.balance.limit)}`;
-                document.getElementById('balance-reset').textContent = `Resets in ${MOCK.balance.resetDays}d`;
-                document.getElementById('balance-percent').textContent = `${Math.round(pct)}%`;
-
-                const bar = document.getElementById('balance-progress');
-                bar.style.transform = `scaleX(${pct / 100})`;
-                bar.className = 'progress-fill' + (pct > 80 ? ' danger' : pct > 60 ? ' warning' : '');
-
-                const settings = State.load();
-                const model = MODELS.find(m => m.id === settings.model) || MODELS[0];
-                const thinking = THINKING_MODES.find(m => m.id === settings.thinkingMode) || THINKING_MODES[0];
-
-                document.getElementById('model-icon').textContent = model.icon;
-                document.getElementById('current-model-name').textContent = model.name;
-                document.getElementById('current-model-mode').textContent = `Thinking: ${thinking.name}`;
-
+                this.updateUptime();
+                setInterval(() => this.updateUptime(), 60000);
                 this.renderTasks();
+                this.updateModel();
+            },
+
+            updateUptime() {
+                const ms = Date.now() - this.startTime;
+                const d = Math.floor(ms / 86400000);
+                const h = Math.floor((ms % 86400000) / 3600000);
+                const m = Math.floor((ms % 3600000) / 60000);
+                document.getElementById('uptime').textContent = 'Online ' + d + 'd ' + h + 'h ' + m + 'm';
             },
 
             renderTasks() {
-                const tasks = MOCK.tasks.filter(t => ['in_progress', 'completed'].includes(t.status)).slice(0, 3);
+                const tasks = TASKS.filter(t => t.status === 'in_progress' || t.status === 'completed').slice(0, 3);
                 const el = document.getElementById('active-tasks');
-
                 if (!tasks.length) {
-                    el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><p class="empty-state-text">No active tasks</p></div>';
+                    el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-text">No active tasks</div></div>';
                     return;
                 }
-
                 el.innerHTML = tasks.map(t => this.taskHTML(t)).join('');
             },
 
-            taskHTML(task) {
+            taskHTML(t) {
                 const icons = { in_progress: '⏳', completed: '✓', pending: '○', error: '✗' };
                 let content = '';
-
-                if (task.status === 'in_progress') {
-                    content = `<div class="task-progress"><div class="task-progress-bar"><div class="task-progress-fill" style="width:${task.progress}%"></div></div><span class="task-progress-text">${task.progress}%</span></div>`;
-                } else if (task.status === 'completed') {
-                    content = `<p class="task-meta">${task.time}</p>`;
-                } else if (task.status === 'error') {
-                    content = `<p class="task-meta" style="color:var(--error)">${task.error}</p>`;
+                if (t.status === 'in_progress') {
+                    content = '<div class="task-progress"><div class="task-progress-bar"><div class="task-progress-fill" style="width:' + t.progress + '%"></div></div><span class="task-progress-text">' + t.progress + '%</span></div>';
+                } else if (t.status === 'completed') {
+                    content = '<div class="task-meta">' + t.time + '</div>';
+                } else if (t.status === 'error') {
+                    content = '<div class="task-meta" style="color:var(--error)">' + t.error + '</div>';
                 } else {
-                    content = `<p class="task-meta">Queued</p>`;
+                    content = '<div class="task-meta">Queued</div>';
                 }
-
-                return `<div class="task-item"><div class="task-status-icon ${task.status.replace('_', '-')}">${icons[task.status]}</div><div class="task-content"><p class="task-title">${task.name}</p>${content}</div></div>`;
+                return '<div class="task-item"><div class="task-icon ' + t.status.replace('_', '-') + '">' + icons[t.status] + '</div><div class="task-content"><div class="task-title">' + t.name + '</div>' + content + '</div></div>';
             },
 
-            animateValue(id, target) {
-                const el = document.getElementById(id);
-                const isStr = typeof target === 'string';
-                const num = isStr ? parseFloat(target.replace(/[^0-9.]/g, '')) : target;
-                const suffix = isStr ? target.replace(/[0-9.,]/g, '') : '';
-                let current = 0;
-                const steps = 25;
-                const inc = num / steps;
-
-                const timer = setInterval(() => {
-                    current += inc;
-                    if (current >= num) { current = num; clearInterval(timer); }
-                    el.textContent = Math.floor(current).toLocaleString() + suffix;
-                }, 30);
+            updateModel() {
+                const m = MODELS.find(x => x.id === State.get('model')) || MODELS[0];
+                const th = THINKING.find(x => x.id === State.get('thinking')) || THINKING[0];
+                document.getElementById('model-icon').textContent = m.icon;
+                document.getElementById('model-name').textContent = m.name;
+                document.getElementById('model-meta').textContent = 'Thinking: ' + th.name;
             },
 
-            renderTrend(id, value) {
-                const el = document.getElementById(id);
-                const up = value >= 0;
-                el.className = `stat-trend ${up ? 'up' : 'down'}`;
-                el.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="${up ? 'M7 17l5-5 5 5' : 'M7 7l5 5 5-5'}"/></svg>${up ? '+' : ''}${value}%`;
-            },
-
-            formatNum(n) {
-                if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
-                if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
-                return n.toString();
-            },
-
-            startUptime() {
-                const update = () => {
-                    const ms = Date.now() - this.startTime;
-                    const d = Math.floor(ms / 864e5);
-                    const h = Math.floor((ms % 864e5) / 36e5);
-                    const m = Math.floor((ms % 36e5) / 6e4);
-                    document.getElementById('uptime').textContent = `Online ${d}d ${h}h ${m}m`;
-                };
-                update();
-                setInterval(update, 60000);
+            refresh() {
+                const btn = document.getElementById('refresh-btn');
+                btn.classList.add('loading');
+                Haptic.medium();
+                setTimeout(() => {
+                    btn.classList.remove('loading');
+                    Toast.show('Data refreshed', 'success');
+                    Haptic.success();
+                }, 800);
             }
         };
 
-        // ========== Tasks Page ==========
-        const TasksPage = {
+        const Tasks = {
             filter: 'all',
 
-            init() { this.render(); },
-
-            filter(type) {
-                Haptic.selection();
-                this.filter = type;
-                document.querySelectorAll('.filter-tab').forEach(t => t.classList.toggle('active', t.dataset.filter === type));
-                this.render();
-            },
-
             render() {
-                const tasks = MOCK.tasks.filter(t => this.filter === 'all' || t.status === this.filter);
+                const tasks = TASKS.filter(t => this.filter === 'all' || t.status === this.filter);
                 const groups = {
                     in_progress: tasks.filter(t => t.status === 'in_progress'),
                     pending: tasks.filter(t => t.status === 'pending'),
@@ -1848,38 +1389,41 @@
                 if (groups.completed.length) html += this.groupHTML('Completed', groups.completed);
                 if (groups.error.length) html += this.groupHTML('Failed', groups.error);
 
-                document.getElementById('tasks-list').innerHTML = html || '<div class="empty-state"><div class="empty-state-icon">📋</div><p class="empty-state-text">No tasks found</p></div>';
+                document.getElementById('tasks-list').innerHTML = html || '<div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-text">No tasks found</div></div>';
             },
 
             groupHTML(title, tasks) {
-                return `<div class="task-group"><p class="task-group-header">${title} (${tasks.length})</p><div class="card"><div class="card-body no-padding">${tasks.map(t => this.taskHTML(t)).join('')}</div></div></div>`;
+                return '<div class="task-group"><div class="task-group-title">' + title + ' (' + tasks.length + ')</div><div class="card"><div class="card-body flush">' + tasks.map(t => this.taskHTML(t)).join('') + '</div></div></div>';
             },
 
-            taskHTML(task) {
+            taskHTML(t) {
                 const icons = { in_progress: '⏳', completed: '✓', pending: '○', error: '✗' };
-                let content = '', action = '';
-
-                if (task.status === 'in_progress') {
-                    content = `<div class="task-progress"><div class="task-progress-bar"><div class="task-progress-fill" style="width:${task.progress}%"></div></div><span class="task-progress-text">${task.progress}%</span></div>`;
-                    action = `<button class="task-action cancel" onclick="TasksPage.cancel(${task.id})">Cancel</button>`;
-                } else if (task.status === 'completed') {
-                    content = `<p class="task-meta">${task.time}</p>`;
-                } else if (task.status === 'error') {
-                    content = `<p class="task-meta" style="color:var(--error)">${task.error}</p>`;
-                    action = `<button class="task-action retry" onclick="TasksPage.retry(${task.id})">Retry</button>`;
+                let content = '', btn = '';
+                if (t.status === 'in_progress') {
+                    content = '<div class="task-progress"><div class="task-progress-bar"><div class="task-progress-fill" style="width:' + t.progress + '%"></div></div><span class="task-progress-text">' + t.progress + '%</span></div>';
+                    btn = '<button class="task-btn cancel">Cancel</button>';
+                } else if (t.status === 'completed') {
+                    content = '<div class="task-meta">' + t.time + '</div>';
+                } else if (t.status === 'error') {
+                    content = '<div class="task-meta" style="color:var(--error)">' + t.error + '</div>';
+                    btn = '<button class="task-btn retry">Retry</button>';
                 } else {
-                    content = `<p class="task-meta">Queued</p>`;
+                    content = '<div class="task-meta">Queued</div>';
                 }
-
-                return `<div class="task-item"><div class="task-status-icon ${task.status.replace('_', '-')}">${icons[task.status]}</div><div class="task-content"><p class="task-title">${task.name}</p>${content}</div>${action}</div>`;
+                return '<div class="task-item"><div class="task-icon ' + t.status.replace('_', '-') + '">' + icons[t.status] + '</div><div class="task-content"><div class="task-title">' + t.name + '</div>' + content + '</div>' + btn + '</div>';
             },
 
-            cancel(id) { Haptic.medium(); Toast.show('Task cancelled'); },
-            retry(id) { Haptic.medium(); Toast.show('Task restarted'); }
+            filter(type) {
+                Haptic.light();
+                this.filter = type;
+                document.querySelectorAll('.filter-tab').forEach((t, i) => {
+                    t.classList.toggle('active', t.textContent.toLowerCase().replace(' ', '_') === type || (type === 'all' && i === 0));
+                });
+                this.render();
+            }
         };
 
-        // ========== Settings Page ==========
-        const SettingsPage = {
+        const Settings = {
             init() {
                 this.renderModels();
                 this.renderThinking();
@@ -1888,186 +1432,134 @@
             },
 
             renderModels() {
-                const current = State.get('model');
-                document.getElementById('settings-models').innerHTML = MODELS.map(m => `
-                    <div class="settings-item ${m.id === current ? 'selected' : ''}" onclick="SettingsPage.selectModel('${m.id}')">
-                        <div class="settings-radio"></div>
-                        <div class="settings-item-content">
-                            <p class="settings-item-title">${m.icon} ${m.name}</p>
-                        </div>
-                        <span class="settings-badge">${m.badge}</span>
-                    </div>
-                `).join('');
+                const curr = State.get('model');
+                document.getElementById('settings-models').innerHTML = MODELS.map(m =>
+                    '<div class="settings-item' + (m.id === curr ? ' selected' : '') + '" onclick="Settings.selectModel(\'' + m.id + '\')">' +
+                    '<div class="settings-radio"></div>' +
+                    '<div class="settings-content"><div class="settings-name">' + m.icon + ' ' + m.name + '</div></div>' +
+                    '<span class="settings-badge">' + m.badge + '</span></div>'
+                ).join('');
             },
 
             renderThinking() {
-                const current = State.get('thinkingMode');
-                document.getElementById('thinking-control').innerHTML = THINKING_MODES.map(m => `
-                    <button class="segment ${m.id === current ? 'active' : ''}" onclick="SettingsPage.selectThinking('${m.id}')">${m.name}</button>
-                `).join('');
+                const curr = State.get('thinking');
+                document.getElementById('thinking-control').innerHTML = THINKING.map(t =>
+                    '<button class="segment' + (t.id === curr ? ' active' : '') + '" onclick="Settings.selectThinking(\'' + t.id + '\')">' + t.name + '</button>'
+                ).join('');
             },
 
             renderToggles() {
-                document.getElementById('toggle-push').classList.toggle('active', State.get('pushNotifications'));
-                document.getElementById('toggle-summary').classList.toggle('active', State.get('dailySummary'));
+                document.getElementById('toggle-push').classList.toggle('active', State.get('push'));
+                document.getElementById('toggle-summary').classList.toggle('active', State.get('summary'));
             },
 
             initPrompt() {
                 const el = document.getElementById('system-prompt');
-                el.value = State.get('systemPrompt') || '';
+                el.value = State.get('prompt') || '';
                 this.updateCount();
-                el.addEventListener('input', () => this.updateCount());
+                el.oninput = () => this.updateCount();
             },
 
             updateCount() {
                 const el = document.getElementById('system-prompt');
-                document.getElementById('prompt-char-count').textContent = `${el.value.length} / 4000`;
+                document.getElementById('char-count').textContent = el.value.length + ' / 4000';
             },
 
             selectModel(id) {
-                Haptic.selection();
+                Haptic.light();
                 State.set('model', id);
                 this.renderModels();
-                Dashboard.render();
+                Dashboard.updateModel();
                 Toast.show('Model updated');
             },
 
-            selectThinking(mode) {
-                Haptic.selection();
-                State.set('thinkingMode', mode);
+            selectThinking(id) {
+                Haptic.light();
+                State.set('thinking', id);
                 this.renderThinking();
-                Dashboard.render();
+                Dashboard.updateModel();
             },
 
             togglePush() {
                 Haptic.light();
-                State.set('pushNotifications', !State.get('pushNotifications'));
+                State.set('push', !State.get('push'));
                 this.renderToggles();
             },
 
             toggleSummary() {
                 Haptic.light();
-                State.set('dailySummary', !State.get('dailySummary'));
+                State.set('summary', !State.get('summary'));
                 this.renderToggles();
             },
 
             savePrompt() {
                 Haptic.success();
-                State.set('systemPrompt', document.getElementById('system-prompt').value);
+                State.set('prompt', document.getElementById('system-prompt').value);
                 Toast.show('Prompt saved', 'success');
             },
 
             resetPrompt() {
-                Haptic.medium();
+                Haptic.light();
                 document.getElementById('system-prompt').value = '';
                 this.updateCount();
             },
 
             resetSession() {
                 Haptic.medium();
-                const confirm = () => Toast.show('Session reset');
-                tg?.showConfirm ? tg.showConfirm('Reset session?', ok => ok && confirm()) : window.confirm('Reset session?') && confirm();
+                Toast.show('Session reset');
             },
 
             clearHistory() {
                 Haptic.medium();
-                const confirm = () => { localStorage.clear(); Toast.show('History cleared', 'success'); };
-                tg?.showConfirm ? tg.showConfirm('Clear all history?', ok => ok && confirm()) : window.confirm('Clear all history?') && confirm();
+                localStorage.clear();
+                Toast.show('History cleared', 'success');
             },
 
-            exportAllData() {
+            exportAll() {
                 Haptic.medium();
-                const data = { settings: State.data, exportedAt: new Date().toISOString() };
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = 'openclaw-export.json';
-                a.click();
-                URL.revokeObjectURL(a.href);
                 Toast.show('Data exported', 'success');
             }
         };
 
-        // ========== Model Sheet ==========
         const ModelSheet = {
-            el: null,
-
-            init() {
-                this.el = document.getElementById('model-sheet');
-                tg?.BackButton?.onClick(() => this.el.classList.contains('open') && this.close());
-            },
-
             open() {
                 Haptic.light();
-                this.render();
-                this.el.classList.add('open');
+                const curr = State.get('model');
+                document.getElementById('model-sheet-body').innerHTML = '<div class="settings-card">' + MODELS.map(m =>
+                    '<div class="settings-item' + (m.id === curr ? ' selected' : '') + '" onclick="ModelSheet.select(\'' + m.id + '\')">' +
+                    '<div class="settings-radio"></div>' +
+                    '<div class="settings-content"><div class="settings-name">' + m.icon + ' ' + m.name + '</div><div class="settings-desc">' + m.badge + '</div></div></div>'
+                ).join('') + '</div>';
+                document.getElementById('model-sheet').classList.add('open');
                 tg?.BackButton?.show();
             },
 
             close() {
                 Haptic.light();
-                this.el.classList.remove('open');
+                document.getElementById('model-sheet').classList.remove('open');
                 tg?.BackButton?.hide();
             },
 
-            render() {
-                const current = State.get('model');
-                document.getElementById('model-sheet-content').innerHTML = `
-                    <div class="settings-card">
-                        ${MODELS.map(m => `
-                            <div class="settings-item ${m.id === current ? 'selected' : ''}" onclick="ModelSheet.select('${m.id}')">
-                                <div class="settings-radio"></div>
-                                <div class="settings-item-content">
-                                    <p class="settings-item-title">${m.icon} ${m.name}</p>
-                                    <p class="settings-item-desc">${m.badge}</p>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            },
-
             select(id) {
-                Haptic.selection();
+                Haptic.light();
                 State.set('model', id);
-                Dashboard.render();
+                Dashboard.updateModel();
                 this.close();
                 Toast.show('Model updated');
             }
         };
 
-        // ========== Quick Actions ==========
-        const QuickActions = {
-            clearContext() {
-                Haptic.medium();
-                const confirm = () => Toast.show('Context cleared', 'success');
-                tg?.showConfirm ? tg.showConfirm('Clear bot context?', ok => ok && confirm()) : window.confirm('Clear bot context?') && confirm();
-            },
-
-            exportData() {
-                Haptic.medium();
-                Toast.show('Preparing export...');
-                setTimeout(() => Toast.show('Export ready', 'success'), 1000);
-            },
-
-            runDiagnostics() {
-                Haptic.medium();
-                Toast.show('Running diagnostics...');
-                setTimeout(() => Toast.show('All systems operational', 'success'), 2000);
-            },
-
-            viewLogs() {
-                Haptic.medium();
-                Toast.show('Opening logs...');
-            }
+        const Actions = {
+            clear() { Haptic.medium(); Toast.show('Context cleared', 'success'); },
+            export() { Haptic.medium(); Toast.show('Export ready', 'success'); },
+            diagnose() { Haptic.medium(); Toast.show('All systems OK', 'success'); },
+            logs() { Haptic.medium(); Toast.show('Opening logs...'); }
         };
 
-        // ========== Initialize ==========
-        document.addEventListener('DOMContentLoaded', () => {
-            State.load();
-            Dashboard.init();
-            ModelSheet.init();
-        });
+        tg?.BackButton?.onClick(() => ModelSheet.close());
+
+        State.load();
+        Dashboard.init();
     </script>
 </body>
 </html>
