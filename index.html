@@ -5,51 +5,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>OpenClaw Dashboard</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         :root {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2a2a2a;
-            --bg-card: #2a2a2a;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
-            --accent: #20b2aa;
-            --accent-hover: #3ccec6;
-            --success: #4caf50;
-            --warning: #ff9800;
-            --error: #f44336;
-            --gradient-teal: linear-gradient(135deg, #20b2aa, #1a8a84);
-            --gradient-gold: linear-gradient(135deg, #ffd700, #ffb347);
-            --gradient-purple: linear-gradient(135deg, #667eea, #764ba2);
-            --gradient-green: linear-gradient(135deg, #4caf50, #2e7d32);
-            --gradient-orange: linear-gradient(135deg, #ff9800, #f57c00);
-            --gradient-red: linear-gradient(135deg, #f44336, #c62828);
+            /* Primary Colors - Professional Blue */
+            --primary: #3B82F6;
+            --primary-light: #60A5FA;
+            --primary-dark: #2563EB;
+            --primary-subtle: rgba(59, 130, 246, 0.12);
+
+            /* Neutrals - Refined Dark Theme */
+            --bg-primary: #0F0F0F;
+            --bg-secondary: #171717;
+            --bg-card: #1C1C1E;
+            --bg-elevated: #232326;
+            --bg-input: #2C2C2E;
+
+            /* Text Colors */
+            --text-primary: #FFFFFF;
+            --text-secondary: #8E8E93;
+            --text-tertiary: #636366;
+
+            /* Borders */
+            --border-primary: rgba(255, 255, 255, 0.08);
+            --border-secondary: rgba(255, 255, 255, 0.04);
+
+            /* Status Colors */
+            --success: #34C759;
+            --success-subtle: rgba(52, 199, 89, 0.12);
+            --warning: #FF9F0A;
+            --warning-subtle: rgba(255, 159, 10, 0.12);
+            --error: #FF453A;
+            --error-subtle: rgba(255, 69, 58, 0.12);
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.3);
+
+            /* Spacing - 8px base */
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 20px;
+            --space-6: 24px;
+            --space-8: 32px;
+
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-full: 9999px;
+
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
             background-color: var(--tg-theme-bg-color, var(--bg-primary));
             color: var(--tg-theme-text-color, var(--text-primary));
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            font-size: 15px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
+
+        /* ========== Typography ========== */
+        .text-xs { font-size: 11px; line-height: 1.4; }
+        .text-sm { font-size: 13px; line-height: 1.4; }
+        .text-base { font-size: 15px; line-height: 1.5; }
+        .text-lg { font-size: 17px; line-height: 1.4; }
+        .text-xl { font-size: 20px; line-height: 1.3; }
+        .text-2xl { font-size: 24px; line-height: 1.2; }
+        .text-3xl { font-size: 32px; line-height: 1.1; }
+
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
 
         /* ========== Animations ========== */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes countUp {
-            from { opacity: 0; transform: scale(0.5); }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
         }
 
         @keyframes shimmer {
@@ -58,13 +124,8 @@
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-        }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 5px rgba(32, 178, 170, 0.5); }
-            50% { box-shadow: 0 0 20px rgba(32, 178, 170, 0.8); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
         @keyframes spin {
@@ -72,122 +133,127 @@
             to { transform: rotate(360deg); }
         }
 
-        @keyframes progressBar {
-            from { width: 0%; }
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes slideUp {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        @keyframes progressFill {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes breathe {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
         }
 
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(0);
-            animation: ripple-effect 0.6s ease-out;
-            pointer-events: none;
+        .animate-fadeIn {
+            animation: fadeIn var(--transition-normal) ease-out forwards;
         }
 
-        @keyframes ripple-effect {
-            to { transform: scale(4); opacity: 0; }
-        }
+        .animate-stagger-1 { animation-delay: 50ms; }
+        .animate-stagger-2 { animation-delay: 100ms; }
+        .animate-stagger-3 { animation-delay: 150ms; }
+        .animate-stagger-4 { animation-delay: 200ms; }
 
         /* ========== Header ========== */
         .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 16px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            background: var(--bg-primary);
+            padding: var(--space-4) var(--space-5);
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-primary);
             flex-shrink: 0;
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: var(--space-3);
+        }
+
+        .status-indicator {
+            position: relative;
+            width: 10px;
+            height: 10px;
         }
 
         .status-dot {
             width: 10px;
             height: 10px;
-            border-radius: 50%;
+            border-radius: var(--radius-full);
             background: var(--success);
-            box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
-            animation: pulse 2s infinite;
+        }
+
+        .status-dot.online {
+            animation: breathe 2s ease-in-out infinite;
         }
 
         .status-dot.offline {
             background: var(--error);
-            box-shadow: 0 0 8px rgba(244, 67, 54, 0.5);
+        }
+
+        .header-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
         }
 
         .header-title {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header-title-main {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: var(--space-2);
+            letter-spacing: -0.3px;
         }
 
-        .header-title-main span {
-            color: var(--accent);
+        .header-title .brand {
+            color: var(--primary);
         }
 
         .header-subtitle {
             font-size: 12px;
-            color: var(--text-secondary);
+            color: var(--text-tertiary);
+            font-weight: 500;
         }
 
-        .header-right {
+        .header-actions {
             display: flex;
-            gap: 8px;
+            gap: var(--space-2);
         }
 
-        .header-btn {
-            background: var(--bg-secondary);
-            border: none;
-            border-radius: 8px;
-            padding: 8px 12px;
-            color: var(--text-primary);
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            color: var(--text-secondary);
             cursor: pointer;
-            font-size: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
-            position: relative;
-            overflow: hidden;
+            transition: all var(--transition-fast);
         }
 
-        .header-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
+        .icon-btn:hover {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
         }
 
-        .header-btn:active {
+        .icon-btn:active {
             transform: scale(0.95);
         }
 
-        .header-btn svg {
-            width: 18px;
-            height: 18px;
+        .icon-btn svg {
+            width: 20px;
+            height: 20px;
         }
 
-        .header-btn.refreshing svg {
+        .icon-btn.loading svg {
             animation: spin 1s linear infinite;
         }
 
@@ -197,58 +263,36 @@
             overflow-y: auto;
             overflow-x: hidden;
             overscroll-behavior: contain;
+            scroll-behavior: smooth;
         }
 
         .page {
             display: none;
-            padding: 16px;
-            animation: fadeIn 0.3s ease;
+            padding: var(--space-5);
+            padding-bottom: calc(var(--space-5) + 80px);
         }
 
         .page.active {
             display: block;
         }
 
-        /* ========== Pull to Refresh ========== */
-        .ptr-indicator {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 0;
-            overflow: hidden;
-            transition: height 0.2s;
-        }
-
-        .ptr-indicator.pulling {
-            height: 50px;
-        }
-
-        .ptr-spinner {
-            width: 24px;
-            height: 24px;
-            border: 2px solid var(--accent);
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        /* ========== Statistics Cards ========== */
+        /* ========== Stats Grid ========== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: var(--space-3);
+            margin-bottom: var(--space-5);
         }
 
         .stat-card {
             background: var(--bg-card);
-            border-radius: 16px;
-            padding: 16px 12px;
-            text-align: center;
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            border: 1px solid var(--border-primary);
             position: relative;
             overflow: hidden;
-            animation: fadeIn 0.3s ease;
-            transition: transform 0.2s, box-shadow 0.2s;
+            opacity: 0;
+            animation: fadeIn var(--transition-normal) ease-out forwards;
         }
 
         .stat-card::before {
@@ -257,51 +301,53 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: var(--gradient-teal);
+            height: 2px;
+            background: var(--primary);
         }
 
         .stat-card:nth-child(2)::before {
-            background: var(--gradient-purple);
+            background: linear-gradient(90deg, #A855F7, #7C3AED);
         }
 
         .stat-card:nth-child(3)::before {
-            background: var(--gradient-gold);
-        }
-
-        .stat-card:active {
-            transform: scale(0.98);
+            background: linear-gradient(90deg, #F59E0B, #D97706);
         }
 
         .stat-label {
             font-size: 11px;
-            color: var(--text-secondary);
+            font-weight: 600;
+            color: var(--text-tertiary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 8px;
+            margin-bottom: var(--space-2);
         }
 
         .stat-value {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 4px;
+            letter-spacing: -1px;
+            margin-bottom: var(--space-1);
             font-variant-numeric: tabular-nums;
         }
 
         .stat-trend {
-            font-size: 11px;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 4px;
+            gap: var(--space-1);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
         }
 
         .stat-trend.up {
             color: var(--success);
+            background: var(--success-subtle);
         }
 
         .stat-trend.down {
             color: var(--error);
+            background: var(--error-subtle);
         }
 
         .stat-trend svg {
@@ -309,112 +355,161 @@
             height: 12px;
         }
 
-        /* Skeleton Loading */
-        .skeleton {
-            background: linear-gradient(90deg, var(--bg-card) 25%, rgba(255,255,255,0.1) 50%, var(--bg-card) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 4px;
+        /* ========== Cards ========== */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-primary);
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeIn var(--transition-normal) ease-out forwards;
         }
 
-        .stat-value.skeleton {
-            width: 60px;
-            height: 28px;
-            margin: 0 auto 4px;
+        .card + .card {
+            margin-top: var(--space-4);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-4) var(--space-5);
+            border-bottom: 1px solid var(--border-secondary);
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-action {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+            transition: opacity var(--transition-fast);
+        }
+
+        .card-action:hover {
+            opacity: 0.8;
+        }
+
+        .card-action svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .card-body {
+            padding: var(--space-5);
+        }
+
+        .card-body.no-padding {
+            padding: 0;
         }
 
         /* ========== Balance Card ========== */
         .balance-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-            animation: fadeIn 0.3s ease 0.1s both;
+            margin-bottom: var(--space-5);
         }
 
         .balance-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
+            align-items: flex-start;
+            margin-bottom: var(--space-5);
         }
 
-        .balance-title {
-            font-size: 14px;
-            color: var(--text-secondary);
+        .balance-label {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-1);
         }
 
-        .balance-amount {
-            font-size: 20px;
+        .balance-value {
+            font-size: 32px;
             font-weight: 700;
-            color: var(--accent);
+            letter-spacing: -1px;
         }
 
-        .balance-progress {
-            position: relative;
+        .balance-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-3);
+            background: var(--primary-subtle);
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .progress-container {
+            margin-bottom: var(--space-4);
+        }
+
+        .progress-bar {
             height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-full);
             overflow: hidden;
-            margin-bottom: 12px;
         }
 
-        .balance-progress-bar {
+        .progress-fill {
             height: 100%;
-            border-radius: 4px;
-            background: var(--gradient-teal);
-            transition: width 1s ease-out;
-            animation: progressBar 1s ease-out;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius-full);
+            transform-origin: left;
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .balance-progress-bar.warning {
-            background: var(--gradient-orange);
-            animation: glow 2s infinite;
+        .progress-fill.warning {
+            background: linear-gradient(90deg, var(--warning), #FBBF24);
         }
 
-        .balance-progress-bar.danger {
-            background: var(--gradient-red);
-            animation: glow 1s infinite;
+        .progress-fill.danger {
+            background: linear-gradient(90deg, var(--error), #F87171);
         }
 
-        .balance-info {
+        .progress-info {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
-            color: var(--text-secondary);
+            margin-top: var(--space-3);
+            font-size: 13px;
+            color: var(--text-tertiary);
         }
 
         /* ========== Model Card ========== */
         .model-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: var(--space-4);
+            padding: var(--space-4) var(--space-5);
             cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-            animation: fadeIn 0.3s ease 0.2s both;
-            position: relative;
-            overflow: hidden;
+            transition: background var(--transition-fast);
+            margin-bottom: var(--space-5);
         }
 
         .model-card:active {
-            transform: scale(0.98);
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--bg-elevated);
         }
 
         .model-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            background: var(--gradient-purple);
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--primary), #7C3AED);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
             flex-shrink: 0;
+            box-shadow: var(--shadow-md);
         }
 
         .model-info {
@@ -424,12 +519,12 @@
 
         .model-label {
             font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
+            color: var(--text-tertiary);
+            margin-bottom: 2px;
         }
 
         .model-name {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 600;
             margin-bottom: 2px;
             white-space: nowrap;
@@ -437,56 +532,23 @@
             text-overflow: ellipsis;
         }
 
-        .model-mode {
-            font-size: 12px;
+        .model-meta {
+            font-size: 13px;
             color: var(--text-secondary);
         }
 
         .model-arrow {
-            color: var(--text-secondary);
-            flex-shrink: 0;
+            color: var(--text-tertiary);
         }
 
-        /* ========== Active Tasks ========== */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .section-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .section-link {
-            font-size: 13px;
-            color: var(--accent);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .tasks-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 16px;
-            animation: fadeIn 0.3s ease 0.3s both;
-        }
-
+        /* ========== Task Items ========== */
         .task-item {
             display: flex;
             align-items: center;
-            padding: 14px 16px;
-            gap: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: background 0.2s;
+            gap: var(--space-3);
+            padding: var(--space-4) var(--space-5);
+            border-bottom: 1px solid var(--border-secondary);
+            transition: background var(--transition-fast);
         }
 
         .task-item:last-child {
@@ -494,137 +556,217 @@
         }
 
         .task-item:active {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--bg-elevated);
         }
 
-        .task-status {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
+        .task-status-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-full);
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            font-size: 12px;
+            font-size: 14px;
+            font-weight: 600;
         }
 
-        .task-status.in-progress {
-            background: rgba(32, 178, 170, 0.2);
-            color: var(--accent);
-            animation: pulse 1.5s infinite;
+        .task-status-icon.in-progress {
+            background: var(--primary-subtle);
+            color: var(--primary);
         }
 
-        .task-status.completed {
-            background: rgba(76, 175, 80, 0.2);
+        .task-status-icon.completed {
+            background: var(--success-subtle);
             color: var(--success);
         }
 
-        .task-status.pending {
-            background: rgba(255, 152, 0, 0.2);
+        .task-status-icon.pending {
+            background: var(--warning-subtle);
             color: var(--warning);
         }
 
-        .task-status.error {
-            background: rgba(244, 67, 54, 0.2);
+        .task-status-icon.error {
+            background: var(--error-subtle);
             color: var(--error);
         }
 
-        .task-info {
+        .task-content {
             flex: 1;
             min-width: 0;
         }
 
-        .task-name {
-            font-size: 14px;
+        .task-title {
+            font-size: 15px;
             font-weight: 500;
-            margin-bottom: 4px;
+            margin-bottom: var(--space-1);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .task-progress-container {
+        .task-progress {
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .task-progress {
-            flex: 1;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            overflow: hidden;
+            gap: var(--space-3);
         }
 
         .task-progress-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        .task-progress-fill {
             height: 100%;
-            background: var(--accent);
-            border-radius: 2px;
-            transition: width 0.3s ease;
+            background: var(--primary);
+            border-radius: var(--radius-full);
+            transition: width var(--transition-normal);
         }
 
         .task-progress-text {
-            font-size: 11px;
-            color: var(--text-secondary);
-            min-width: 32px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            min-width: 36px;
             text-align: right;
         }
 
         .task-meta {
-            font-size: 11px;
-            color: var(--text-secondary);
+            font-size: 13px;
+            color: var(--text-tertiary);
         }
 
-        .tasks-empty {
-            padding: 32px;
+        .task-action {
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-sm);
+            background: var(--bg-elevated);
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            flex-shrink: 0;
+        }
+
+        .task-action:active {
+            transform: scale(0.95);
+        }
+
+        .task-action.cancel {
+            color: var(--error);
+        }
+
+        .task-action.retry {
+            color: var(--primary);
+        }
+
+        .empty-state {
+            padding: var(--space-8) var(--space-5);
             text-align: center;
-            color: var(--text-secondary);
-            font-size: 14px;
+            color: var(--text-tertiary);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: var(--space-4);
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 15px;
         }
 
         /* ========== Quick Actions ========== */
         .quick-actions {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
-            animation: fadeIn 0.3s ease 0.4s both;
+            gap: var(--space-3);
+            opacity: 0;
+            animation: fadeIn var(--transition-normal) ease-out forwards;
+            animation-delay: 200ms;
         }
 
         .quick-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-4) var(--space-2);
             background: var(--bg-card);
-            border-radius: 12px;
-            padding: 16px 8px;
-            text-align: center;
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-lg);
             cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-            position: relative;
-            overflow: hidden;
+            transition: all var(--transition-fast);
+        }
+
+        .quick-action:hover {
+            background: var(--bg-elevated);
+            border-color: var(--border-primary);
         }
 
         .quick-action:active {
             transform: scale(0.95);
-            background: rgba(255, 255, 255, 0.1);
         }
 
         .quick-action-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: var(--bg-elevated);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
         }
 
         .quick-action-label {
-            font-size: 11px;
+            font-size: 12px;
+            font-weight: 500;
             color: var(--text-secondary);
+        }
+
+        /* ========== Section Header ========== */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-4);
+            margin-top: var(--space-5);
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-action {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
         }
 
         /* ========== Bottom Navigation ========== */
         .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
             display: flex;
             background: var(--bg-secondary);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 8px 16px 24px;
-            flex-shrink: 0;
+            border-top: 1px solid var(--border-primary);
+            padding: var(--space-2) var(--space-4);
+            padding-bottom: max(var(--space-2), env(safe-area-inset-bottom));
+            z-index: 100;
         }
 
         .nav-item {
@@ -632,15 +774,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 8px;
+            gap: var(--space-1);
+            padding: var(--space-2);
             cursor: pointer;
-            color: var(--text-secondary);
-            transition: color 0.2s;
+            color: var(--text-tertiary);
+            transition: color var(--transition-fast);
             position: relative;
         }
 
         .nav-item.active {
-            color: var(--accent);
+            color: var(--primary);
         }
 
         .nav-item.active::before {
@@ -649,122 +792,97 @@
             top: -8px;
             left: 50%;
             transform: translateX(-50%);
-            width: 32px;
+            width: 24px;
             height: 3px;
-            background: var(--accent);
-            border-radius: 0 0 3px 3px;
+            background: var(--primary);
+            border-radius: 0 0 var(--radius-sm) var(--radius-sm);
         }
 
         .nav-icon {
             width: 24px;
             height: 24px;
-            margin-bottom: 4px;
         }
 
         .nav-label {
             font-size: 11px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         /* ========== Tasks Page ========== */
-        .tasks-filter {
+        .filter-tabs {
             display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
+            gap: var(--space-2);
+            margin-bottom: var(--space-5);
             overflow-x: auto;
-            padding-bottom: 8px;
+            padding-bottom: var(--space-2);
             -webkit-overflow-scrolling: touch;
         }
 
-        .filter-chip {
+        .filter-tab {
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-full);
             background: var(--bg-card);
-            border: none;
-            border-radius: 20px;
-            padding: 8px 16px;
-            color: var(--text-secondary);
+            border: 1px solid var(--border-primary);
             font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
             cursor: pointer;
             white-space: nowrap;
-            transition: all 0.2s;
+            transition: all var(--transition-fast);
         }
 
-        .filter-chip.active {
-            background: var(--accent);
+        .filter-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
             color: white;
         }
 
-        .filter-chip:active {
+        .filter-tab:active {
             transform: scale(0.95);
         }
 
-        .tasks-group {
-            margin-bottom: 24px;
+        .task-group {
+            margin-bottom: var(--space-6);
         }
 
-        .tasks-group-title {
+        .task-group-header {
             font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-            padding-left: 4px;
-        }
-
-        .task-action-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            border-radius: 8px;
-            padding: 6px 12px;
-            color: var(--text-primary);
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            flex-shrink: 0;
-        }
-
-        .task-action-btn:active {
-            transform: scale(0.95);
-        }
-
-        .task-action-btn.cancel {
-            color: var(--error);
-        }
-
-        .task-action-btn.retry {
-            color: var(--accent);
+            font-weight: 600;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-3);
+            padding-left: var(--space-1);
         }
 
         /* ========== Settings Page ========== */
         .settings-section {
-            margin-bottom: 24px;
+            margin-bottom: var(--space-6);
         }
 
-        .settings-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .settings-section-title {
-            font-size: 12px;
+        .settings-section-header {
+            font-size: 13px;
             font-weight: 600;
-            color: var(--text-secondary);
+            color: var(--text-tertiary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            padding-left: 4px;
+            margin-bottom: var(--space-3);
+            padding-left: var(--space-1);
         }
 
         .settings-card {
             background: var(--bg-card);
-            border-radius: 16px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-primary);
             overflow: hidden;
         }
 
         .settings-item {
             display: flex;
             align-items: center;
-            padding: 14px 16px;
-            gap: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            gap: var(--space-3);
+            padding: var(--space-4) var(--space-5);
+            border-bottom: 1px solid var(--border-secondary);
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background var(--transition-fast);
         }
 
         .settings-item:last-child {
@@ -772,44 +890,45 @@
         }
 
         .settings-item:active {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--bg-elevated);
         }
 
         .settings-item.selected {
-            background: rgba(32, 178, 170, 0.1);
+            background: var(--primary-subtle);
         }
 
         .settings-radio {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--text-secondary);
-            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--text-tertiary);
+            border-radius: var(--radius-full);
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: all 0.2s;
+            transition: all var(--transition-fast);
         }
 
         .settings-item.selected .settings-radio {
-            border-color: var(--accent);
+            border-color: var(--primary);
+            background: var(--primary);
         }
 
         .settings-radio::after {
             content: '';
-            width: 10px;
-            height: 10px;
-            background: var(--accent);
-            border-radius: 50%;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: var(--radius-full);
             transform: scale(0);
-            transition: transform 0.2s;
+            transition: transform var(--transition-fast);
         }
 
         .settings-item.selected .settings-radio::after {
             transform: scale(1);
         }
 
-        .settings-item-info {
+        .settings-item-content {
             flex: 1;
             min-width: 0;
         }
@@ -821,38 +940,40 @@
         }
 
         .settings-item-desc {
-            font-size: 12px;
-            color: var(--text-secondary);
+            font-size: 13px;
+            color: var(--text-tertiary);
         }
 
         .settings-badge {
-            font-size: 10px;
-            color: var(--text-secondary);
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2px 8px;
-            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            background: var(--bg-elevated);
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-sm);
         }
 
         /* Segmented Control */
         .segmented-control {
             display: flex;
             background: var(--bg-card);
-            border-radius: 12px;
-            padding: 4px;
+            border-radius: var(--radius-lg);
+            padding: var(--space-1);
+            border: 1px solid var(--border-primary);
         }
 
         .segment {
             flex: 1;
-            padding: 10px 8px;
+            padding: var(--space-3) var(--space-2);
             text-align: center;
-            font-size: 13px;
-            font-weight: 500;
+            font-size: 14px;
+            font-weight: 600;
             color: var(--text-secondary);
             background: transparent;
             border: none;
-            border-radius: 8px;
+            border-radius: var(--radius-md);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all var(--transition-fast);
         }
 
         .segment:hover {
@@ -860,70 +981,77 @@
         }
 
         .segment.active {
-            background: var(--accent);
+            background: var(--primary);
             color: white;
+            box-shadow: var(--shadow-sm);
         }
 
-        /* Text Area Settings */
-        .settings-textarea-container {
+        /* Textarea */
+        .textarea-container {
             background: var(--bg-card);
-            border-radius: 16px;
-            padding: 16px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-primary);
+            padding: var(--space-4);
         }
 
         .settings-textarea {
             width: 100%;
             min-height: 120px;
-            background: var(--bg-primary);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 12px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-md);
+            padding: var(--space-3);
             color: var(--text-primary);
             font-size: 14px;
             font-family: inherit;
             resize: vertical;
             outline: none;
-            transition: border-color 0.2s;
+            transition: border-color var(--transition-fast);
         }
 
         .settings-textarea:focus {
-            border-color: var(--accent);
+            border-color: var(--primary);
         }
 
-        .settings-textarea-footer {
+        .textarea-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 12px;
+            margin-top: var(--space-3);
         }
 
         .char-count {
             font-size: 12px;
-            color: var(--text-secondary);
+            color: var(--text-tertiary);
         }
 
-        .settings-btn-group {
+        .btn-group {
             display: flex;
-            gap: 8px;
+            gap: var(--space-2);
         }
 
-        .settings-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            border-radius: 8px;
-            padding: 8px 16px;
-            color: var(--text-primary);
-            font-size: 13px;
+        .btn {
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all var(--transition-fast);
+            border: none;
         }
 
-        .settings-btn:active {
+        .btn:active {
             transform: scale(0.95);
         }
 
-        .settings-btn.primary {
-            background: var(--accent);
+        .btn-secondary {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
         }
 
         /* Toggle Switch */
@@ -931,8 +1059,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: var(--space-4) var(--space-5);
+            border-bottom: 1px solid var(--border-secondary);
         }
 
         .toggle-item:last-child {
@@ -940,79 +1068,74 @@
         }
 
         .toggle-switch {
-            width: 50px;
-            height: 30px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
+            width: 52px;
+            height: 32px;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-full);
             position: relative;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background var(--transition-fast);
             flex-shrink: 0;
         }
 
         .toggle-switch.active {
-            background: var(--accent);
+            background: var(--primary);
         }
 
         .toggle-switch::after {
             content: '';
             position: absolute;
-            top: 3px;
-            left: 3px;
+            top: 4px;
+            left: 4px;
             width: 24px;
             height: 24px;
             background: white;
-            border-radius: 50%;
-            transition: transform 0.2s;
+            border-radius: var(--radius-full);
+            transition: transform var(--transition-fast);
+            box-shadow: var(--shadow-sm);
         }
 
         .toggle-switch.active::after {
             transform: translateX(20px);
         }
 
-        /* Session Card */
-        .session-info {
+        /* Session Info */
+        .session-row {
             display: flex;
             align-items: center;
-            padding: 14px 16px;
-            gap: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            gap: var(--space-3);
+            padding: var(--space-4) var(--space-5);
+            border-bottom: 1px solid var(--border-secondary);
+        }
+
+        .session-row:last-child {
+            border-bottom: none;
+        }
+
+        .session-row.clickable {
+            cursor: pointer;
+            transition: background var(--transition-fast);
+        }
+
+        .session-row.clickable:active {
+            background: var(--bg-elevated);
+        }
+
+        .session-row.danger {
+            color: var(--error);
+        }
+
+        .session-icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
         }
 
         .session-dot {
             width: 10px;
             height: 10px;
-            border-radius: 50%;
+            border-radius: var(--radius-full);
             background: var(--success);
-            box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
-        }
-
-        .session-action {
-            display: flex;
-            align-items: center;
-            padding: 14px 16px;
-            gap: 12px;
-            cursor: pointer;
-            transition: background 0.2s;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .session-action:last-child {
-            border-bottom: none;
-        }
-
-        .session-action:active {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .session-action.danger {
-            color: var(--error);
-        }
-
-        .session-action-icon {
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
         }
 
         /* ========== Bottom Sheet ========== */
@@ -1022,7 +1145,7 @@
             z-index: 1000;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity var(--transition-normal);
         }
 
         .bottom-sheet.open {
@@ -1033,9 +1156,11 @@
         .sheet-backdrop {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity var(--transition-normal);
         }
 
         .bottom-sheet.open .sheet-backdrop {
@@ -1047,11 +1172,11 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: var(--tg-theme-secondary-bg-color, var(--bg-secondary));
-            border-radius: 20px 20px 0 0;
-            max-height: 70vh;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            max-height: 75vh;
             transform: translateY(100%);
-            transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+            transition: transform var(--transition-slow);
             display: flex;
             flex-direction: column;
         }
@@ -1063,19 +1188,18 @@
         .sheet-handle {
             width: 36px;
             height: 4px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 2px;
-            margin: 8px auto;
-            flex-shrink: 0;
+            background: var(--text-tertiary);
+            border-radius: var(--radius-full);
+            margin: var(--space-3) auto;
+            opacity: 0.5;
         }
 
         .sheet-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 8px 16px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            flex-shrink: 0;
+            padding: var(--space-2) var(--space-5) var(--space-4);
+            border-bottom: 1px solid var(--border-primary);
         }
 
         .sheet-title {
@@ -1084,28 +1208,28 @@
         }
 
         .sheet-close {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            border-radius: 50%;
             width: 32px;
             height: 32px;
+            border-radius: var(--radius-full);
+            background: var(--bg-elevated);
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s;
+            transition: all var(--transition-fast);
         }
 
         .sheet-close:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--bg-input);
             color: var(--text-primary);
         }
 
         .sheet-content {
             flex: 1;
             overflow-y: auto;
-            padding: 16px;
+            padding: var(--space-4);
             overscroll-behavior: contain;
         }
 
@@ -1114,18 +1238,19 @@
             position: fixed;
             bottom: 100px;
             left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--bg-card);
+            transform: translateX(-50%) translateY(20px);
+            background: var(--bg-elevated);
             color: var(--text-primary);
-            padding: 12px 24px;
-            border-radius: 24px;
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-full);
             font-size: 14px;
             font-weight: 500;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-lg);
             opacity: 0;
-            transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+            transition: all var(--transition-normal);
             z-index: 2000;
             pointer-events: none;
+            border: 1px solid var(--border-primary);
         }
 
         .toast.show {
@@ -1135,213 +1260,218 @@
 
         .toast.success {
             background: var(--success);
+            border-color: var(--success);
         }
 
         .toast.error {
             background: var(--error);
+            border-color: var(--error);
         }
 
         /* ========== Scrollbar ========== */
         .main-content::-webkit-scrollbar {
-            width: 4px;
+            width: 0;
         }
 
-        .main-content::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .main-content::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-        }
-
-        /* ========== Safe Area ========== */
-        @supports (padding-bottom: env(safe-area-inset-bottom)) {
-            .bottom-nav {
-                padding-bottom: calc(8px + env(safe-area-inset-bottom));
-            }
+        /* ========== Skeleton ========== */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-input) 50%, var(--bg-elevated) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: var(--radius-sm);
         }
     </style>
 </head>
 <body>
     <!-- Header -->
-    <div class="header">
+    <header class="header">
         <div class="header-left">
-            <div class="status-dot" id="status-dot"></div>
-            <div class="header-title">
-                <div class="header-title-main">Open<span>Claw</span> Bot</div>
-                <div class="header-subtitle" id="uptime">Online 0d 0h 0m</div>
+            <div class="status-indicator">
+                <div class="status-dot online" id="status-dot"></div>
+            </div>
+            <div class="header-info">
+                <h1 class="header-title">Open<span class="brand">Claw</span></h1>
+                <p class="header-subtitle" id="uptime">Online 0d 0h 0m</p>
             </div>
         </div>
-        <div class="header-right">
-            <button class="header-btn" id="refresh-btn" onclick="Dashboard.refresh()" title="Refresh">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M23 4v6h-6M1 20v-6h6"/>
-                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        <div class="header-actions">
+            <button class="icon-btn" id="refresh-btn" onclick="Dashboard.refresh()" aria-label="Refresh">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
+                    <path d="M21 3v5h-5"/>
                 </svg>
             </button>
-            <button class="header-btn" onclick="Navigation.goTo('settings')" title="Settings">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button class="icon-btn" onclick="Navigation.goTo('settings')" aria-label="Settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="3"/>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                 </svg>
             </button>
         </div>
-    </div>
+    </header>
 
     <!-- Main Content -->
-    <div class="main-content" id="main-content">
+    <main class="main-content" id="main-content">
         <!-- Dashboard Page -->
-        <div class="page active" id="page-dashboard">
-            <!-- Pull to Refresh Indicator -->
-            <div class="ptr-indicator" id="ptr-indicator">
-                <div class="ptr-spinner"></div>
-            </div>
-
+        <section class="page active" id="page-dashboard">
             <!-- Statistics Cards -->
             <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">Messages</div>
-                    <div class="stat-value" id="stat-messages">0</div>
-                    <div class="stat-trend up" id="trend-messages">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                            <polyline points="17 6 23 6 23 12"/>
+                <article class="stat-card animate-stagger-1">
+                    <p class="stat-label">Messages</p>
+                    <p class="stat-value" id="stat-messages">0</p>
+                    <span class="stat-trend up" id="trend-messages">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M7 17l5-5 5 5M7 7l5 5 5-5"/>
                         </svg>
-                        <span>+0%</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Users</div>
-                    <div class="stat-value" id="stat-users">0</div>
-                    <div class="stat-trend up" id="trend-users">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                            <polyline points="17 6 23 6 23 12"/>
+                        +0%
+                    </span>
+                </article>
+                <article class="stat-card animate-stagger-2">
+                    <p class="stat-label">Users</p>
+                    <p class="stat-value" id="stat-users">0</p>
+                    <span class="stat-trend up" id="trend-users">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M7 17l5-5 5 5M7 7l5 5 5-5"/>
                         </svg>
-                        <span>+0%</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Tokens</div>
-                    <div class="stat-value" id="stat-tokens">0</div>
-                    <div class="stat-trend down" id="trend-tokens">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
-                            <polyline points="17 18 23 18 23 12"/>
+                        +0%
+                    </span>
+                </article>
+                <article class="stat-card animate-stagger-3">
+                    <p class="stat-label">Tokens</p>
+                    <p class="stat-value" id="stat-tokens">0</p>
+                    <span class="stat-trend down" id="trend-tokens">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M7 7l5 5 5-5M7 17l5-5 5 5"/>
                         </svg>
-                        <span>-0%</span>
-                    </div>
-                </div>
+                        -0%
+                    </span>
+                </article>
             </div>
 
             <!-- Balance Card -->
-            <div class="balance-card">
-                <div class="balance-header">
-                    <span class="balance-title">Balance & Limits</span>
-                    <span class="balance-amount" id="balance-amount">$0.00</span>
+            <article class="card balance-card animate-stagger-2">
+                <div class="card-body">
+                    <div class="balance-header">
+                        <div>
+                            <p class="balance-label">Available Balance</p>
+                            <p class="balance-value" id="balance-amount">$0.00</p>
+                        </div>
+                        <span class="balance-badge">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 6v6l4 2"/>
+                            </svg>
+                            <span id="balance-reset">Resets in 0d</span>
+                        </span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="balance-progress" style="transform: scaleX(0)"></div>
+                        </div>
+                        <div class="progress-info">
+                            <span id="balance-used">0 / 0 tokens</span>
+                            <span id="balance-percent">0%</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="balance-progress">
-                    <div class="balance-progress-bar" id="balance-progress" style="width: 0%"></div>
-                </div>
-                <div class="balance-info">
-                    <span id="balance-used">0 / 0 tokens</span>
-                    <span id="balance-reset">Resets in 0d</span>
-                </div>
-            </div>
+            </article>
 
             <!-- Model Card -->
-            <div class="model-card" onclick="ModelSheet.open()">
-                <div class="model-icon" id="model-icon">🤖</div>
-                <div class="model-info">
-                    <div class="model-label">Current Model</div>
-                    <div class="model-name" id="current-model-name">Loading...</div>
-                    <div class="model-mode" id="current-model-mode">Thinking: None</div>
+            <article class="card animate-stagger-3" onclick="ModelSheet.open()">
+                <div class="model-card">
+                    <div class="model-icon" id="model-icon">🤖</div>
+                    <div class="model-info">
+                        <p class="model-label">Current Model</p>
+                        <p class="model-name" id="current-model-name">Loading...</p>
+                        <p class="model-meta" id="current-model-mode">Thinking: None</p>
+                    </div>
+                    <div class="model-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </div>
                 </div>
-                <div class="model-arrow">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="9 18 15 12 9 6"/>
-                    </svg>
-                </div>
-            </div>
+            </article>
 
             <!-- Active Tasks -->
             <div class="section-header">
-                <span class="section-title">Active Tasks</span>
-                <span class="section-link" onclick="Navigation.goTo('tasks')">
+                <h2 class="section-title">Active Tasks</h2>
+                <button class="section-action" onclick="Navigation.goTo('tasks')">
                     View All
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="9 18 15 12 9 6"/>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"/>
                     </svg>
-                </span>
+                </button>
             </div>
-            <div class="tasks-card" id="active-tasks">
-                <div class="tasks-empty">No active tasks</div>
-            </div>
+            <article class="card animate-stagger-4">
+                <div class="card-body no-padding" id="active-tasks">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <p class="empty-state-text">No active tasks</p>
+                    </div>
+                </div>
+            </article>
 
             <!-- Quick Actions -->
             <div class="section-header">
-                <span class="section-title">Quick Actions</span>
+                <h2 class="section-title">Quick Actions</h2>
             </div>
             <div class="quick-actions">
-                <div class="quick-action" onclick="QuickActions.clearContext()">
+                <button class="quick-action" onclick="QuickActions.clearContext()">
                     <div class="quick-action-icon">🔄</div>
-                    <div class="quick-action-label">Clear</div>
-                </div>
-                <div class="quick-action" onclick="QuickActions.exportData()">
+                    <span class="quick-action-label">Clear</span>
+                </button>
+                <button class="quick-action" onclick="QuickActions.exportData()">
                     <div class="quick-action-icon">📤</div>
-                    <div class="quick-action-label">Export</div>
-                </div>
-                <div class="quick-action" onclick="QuickActions.runDiagnostics()">
+                    <span class="quick-action-label">Export</span>
+                </button>
+                <button class="quick-action" onclick="QuickActions.runDiagnostics()">
                     <div class="quick-action-icon">🔍</div>
-                    <div class="quick-action-label">Diagnose</div>
-                </div>
-                <div class="quick-action" onclick="QuickActions.viewLogs()">
+                    <span class="quick-action-label">Diagnose</span>
+                </button>
+                <button class="quick-action" onclick="QuickActions.viewLogs()">
                     <div class="quick-action-icon">📋</div>
-                    <div class="quick-action-label">Logs</div>
-                </div>
+                    <span class="quick-action-label">Logs</span>
+                </button>
             </div>
-        </div>
+        </section>
 
         <!-- Tasks Page -->
-        <div class="page" id="page-tasks">
-            <!-- Filter Chips -->
-            <div class="tasks-filter">
-                <button class="filter-chip active" data-filter="all" onclick="TasksPage.filter('all')">All</button>
-                <button class="filter-chip" data-filter="in_progress" onclick="TasksPage.filter('in_progress')">In Progress</button>
-                <button class="filter-chip" data-filter="pending" onclick="TasksPage.filter('pending')">Pending</button>
-                <button class="filter-chip" data-filter="completed" onclick="TasksPage.filter('completed')">Completed</button>
-                <button class="filter-chip" data-filter="error" onclick="TasksPage.filter('error')">Failed</button>
+        <section class="page" id="page-tasks">
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all" onclick="TasksPage.filter('all')">All</button>
+                <button class="filter-tab" data-filter="in_progress" onclick="TasksPage.filter('in_progress')">In Progress</button>
+                <button class="filter-tab" data-filter="pending" onclick="TasksPage.filter('pending')">Pending</button>
+                <button class="filter-tab" data-filter="completed" onclick="TasksPage.filter('completed')">Completed</button>
+                <button class="filter-tab" data-filter="error" onclick="TasksPage.filter('error')">Failed</button>
             </div>
-
-            <!-- Tasks List -->
             <div id="tasks-list"></div>
-        </div>
+        </section>
 
         <!-- Settings Page -->
-        <div class="page" id="page-settings">
+        <section class="page" id="page-settings">
             <!-- AI Model Section -->
             <div class="settings-section">
-                <div class="settings-section-title">AI Model</div>
+                <h3 class="settings-section-header">AI Model</h3>
                 <div class="settings-card" id="settings-models"></div>
             </div>
 
             <!-- Thinking Mode Section -->
             <div class="settings-section">
-                <div class="settings-section-title">Thinking Mode</div>
+                <h3 class="settings-section-header">Thinking Mode</h3>
                 <div class="segmented-control" id="thinking-control"></div>
             </div>
 
             <!-- System Prompt Section -->
             <div class="settings-section">
-                <div class="settings-section-title">System Prompt</div>
-                <div class="settings-textarea-container">
-                    <textarea class="settings-textarea" id="system-prompt" placeholder="Enter system prompt..."></textarea>
-                    <div class="settings-textarea-footer">
+                <h3 class="settings-section-header">System Prompt</h3>
+                <div class="textarea-container">
+                    <textarea class="settings-textarea" id="system-prompt" placeholder="Enter custom system prompt..."></textarea>
+                    <div class="textarea-footer">
                         <span class="char-count" id="prompt-char-count">0 / 4000</span>
-                        <div class="settings-btn-group">
-                            <button class="settings-btn" onclick="SettingsPage.resetPrompt()">Reset</button>
-                            <button class="settings-btn primary" onclick="SettingsPage.savePrompt()">Save</button>
+                        <div class="btn-group">
+                            <button class="btn btn-secondary" onclick="SettingsPage.resetPrompt()">Reset</button>
+                            <button class="btn btn-primary" onclick="SettingsPage.savePrompt()">Save</button>
                         </div>
                     </div>
                 </div>
@@ -1349,19 +1479,19 @@
 
             <!-- Notifications Section -->
             <div class="settings-section">
-                <div class="settings-section-title">Notifications</div>
+                <h3 class="settings-section-header">Notifications</h3>
                 <div class="settings-card">
                     <div class="toggle-item">
-                        <div class="settings-item-info">
-                            <div class="settings-item-title">Push Notifications</div>
-                            <div class="settings-item-desc">Get notified about task completions</div>
+                        <div class="settings-item-content">
+                            <p class="settings-item-title">Push Notifications</p>
+                            <p class="settings-item-desc">Get notified about task completions</p>
                         </div>
                         <div class="toggle-switch" id="toggle-push" onclick="SettingsPage.togglePush()"></div>
                     </div>
                     <div class="toggle-item">
-                        <div class="settings-item-info">
-                            <div class="settings-item-title">Daily Summary</div>
-                            <div class="settings-item-desc">Receive daily usage report</div>
+                        <div class="settings-item-content">
+                            <p class="settings-item-title">Daily Summary</p>
+                            <p class="settings-item-desc">Receive daily usage report</p>
                         </div>
                         <div class="toggle-switch" id="toggle-summary" onclick="SettingsPage.toggleSummary()"></div>
                     </div>
@@ -1370,67 +1500,66 @@
 
             <!-- Session Section -->
             <div class="settings-section">
-                <div class="settings-section-title">Session</div>
+                <h3 class="settings-section-header">Session</h3>
                 <div class="settings-card">
-                    <div class="session-info">
+                    <div class="session-row">
                         <span class="session-dot"></span>
                         <span>Connection: Active</span>
                     </div>
-                    <div class="session-action" onclick="SettingsPage.resetSession()">
-                        <span class="session-action-icon">🔄</span>
+                    <div class="session-row clickable" onclick="SettingsPage.resetSession()">
+                        <span class="session-icon">🔄</span>
                         <span>Reset Session</span>
                     </div>
-                    <div class="session-action" onclick="SettingsPage.clearHistory()">
-                        <span class="session-action-icon">🗑️</span>
+                    <div class="session-row clickable" onclick="SettingsPage.clearHistory()">
+                        <span class="session-icon">🗑️</span>
                         <span>Clear History</span>
                     </div>
-                    <div class="session-action danger" onclick="SettingsPage.exportAllData()">
-                        <span class="session-action-icon">📦</span>
+                    <div class="session-row clickable danger" onclick="SettingsPage.exportAllData()">
+                        <span class="session-icon">📦</span>
                         <span>Export All Data</span>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-        <div class="nav-item active" data-page="dashboard" onclick="Navigation.goTo('dashboard')">
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-page="dashboard" onclick="Navigation.goTo('dashboard')">
             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="7" height="9"/>
-                <rect x="14" y="3" width="7" height="5"/>
-                <rect x="14" y="12" width="7" height="9"/>
-                <rect x="3" y="16" width="7" height="5"/>
+                <rect x="3" y="3" width="7" height="9" rx="1"/>
+                <rect x="14" y="3" width="7" height="5" rx="1"/>
+                <rect x="14" y="12" width="7" height="9" rx="1"/>
+                <rect x="3" y="16" width="7" height="5" rx="1"/>
             </svg>
             <span class="nav-label">Dashboard</span>
-        </div>
-        <div class="nav-item" data-page="tasks" onclick="Navigation.goTo('tasks')">
+        </button>
+        <button class="nav-item" data-page="tasks" onclick="Navigation.goTo('tasks')">
             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M9 11l3 3L22 4"/>
                 <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
             </svg>
             <span class="nav-label">Tasks</span>
-        </div>
-        <div class="nav-item" data-page="settings" onclick="Navigation.goTo('settings')">
+        </button>
+        <button class="nav-item" data-page="settings" onclick="Navigation.goTo('settings')">
             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="3"/>
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
             </svg>
             <span class="nav-label">Settings</span>
-        </div>
-    </div>
+        </button>
+    </nav>
 
     <!-- Model Selection Bottom Sheet -->
     <div class="bottom-sheet" id="model-sheet">
-        <div class="sheet-backdrop"></div>
+        <div class="sheet-backdrop" onclick="ModelSheet.close()"></div>
         <div class="sheet-container">
             <div class="sheet-handle"></div>
             <div class="sheet-header">
-                <span class="sheet-title">Select Model</span>
+                <h2 class="sheet-title">Select Model</h2>
                 <button class="sheet-close" onclick="ModelSheet.close()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
+                        <path d="M18 6L6 18M6 6l12 12"/>
                     </svg>
                 </button>
             </div>
@@ -1443,18 +1572,18 @@
 
     <script>
         // ========== Telegram WebApp ==========
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.ready();
+        const tg = window.Telegram?.WebApp;
+        tg?.expand();
+        tg?.ready();
 
         // ========== Configuration ==========
         const CONFIG = {
             API_URL: 'https://openclaw-production-ef1e.up.railway.app',
             SESSION_KEY: 'agent:main:main',
-            STORAGE_KEY: 'openclaw_dashboard'
+            STORAGE_KEY: 'openclaw_dashboard_v2'
         };
 
-        const AVAILABLE_MODELS = [
+        const MODELS = [
             { id: 'openrouter/deepseek/deepseek-chat', name: 'DeepSeek Chat', badge: 'Default', icon: '🤖' },
             { id: 'openrouter/anthropic/claude-3.5-sonnet', name: 'Claude 3.5 Sonnet', badge: 'Advanced', icon: '🧠' },
             { id: 'openrouter/openai/gpt-4o', name: 'GPT-4o', badge: 'Versatile', icon: '✨' },
@@ -1468,60 +1597,43 @@
             { id: 'high', name: 'Max' }
         ];
 
-        // ========== Mock Data (until backend is ready) ==========
-        const MOCK_DATA = {
-            dashboard: {
-                status: 'online',
-                uptime: { days: 2, hours: 14, minutes: 32 },
-                stats: {
-                    messages: 1247,
-                    messagesTrend: 12,
-                    users: 89,
-                    usersTrend: 5,
-                    tokens: 125400,
-                    tokensTrend: -3
-                }
-            },
-            balance: {
-                used: 125400,
-                limit: 200000,
-                amount: 12.45,
-                resetDays: 12
-            },
+        // ========== Mock Data ==========
+        const MOCK = {
+            stats: { messages: 1247, messagesTrend: 12, users: 89, usersTrend: 5, tokens: 125400, tokensTrend: -3 },
+            balance: { used: 125400, limit: 200000, amount: 12.45, resetDays: 12 },
             tasks: [
                 { id: 1, name: 'Generating report...', status: 'in_progress', progress: 45 },
-                { id: 2, name: 'Image analysis', status: 'completed', completedAt: '2m ago' },
+                { id: 2, name: 'Image analysis', status: 'completed', time: '2m ago' },
                 { id: 3, name: 'Data processing', status: 'in_progress', progress: 78 },
                 { id: 4, name: 'Text extraction', status: 'pending' },
                 { id: 5, name: 'API sync', status: 'pending' },
                 { id: 6, name: 'Failed task', status: 'error', error: 'Timeout' },
-                { id: 7, name: 'Summary generation', status: 'completed', completedAt: '15m ago' },
-                { id: 8, name: 'Chat response', status: 'completed', completedAt: '1h ago' }
+                { id: 7, name: 'Summary generation', status: 'completed', time: '15m ago' },
+                { id: 8, name: 'Chat response', status: 'completed', time: '1h ago' }
             ]
         };
 
-        // ========== State Management ==========
+        // ========== State ==========
         const State = {
             data: null,
-            settings: null,
 
             load() {
                 try {
                     const stored = localStorage.getItem(CONFIG.STORAGE_KEY);
-                    this.settings = stored ? JSON.parse(stored) : this.getDefaults();
+                    this.data = stored ? JSON.parse(stored) : this.defaults();
                 } catch {
-                    this.settings = this.getDefaults();
+                    this.data = this.defaults();
                 }
-                return this.settings;
+                return this.data;
             },
 
             save() {
-                localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(this.settings));
+                localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(this.data));
             },
 
-            getDefaults() {
+            defaults() {
                 return {
-                    model: AVAILABLE_MODELS[0].id,
+                    model: MODELS[0].id,
                     thinkingMode: 'none',
                     systemPrompt: '',
                     pushNotifications: true,
@@ -1530,63 +1642,52 @@
             },
 
             get(key) {
-                if (!this.settings) this.load();
-                return this.settings[key];
+                if (!this.data) this.load();
+                return this.data[key];
             },
 
             set(key, value) {
-                if (!this.settings) this.load();
-                this.settings[key] = value;
+                if (!this.data) this.load();
+                this.data[key] = value;
                 this.save();
             }
         };
 
-        // ========== Toast Notifications ==========
+        // ========== Toast ==========
         const Toast = {
-            show(message, type = 'default', duration = 2000) {
-                const toast = document.getElementById('toast');
-                toast.textContent = message;
-                toast.className = 'toast ' + type;
-
-                requestAnimationFrame(() => {
-                    toast.classList.add('show');
-                });
-
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, duration);
+            show(message, type = 'default', duration = 2500) {
+                const el = document.getElementById('toast');
+                el.textContent = message;
+                el.className = `toast ${type}`;
+                requestAnimationFrame(() => el.classList.add('show'));
+                setTimeout(() => el.classList.remove('show'), duration);
             }
         };
 
-        // ========== Haptic Feedback ==========
+        // ========== Haptic ==========
         const Haptic = {
-            light() { tg.HapticFeedback?.impactOccurred('light'); },
-            medium() { tg.HapticFeedback?.impactOccurred('medium'); },
-            heavy() { tg.HapticFeedback?.impactOccurred('heavy'); },
-            selection() { tg.HapticFeedback?.selectionChanged(); },
-            success() { tg.HapticFeedback?.notificationOccurred('success'); },
-            error() { tg.HapticFeedback?.notificationOccurred('error'); }
+            light: () => tg?.HapticFeedback?.impactOccurred('light'),
+            medium: () => tg?.HapticFeedback?.impactOccurred('medium'),
+            selection: () => tg?.HapticFeedback?.selectionChanged(),
+            success: () => tg?.HapticFeedback?.notificationOccurred('success'),
+            error: () => tg?.HapticFeedback?.notificationOccurred('error')
         };
 
         // ========== Navigation ==========
         const Navigation = {
-            currentPage: 'dashboard',
+            current: 'dashboard',
 
             goTo(page) {
-                if (this.currentPage === page) return;
-
+                if (this.current === page) return;
                 Haptic.light();
-                this.currentPage = page;
+                this.current = page;
 
-                // Update pages
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                 document.getElementById(`page-${page}`).classList.add('active');
 
-                // Update nav
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
                 document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
 
-                // Initialize page
                 if (page === 'tasks') TasksPage.init();
                 if (page === 'settings') SettingsPage.init();
             }
@@ -1597,243 +1698,144 @@
             startTime: Date.now() - (2 * 24 * 60 * 60 * 1000 + 14 * 60 * 60 * 1000 + 32 * 60 * 1000),
 
             init() {
-                this.loadData();
-                this.startUptimeTimer();
-                this.initPullToRefresh();
-            },
-
-            async loadData() {
-                // Use mock data for now
-                this.data = MOCK_DATA;
                 this.render();
+                this.startUptime();
             },
 
             async refresh() {
                 const btn = document.getElementById('refresh-btn');
-                btn.classList.add('refreshing');
+                btn.classList.add('loading');
                 Haptic.medium();
 
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(r => setTimeout(r, 800));
 
-                // Refresh with slightly different data
-                MOCK_DATA.dashboard.stats.messages += Math.floor(Math.random() * 10);
-                MOCK_DATA.dashboard.stats.users += Math.floor(Math.random() * 3);
-                MOCK_DATA.dashboard.stats.tokens += Math.floor(Math.random() * 1000);
+                MOCK.stats.messages += Math.floor(Math.random() * 10);
+                MOCK.stats.users += Math.floor(Math.random() * 3);
+                MOCK.stats.tokens += Math.floor(Math.random() * 1000);
 
                 this.render();
-                btn.classList.remove('refreshing');
+                btn.classList.remove('loading');
                 Toast.show('Data refreshed', 'success');
                 Haptic.success();
             },
 
             render() {
-                const data = this.data;
+                this.animateValue('stat-messages', MOCK.stats.messages);
+                this.animateValue('stat-users', MOCK.stats.users);
+                this.animateValue('stat-tokens', this.formatNum(MOCK.stats.tokens));
 
-                // Animate stats
-                this.animateNumber('stat-messages', data.dashboard.stats.messages);
-                this.animateNumber('stat-users', data.dashboard.stats.users);
-                this.animateNumber('stat-tokens', this.formatTokens(data.dashboard.stats.tokens));
+                this.renderTrend('trend-messages', MOCK.stats.messagesTrend);
+                this.renderTrend('trend-users', MOCK.stats.usersTrend);
+                this.renderTrend('trend-tokens', MOCK.stats.tokensTrend);
 
-                // Update trends
-                this.updateTrend('trend-messages', data.dashboard.stats.messagesTrend);
-                this.updateTrend('trend-users', data.dashboard.stats.usersTrend);
-                this.updateTrend('trend-tokens', data.dashboard.stats.tokensTrend);
+                const pct = (MOCK.balance.used / MOCK.balance.limit) * 100;
+                document.getElementById('balance-amount').textContent = `$${MOCK.balance.amount.toFixed(2)}`;
+                document.getElementById('balance-used').textContent = `${this.formatNum(MOCK.balance.used)} / ${this.formatNum(MOCK.balance.limit)}`;
+                document.getElementById('balance-reset').textContent = `Resets in ${MOCK.balance.resetDays}d`;
+                document.getElementById('balance-percent').textContent = `${Math.round(pct)}%`;
 
-                // Balance
-                const balancePercent = (data.balance.used / data.balance.limit) * 100;
-                document.getElementById('balance-amount').textContent = `$${data.balance.amount.toFixed(2)}`;
-                document.getElementById('balance-used').textContent =
-                    `${this.formatTokens(data.balance.used)} / ${this.formatTokens(data.balance.limit)} tokens`;
-                document.getElementById('balance-reset').textContent = `Resets in ${data.balance.resetDays}d`;
+                const bar = document.getElementById('balance-progress');
+                bar.style.transform = `scaleX(${pct / 100})`;
+                bar.className = 'progress-fill' + (pct > 80 ? ' danger' : pct > 60 ? ' warning' : '');
 
-                const progressBar = document.getElementById('balance-progress');
-                progressBar.style.width = `${balancePercent}%`;
-                progressBar.className = 'balance-progress-bar';
-                if (balancePercent > 80) progressBar.classList.add('danger');
-                else if (balancePercent > 60) progressBar.classList.add('warning');
-
-                // Current model
                 const settings = State.load();
-                const model = AVAILABLE_MODELS.find(m => m.id === settings.model) || AVAILABLE_MODELS[0];
-                const thinkingMode = THINKING_MODES.find(m => m.id === settings.thinkingMode) || THINKING_MODES[0];
+                const model = MODELS.find(m => m.id === settings.model) || MODELS[0];
+                const thinking = THINKING_MODES.find(m => m.id === settings.thinkingMode) || THINKING_MODES[0];
 
                 document.getElementById('model-icon').textContent = model.icon;
                 document.getElementById('current-model-name').textContent = model.name;
-                document.getElementById('current-model-mode').textContent = `Thinking: ${thinkingMode.name}`;
+                document.getElementById('current-model-mode').textContent = `Thinking: ${thinking.name}`;
 
-                // Active tasks
-                this.renderActiveTasks();
+                this.renderTasks();
             },
 
-            renderActiveTasks() {
-                const tasks = this.data.tasks.filter(t => t.status === 'in_progress' || t.status === 'completed')
-                    .slice(0, 3);
+            renderTasks() {
+                const tasks = MOCK.tasks.filter(t => ['in_progress', 'completed'].includes(t.status)).slice(0, 3);
+                const el = document.getElementById('active-tasks');
 
-                const container = document.getElementById('active-tasks');
-
-                if (tasks.length === 0) {
-                    container.innerHTML = '<div class="tasks-empty">No active tasks</div>';
+                if (!tasks.length) {
+                    el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><p class="empty-state-text">No active tasks</p></div>';
                     return;
                 }
 
-                container.innerHTML = tasks.map(task => this.renderTaskItem(task)).join('');
+                el.innerHTML = tasks.map(t => this.taskHTML(t)).join('');
             },
 
-            renderTaskItem(task) {
-                const statusIcon = {
-                    'in_progress': '~',
-                    'completed': '✓',
-                    'pending': '○',
-                    'error': '✗'
-                };
-
+            taskHTML(task) {
+                const icons = { in_progress: '⏳', completed: '✓', pending: '○', error: '✗' };
                 let content = '';
+
                 if (task.status === 'in_progress') {
-                    content = `
-                        <div class="task-progress-container">
-                            <div class="task-progress">
-                                <div class="task-progress-bar" style="width: ${task.progress}%"></div>
-                            </div>
-                            <span class="task-progress-text">${task.progress}%</span>
-                        </div>
-                    `;
+                    content = `<div class="task-progress"><div class="task-progress-bar"><div class="task-progress-fill" style="width:${task.progress}%"></div></div><span class="task-progress-text">${task.progress}%</span></div>`;
                 } else if (task.status === 'completed') {
-                    content = `<div class="task-meta">${task.completedAt}</div>`;
+                    content = `<p class="task-meta">${task.time}</p>`;
                 } else if (task.status === 'error') {
-                    content = `<div class="task-meta" style="color: var(--error)">${task.error}</div>`;
+                    content = `<p class="task-meta" style="color:var(--error)">${task.error}</p>`;
                 } else {
-                    content = `<div class="task-meta">Queued</div>`;
+                    content = `<p class="task-meta">Queued</p>`;
                 }
 
-                return `
-                    <div class="task-item">
-                        <div class="task-status ${task.status.replace('_', '-')}">${statusIcon[task.status]}</div>
-                        <div class="task-info">
-                            <div class="task-name">${task.name}</div>
-                            ${content}
-                        </div>
-                    </div>
-                `;
+                return `<div class="task-item"><div class="task-status-icon ${task.status.replace('_', '-')}">${icons[task.status]}</div><div class="task-content"><p class="task-title">${task.name}</p>${content}</div></div>`;
             },
 
-            animateNumber(elementId, targetValue) {
-                const element = document.getElementById(elementId);
-                const isString = typeof targetValue === 'string';
-                const target = isString ? parseFloat(targetValue.replace(/[^0-9.]/g, '')) : targetValue;
-                const suffix = isString ? targetValue.replace(/[0-9.]/g, '') : '';
-
+            animateValue(id, target) {
+                const el = document.getElementById(id);
+                const isStr = typeof target === 'string';
+                const num = isStr ? parseFloat(target.replace(/[^0-9.]/g, '')) : target;
+                const suffix = isStr ? target.replace(/[0-9.,]/g, '') : '';
                 let current = 0;
-                const duration = 1000;
-                const steps = 30;
-                const increment = target / steps;
-                const stepDuration = duration / steps;
+                const steps = 25;
+                const inc = num / steps;
 
                 const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        current = target;
-                        clearInterval(timer);
-                    }
-                    element.textContent = Math.floor(current).toLocaleString() + suffix;
-                }, stepDuration);
+                    current += inc;
+                    if (current >= num) { current = num; clearInterval(timer); }
+                    el.textContent = Math.floor(current).toLocaleString() + suffix;
+                }, 30);
             },
 
-            updateTrend(elementId, value) {
-                const element = document.getElementById(elementId);
-                const isUp = value >= 0;
-                element.className = `stat-trend ${isUp ? 'up' : 'down'}`;
-                element.innerHTML = `
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        ${isUp ?
-                            '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>' :
-                            '<polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/>'
-                        }
-                    </svg>
-                    <span>${isUp ? '+' : ''}${value}%</span>
-                `;
+            renderTrend(id, value) {
+                const el = document.getElementById(id);
+                const up = value >= 0;
+                el.className = `stat-trend ${up ? 'up' : 'down'}`;
+                el.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="${up ? 'M7 17l5-5 5 5' : 'M7 7l5 5 5-5'}"/></svg>${up ? '+' : ''}${value}%`;
             },
 
-            formatTokens(num) {
-                if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-                if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-                return num.toString();
+            formatNum(n) {
+                if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+                if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
+                return n.toString();
             },
 
-            startUptimeTimer() {
-                const updateUptime = () => {
-                    const elapsed = Date.now() - this.startTime;
-                    const days = Math.floor(elapsed / (24 * 60 * 60 * 1000));
-                    const hours = Math.floor((elapsed % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
-                    const minutes = Math.floor((elapsed % (60 * 60 * 1000)) / (60 * 1000));
-                    document.getElementById('uptime').textContent = `Online ${days}d ${hours}h ${minutes}m`;
+            startUptime() {
+                const update = () => {
+                    const ms = Date.now() - this.startTime;
+                    const d = Math.floor(ms / 864e5);
+                    const h = Math.floor((ms % 864e5) / 36e5);
+                    const m = Math.floor((ms % 36e5) / 6e4);
+                    document.getElementById('uptime').textContent = `Online ${d}d ${h}h ${m}m`;
                 };
-
-                updateUptime();
-                setInterval(updateUptime, 60000);
-            },
-
-            initPullToRefresh() {
-                const mainContent = document.getElementById('main-content');
-                const indicator = document.getElementById('ptr-indicator');
-                let startY = 0;
-                let isPulling = false;
-
-                mainContent.addEventListener('touchstart', (e) => {
-                    if (mainContent.scrollTop === 0) {
-                        startY = e.touches[0].clientY;
-                    }
-                }, { passive: true });
-
-                mainContent.addEventListener('touchmove', (e) => {
-                    if (mainContent.scrollTop === 0 && startY > 0) {
-                        const currentY = e.touches[0].clientY;
-                        const diff = currentY - startY;
-
-                        if (diff > 50 && !isPulling) {
-                            isPulling = true;
-                            indicator.classList.add('pulling');
-                        }
-                    }
-                }, { passive: true });
-
-                mainContent.addEventListener('touchend', async () => {
-                    if (isPulling) {
-                        await this.refresh();
-                        indicator.classList.remove('pulling');
-                        isPulling = false;
-                    }
-                    startY = 0;
-                });
+                update();
+                setInterval(update, 60000);
             }
         };
 
         // ========== Tasks Page ==========
         const TasksPage = {
-            currentFilter: 'all',
+            filter: 'all',
 
-            init() {
-                this.render();
-            },
+            init() { this.render(); },
 
-            filter(filterType) {
+            filter(type) {
                 Haptic.selection();
-                this.currentFilter = filterType;
-
-                document.querySelectorAll('.filter-chip').forEach(chip => {
-                    chip.classList.toggle('active', chip.dataset.filter === filterType);
-                });
-
+                this.filter = type;
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.toggle('active', t.dataset.filter === type));
                 this.render();
             },
 
             render() {
-                const tasks = MOCK_DATA.tasks.filter(task => {
-                    if (this.currentFilter === 'all') return true;
-                    return task.status === this.currentFilter;
-                });
-
-                const grouped = {
+                const tasks = MOCK.tasks.filter(t => this.filter === 'all' || t.status === this.filter);
+                const groups = {
                     in_progress: tasks.filter(t => t.status === 'in_progress'),
                     pending: tasks.filter(t => t.status === 'pending'),
                     completed: tasks.filter(t => t.status === 'completed'),
@@ -1841,128 +1843,68 @@
                 };
 
                 let html = '';
+                if (groups.in_progress.length) html += this.groupHTML('In Progress', groups.in_progress);
+                if (groups.pending.length) html += this.groupHTML('Pending', groups.pending);
+                if (groups.completed.length) html += this.groupHTML('Completed', groups.completed);
+                if (groups.error.length) html += this.groupHTML('Failed', groups.error);
 
-                if (grouped.in_progress.length > 0) {
-                    html += this.renderGroup('In Progress', grouped.in_progress);
-                }
-                if (grouped.pending.length > 0) {
-                    html += this.renderGroup('Pending', grouped.pending);
-                }
-                if (grouped.completed.length > 0) {
-                    html += this.renderGroup('Completed', grouped.completed);
-                }
-                if (grouped.error.length > 0) {
-                    html += this.renderGroup('Failed', grouped.error);
-                }
-
-                if (!html) {
-                    html = '<div class="tasks-empty" style="padding: 48px 0;">No tasks found</div>';
-                }
-
-                document.getElementById('tasks-list').innerHTML = html;
+                document.getElementById('tasks-list').innerHTML = html || '<div class="empty-state"><div class="empty-state-icon">📋</div><p class="empty-state-text">No tasks found</p></div>';
             },
 
-            renderGroup(title, tasks) {
-                return `
-                    <div class="tasks-group">
-                        <div class="tasks-group-title">${title} (${tasks.length})</div>
-                        <div class="tasks-card">
-                            ${tasks.map(t => this.renderTask(t)).join('')}
-                        </div>
-                    </div>
-                `;
+            groupHTML(title, tasks) {
+                return `<div class="task-group"><p class="task-group-header">${title} (${tasks.length})</p><div class="card"><div class="card-body no-padding">${tasks.map(t => this.taskHTML(t)).join('')}</div></div></div>`;
             },
 
-            renderTask(task) {
-                const statusIcon = {
-                    'in_progress': '~',
-                    'completed': '✓',
-                    'pending': '○',
-                    'error': '✗'
-                };
-
-                let content = '';
-                let actionBtn = '';
+            taskHTML(task) {
+                const icons = { in_progress: '⏳', completed: '✓', pending: '○', error: '✗' };
+                let content = '', action = '';
 
                 if (task.status === 'in_progress') {
-                    content = `
-                        <div class="task-progress-container">
-                            <div class="task-progress">
-                                <div class="task-progress-bar" style="width: ${task.progress}%"></div>
-                            </div>
-                            <span class="task-progress-text">${task.progress}%</span>
-                        </div>
-                    `;
-                    actionBtn = `<button class="task-action-btn cancel" onclick="TasksPage.cancelTask(${task.id})">Cancel</button>`;
+                    content = `<div class="task-progress"><div class="task-progress-bar"><div class="task-progress-fill" style="width:${task.progress}%"></div></div><span class="task-progress-text">${task.progress}%</span></div>`;
+                    action = `<button class="task-action cancel" onclick="TasksPage.cancel(${task.id})">Cancel</button>`;
                 } else if (task.status === 'completed') {
-                    content = `<div class="task-meta">${task.completedAt}</div>`;
+                    content = `<p class="task-meta">${task.time}</p>`;
                 } else if (task.status === 'error') {
-                    content = `<div class="task-meta" style="color: var(--error)">${task.error}</div>`;
-                    actionBtn = `<button class="task-action-btn retry" onclick="TasksPage.retryTask(${task.id})">Retry</button>`;
+                    content = `<p class="task-meta" style="color:var(--error)">${task.error}</p>`;
+                    action = `<button class="task-action retry" onclick="TasksPage.retry(${task.id})">Retry</button>`;
                 } else {
-                    content = `<div class="task-meta">Queued</div>`;
+                    content = `<p class="task-meta">Queued</p>`;
                 }
 
-                return `
-                    <div class="task-item">
-                        <div class="task-status ${task.status.replace('_', '-')}">${statusIcon[task.status]}</div>
-                        <div class="task-info">
-                            <div class="task-name">${task.name}</div>
-                            ${content}
-                        </div>
-                        ${actionBtn}
-                    </div>
-                `;
+                return `<div class="task-item"><div class="task-status-icon ${task.status.replace('_', '-')}">${icons[task.status]}</div><div class="task-content"><p class="task-title">${task.name}</p>${content}</div>${action}</div>`;
             },
 
-            cancelTask(id) {
-                Haptic.medium();
-                Toast.show('Task cancelled');
-                // TODO: API call
-            },
-
-            retryTask(id) {
-                Haptic.medium();
-                Toast.show('Task restarted');
-                // TODO: API call
-            }
+            cancel(id) { Haptic.medium(); Toast.show('Task cancelled'); },
+            retry(id) { Haptic.medium(); Toast.show('Task restarted'); }
         };
 
         // ========== Settings Page ==========
         const SettingsPage = {
             init() {
                 this.renderModels();
-                this.renderThinkingModes();
+                this.renderThinking();
                 this.renderToggles();
                 this.initPrompt();
             },
 
             renderModels() {
-                const currentModel = State.get('model');
-                const html = AVAILABLE_MODELS.map(model => `
-                    <div class="settings-item ${model.id === currentModel ? 'selected' : ''}"
-                         onclick="SettingsPage.selectModel('${model.id}')">
+                const current = State.get('model');
+                document.getElementById('settings-models').innerHTML = MODELS.map(m => `
+                    <div class="settings-item ${m.id === current ? 'selected' : ''}" onclick="SettingsPage.selectModel('${m.id}')">
                         <div class="settings-radio"></div>
-                        <div class="settings-item-info">
-                            <div class="settings-item-title">${model.name}</div>
+                        <div class="settings-item-content">
+                            <p class="settings-item-title">${m.icon} ${m.name}</p>
                         </div>
-                        <span class="settings-badge">${model.badge}</span>
+                        <span class="settings-badge">${m.badge}</span>
                     </div>
                 `).join('');
-
-                document.getElementById('settings-models').innerHTML = html;
             },
 
-            renderThinkingModes() {
-                const currentMode = State.get('thinkingMode');
-                const html = THINKING_MODES.map(mode => `
-                    <button class="segment ${mode.id === currentMode ? 'active' : ''}"
-                            onclick="SettingsPage.selectThinkingMode('${mode.id}')">
-                        ${mode.name}
-                    </button>
+            renderThinking() {
+                const current = State.get('thinkingMode');
+                document.getElementById('thinking-control').innerHTML = THINKING_MODES.map(m => `
+                    <button class="segment ${m.id === current ? 'active' : ''}" onclick="SettingsPage.selectThinking('${m.id}')">${m.name}</button>
                 `).join('');
-
-                document.getElementById('thinking-control').innerHTML = html;
             },
 
             renderToggles() {
@@ -1971,31 +1913,29 @@
             },
 
             initPrompt() {
-                const textarea = document.getElementById('system-prompt');
-                textarea.value = State.get('systemPrompt') || '';
-                this.updateCharCount();
-
-                textarea.addEventListener('input', () => this.updateCharCount());
+                const el = document.getElementById('system-prompt');
+                el.value = State.get('systemPrompt') || '';
+                this.updateCount();
+                el.addEventListener('input', () => this.updateCount());
             },
 
-            updateCharCount() {
-                const textarea = document.getElementById('system-prompt');
-                document.getElementById('prompt-char-count').textContent =
-                    `${textarea.value.length} / 4000`;
+            updateCount() {
+                const el = document.getElementById('system-prompt');
+                document.getElementById('prompt-char-count').textContent = `${el.value.length} / 4000`;
             },
 
-            selectModel(modelId) {
+            selectModel(id) {
                 Haptic.selection();
-                State.set('model', modelId);
+                State.set('model', id);
                 this.renderModels();
                 Dashboard.render();
                 Toast.show('Model updated');
             },
 
-            selectThinkingMode(mode) {
+            selectThinking(mode) {
                 Haptic.selection();
                 State.set('thinkingMode', mode);
-                this.renderThinkingModes();
+                this.renderThinking();
                 Dashboard.render();
             },
 
@@ -2020,103 +1960,76 @@
             resetPrompt() {
                 Haptic.medium();
                 document.getElementById('system-prompt').value = '';
-                this.updateCharCount();
+                this.updateCount();
             },
 
             resetSession() {
                 Haptic.medium();
-                if (tg.showConfirm) {
-                    tg.showConfirm('Reset session? Bot context will be cleared.', (confirmed) => {
-                        if (confirmed) {
-                            Toast.show('Session reset');
-                        }
-                    });
-                } else if (confirm('Reset session? Bot context will be cleared.')) {
-                    Toast.show('Session reset');
-                }
+                const confirm = () => Toast.show('Session reset');
+                tg?.showConfirm ? tg.showConfirm('Reset session?', ok => ok && confirm()) : window.confirm('Reset session?') && confirm();
             },
 
             clearHistory() {
                 Haptic.medium();
-                if (tg.showConfirm) {
-                    tg.showConfirm('Clear all history?', (confirmed) => {
-                        if (confirmed) {
-                            localStorage.clear();
-                            Toast.show('History cleared', 'success');
-                        }
-                    });
-                } else if (confirm('Clear all history?')) {
-                    localStorage.clear();
-                    Toast.show('History cleared', 'success');
-                }
+                const confirm = () => { localStorage.clear(); Toast.show('History cleared', 'success'); };
+                tg?.showConfirm ? tg.showConfirm('Clear all history?', ok => ok && confirm()) : window.confirm('Clear all history?') && confirm();
             },
 
             exportAllData() {
                 Haptic.medium();
-                const data = {
-                    settings: State.settings,
-                    exportedAt: new Date().toISOString()
-                };
+                const data = { settings: State.data, exportedAt: new Date().toISOString() };
                 const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = url;
+                a.href = URL.createObjectURL(blob);
                 a.download = 'openclaw-export.json';
                 a.click();
-                URL.revokeObjectURL(url);
+                URL.revokeObjectURL(a.href);
                 Toast.show('Data exported', 'success');
             }
         };
 
         // ========== Model Sheet ==========
         const ModelSheet = {
-            sheet: null,
+            el: null,
 
             init() {
-                this.sheet = document.getElementById('model-sheet');
-                this.sheet.querySelector('.sheet-backdrop').addEventListener('click', () => this.close());
-
-                tg.BackButton?.onClick(() => {
-                    if (this.sheet.classList.contains('open')) {
-                        this.close();
-                    }
-                });
+                this.el = document.getElementById('model-sheet');
+                tg?.BackButton?.onClick(() => this.el.classList.contains('open') && this.close());
             },
 
             open() {
                 Haptic.light();
                 this.render();
-                this.sheet.classList.add('open');
-                tg.BackButton?.show();
+                this.el.classList.add('open');
+                tg?.BackButton?.show();
             },
 
             close() {
                 Haptic.light();
-                this.sheet.classList.remove('open');
-                tg.BackButton?.hide();
+                this.el.classList.remove('open');
+                tg?.BackButton?.hide();
             },
 
             render() {
-                const currentModel = State.get('model');
-                const html = AVAILABLE_MODELS.map(model => `
-                    <div class="settings-item ${model.id === currentModel ? 'selected' : ''}"
-                         onclick="ModelSheet.selectModel('${model.id}')">
-                        <div class="settings-radio"></div>
-                        <div class="settings-item-info">
-                            <div class="settings-item-title">${model.icon} ${model.name}</div>
-                            <div class="settings-item-desc">${model.badge}</div>
-                        </div>
-                    </div>
-                `).join('');
-
+                const current = State.get('model');
                 document.getElementById('model-sheet-content').innerHTML = `
-                    <div class="settings-card">${html}</div>
+                    <div class="settings-card">
+                        ${MODELS.map(m => `
+                            <div class="settings-item ${m.id === current ? 'selected' : ''}" onclick="ModelSheet.select('${m.id}')">
+                                <div class="settings-radio"></div>
+                                <div class="settings-item-content">
+                                    <p class="settings-item-title">${m.icon} ${m.name}</p>
+                                    <p class="settings-item-desc">${m.badge}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
                 `;
             },
 
-            selectModel(modelId) {
+            select(id) {
                 Haptic.selection();
-                State.set('model', modelId);
+                State.set('model', id);
                 Dashboard.render();
                 this.close();
                 Toast.show('Model updated');
@@ -2127,31 +2040,20 @@
         const QuickActions = {
             clearContext() {
                 Haptic.medium();
-                if (tg.showConfirm) {
-                    tg.showConfirm('Clear bot context?', (confirmed) => {
-                        if (confirmed) {
-                            Toast.show('Context cleared', 'success');
-                        }
-                    });
-                } else if (confirm('Clear bot context?')) {
-                    Toast.show('Context cleared', 'success');
-                }
+                const confirm = () => Toast.show('Context cleared', 'success');
+                tg?.showConfirm ? tg.showConfirm('Clear bot context?', ok => ok && confirm()) : window.confirm('Clear bot context?') && confirm();
             },
 
             exportData() {
                 Haptic.medium();
                 Toast.show('Preparing export...');
-                setTimeout(() => {
-                    Toast.show('Export ready', 'success');
-                }, 1000);
+                setTimeout(() => Toast.show('Export ready', 'success'), 1000);
             },
 
             runDiagnostics() {
                 Haptic.medium();
                 Toast.show('Running diagnostics...');
-                setTimeout(() => {
-                    Toast.show('All systems operational', 'success');
-                }, 2000);
+                setTimeout(() => Toast.show('All systems operational', 'success'), 2000);
             },
 
             viewLogs() {
@@ -2159,32 +2061,6 @@
                 Toast.show('Opening logs...');
             }
         };
-
-        // ========== Ripple Effect ==========
-        function addRipple(event) {
-            const button = event.currentTarget;
-            const ripple = document.createElement('span');
-            const rect = button.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = event.clientX - rect.left - size / 2;
-            const y = event.clientY - rect.top - size / 2;
-
-            ripple.style.width = ripple.style.height = `${size}px`;
-            ripple.style.left = `${x}px`;
-            ripple.style.top = `${y}px`;
-            ripple.className = 'ripple';
-
-            button.appendChild(ripple);
-            ripple.addEventListener('animationend', () => ripple.remove());
-        }
-
-        // Add ripple to interactive elements
-        document.addEventListener('click', (e) => {
-            const target = e.target.closest('.quick-action, .header-btn');
-            if (target) {
-                addRipple(e);
-            }
-        });
 
         // ========== Initialize ==========
         document.addEventListener('DOMContentLoaded', () => {
