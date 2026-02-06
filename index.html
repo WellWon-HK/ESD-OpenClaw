@@ -1267,16 +1267,57 @@
 
         const State = {
             data: { model: 'gemini-flash', thinking: 'none', prompt: '', push: true, summary: false },
+            callbacks: [],
+
             load() {
+                // Load from localStorage first (fast)
                 try {
                     const s = localStorage.getItem('openclaw_v3');
                     if (s) this.data = JSON.parse(s);
                 } catch(e) {}
+
+                // Then sync from Telegram CloudStorage
+                this.syncFromCloud();
                 return this.data;
             },
-            save() { localStorage.setItem('openclaw_v3', JSON.stringify(this.data)); },
+
+            save() {
+                localStorage.setItem('openclaw_v3', JSON.stringify(this.data));
+            },
+
+            syncToCloud(key, value) {
+                if (tg?.CloudStorage) {
+                    tg.CloudStorage.setItem('openclaw_' + key, String(value), (err, ok) => {
+                        if (err) console.error('CloudStorage error:', err);
+                    });
+                }
+            },
+
+            syncFromCloud() {
+                if (tg?.CloudStorage) {
+                    const keys = ['openclaw_model', 'openclaw_thinking', 'openclaw_prompt'];
+                    tg.CloudStorage.getItems(keys, (err, values) => {
+                        if (err || !values) return;
+                        if (values.openclaw_model) this.data.model = values.openclaw_model;
+                        if (values.openclaw_thinking) this.data.thinking = values.openclaw_thinking;
+                        if (values.openclaw_prompt) this.data.prompt = values.openclaw_prompt;
+                        this.save();
+                        this.notify();
+                    });
+                }
+            },
+
+            onChange(cb) { this.callbacks.push(cb); },
+            notify() { this.callbacks.forEach(cb => cb(this.data)); },
+
             get(k) { return this.data[k]; },
-            set(k, v) { this.data[k] = v; this.save(); }
+
+            set(k, v, sync = true) {
+                this.data[k] = v;
+                this.save();
+                if (sync) this.syncToCloud(k, v);
+                this.notify();
+            }
         };
 
         const Toast = {
@@ -1468,11 +1509,12 @@
             },
 
             selectModel(id) {
-                Haptic.light();
+                const m = MODELS.find(x => x.id === id);
+                Haptic.success();
                 State.set('model', id);
                 this.renderModels();
                 Dashboard.updateModel();
-                Toast.show('Model updated');
+                Toast.show(m ? m.icon + ' ' + m.name + ' synced' : 'Model synced', 'success');
             },
 
             selectThinking(id) {
@@ -1543,11 +1585,12 @@
             },
 
             select(id) {
-                Haptic.light();
+                const m = MODELS.find(x => x.id === id);
+                Haptic.success();
                 State.set('model', id);
                 Dashboard.updateModel();
                 this.close();
-                Toast.show('Model updated');
+                Toast.show(m ? m.icon + ' ' + m.name + ' synced' : 'Model synced', 'success');
             }
         };
 
@@ -1560,6 +1603,10 @@
 
         tg?.BackButton?.onClick(() => ModelSheet.close());
 
+        State.onChange(() => {
+            Dashboard.updateModel();
+            if (Nav.current === 'settings') Settings.renderModels();
+        });
         State.load();
         Dashboard.init();
     </script>
