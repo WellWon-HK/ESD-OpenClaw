@@ -335,6 +335,388 @@
             background: rgba(255,255,255,0.2);
             border-radius: 3px;
         }
+
+        /* ========== Settings Panel Styles ========== */
+
+        /* Bottom Sheet */
+        .bottom-sheet {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .bottom-sheet.open {
+            pointer-events: auto;
+            opacity: 1;
+        }
+
+        .sheet-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .bottom-sheet.open .sheet-backdrop {
+            opacity: 1;
+        }
+
+        .sheet-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--tg-theme-secondary-bg-color, var(--bg-secondary));
+            border-radius: 20px 20px 0 0;
+            max-height: 85vh;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bottom-sheet.open .sheet-container {
+            transform: translateY(0);
+        }
+
+        .sheet-handle {
+            width: 36px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            margin: 8px auto;
+            flex-shrink: 0;
+        }
+
+        .sheet-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+
+        .sheet-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .sheet-close {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sheet-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+        }
+
+        .sheet-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            overscroll-behavior: contain;
+        }
+
+        /* Settings Sections */
+        .settings-section {
+            margin-bottom: 24px;
+        }
+
+        .settings-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+
+        .section-card {
+            background: var(--tg-theme-bg-color, var(--bg-primary));
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        /* Model Selector */
+        .model-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .model-option:last-child {
+            border-bottom: none;
+        }
+
+        .model-option:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .model-option.selected {
+            background: rgba(32, 178, 170, 0.1);
+        }
+
+        .model-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-secondary);
+            border-radius: 50%;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .model-option.selected .model-radio {
+            border-color: var(--accent);
+        }
+
+        .model-radio::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            transform: scale(0);
+            transition: transform 0.2s;
+        }
+
+        .model-option.selected .model-radio::after {
+            transform: scale(1);
+        }
+
+        .model-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .model-name {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .model-badge {
+            font-size: 11px;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+
+        /* Segmented Control */
+        .segmented-control {
+            display: flex;
+            background: var(--tg-theme-bg-color, var(--bg-primary));
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .segment {
+            flex: 1;
+            padding: 10px 8px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .segment:hover {
+            color: var(--text-primary);
+        }
+
+        .segment.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Command Cards */
+        .command-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .command-item:last-child {
+            border-bottom: none;
+        }
+
+        .command-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .command-item:active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .command-emoji {
+            font-size: 20px;
+            margin-right: 12px;
+            width: 28px;
+            text-align: center;
+        }
+
+        .command-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .command-name {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .command-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .command-arrow {
+            color: var(--text-secondary);
+            margin-left: 8px;
+        }
+
+        /* Session Info */
+        .session-status {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4caf50;
+            margin-right: 12px;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+        }
+
+        .status-indicator.disconnected {
+            background: #f44336;
+            box-shadow: 0 0 8px rgba(244, 67, 54, 0.5);
+        }
+
+        .session-action {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .session-action:last-child {
+            border-bottom: none;
+        }
+
+        .session-action:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .session-action.danger {
+            color: #ff6b6b;
+        }
+
+        .session-action-icon {
+            font-size: 18px;
+            margin-right: 12px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--tg-theme-bg-color, var(--bg-primary));
+            color: var(--text-primary);
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+            z-index: 2000;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: #4caf50;
+            color: white;
+        }
+
+        .toast.error {
+            background: #f44336;
+            color: white;
+        }
+
+        /* Settings Button in Header */
+        .settings-btn {
+            background: var(--bg-secondary);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .settings-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .settings-btn svg {
+            width: 18px;
+            height: 18px;
+        }
     </style>
 </head>
 <body>
@@ -344,9 +726,15 @@
             <div class="avatar" id="user-avatar">U</div>
         </div>
         <div class="header-right">
-            <button class="header-btn" onclick="clearChat()">
+            <button class="header-btn" onclick="clearChat()" title="Новый чат">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M12 5v14M5 12h14"/>
+                </svg>
+            </button>
+            <button class="settings-btn" onclick="BottomSheet.open()" title="Настройки">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                 </svg>
             </button>
         </div>
@@ -494,6 +882,7 @@
             showTyping(true);
 
             try {
+                const settings = SettingsManager.get();
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
@@ -502,7 +891,9 @@
                     },
                     body: JSON.stringify({
                         message: text,
-                        sessionKey: SESSION_KEY
+                        sessionKey: SESSION_KEY,
+                        model: settings.model,
+                        thinkingMode: settings.thinkingMode
                     })
                 });
 
@@ -516,8 +907,17 @@
 
             } catch (error) {
                 showTyping(false);
-                addMessageToUI('bot', 'Ошибка соединения. Попробуйте позже.');
                 console.error('API Error:', error);
+                console.error('Error name:', error.name);
+                console.error('Error message:', error.message);
+
+                let errorMsg = 'Ошибка соединения. ';
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    errorMsg += 'Возможно проблема с CORS или сервер недоступен.';
+                } else {
+                    errorMsg += error.message || 'Попробуйте позже.';
+                }
+                addMessageToUI('bot', errorMsg);
             }
         }
 
@@ -624,6 +1024,390 @@
             tg.HapticFeedback?.impactOccurred('light');
             alert('Вложения скоро будут доступны');
         }
+
+        // ========== Settings Configuration ==========
+
+        const AVAILABLE_MODELS = [
+            { id: 'openrouter/deepseek/deepseek-chat', name: 'DeepSeek Chat', badge: 'Default' },
+            { id: 'openrouter/anthropic/claude-3.5-sonnet', name: 'Claude 3.5 Sonnet', badge: 'Advanced' },
+            { id: 'openrouter/openai/gpt-4o', name: 'GPT-4o', badge: 'Versatile' },
+            { id: 'openrouter/meta-llama/llama-3.1-70b-instruct', name: 'Llama 3.1 70B', badge: 'Open' }
+        ];
+
+        const BOT_COMMANDS = [
+            { cmd: '/status', name: 'Статус', desc: 'Информация о сессии', emoji: '📊' },
+            { cmd: '/reset', name: 'Сброс', desc: 'Очистить контекст', emoji: '🔄' },
+            { cmd: '/model', name: 'Модель', desc: 'Текущая модель', emoji: '🤖' },
+            { cmd: '/help', name: 'Помощь', desc: 'Список команд', emoji: '❓' },
+            { cmd: '/compact', name: 'Компакт', desc: 'Сжать историю', emoji: '📦' }
+        ];
+
+        const THINKING_MODES = [
+            { id: 'none', name: 'Нет' },
+            { id: 'low', name: 'Мин' },
+            { id: 'medium', name: 'Сред' },
+            { id: 'high', name: 'Макс' }
+        ];
+
+        // ========== Settings Manager ==========
+
+        const SettingsManager = {
+            STORAGE_KEY: 'openclaw_settings',
+
+            defaults: {
+                model: AVAILABLE_MODELS[0].id,
+                thinkingMode: 'none'
+            },
+
+            load() {
+                try {
+                    const stored = localStorage.getItem(this.STORAGE_KEY);
+                    return stored ? { ...this.defaults, ...JSON.parse(stored) } : { ...this.defaults };
+                } catch {
+                    return { ...this.defaults };
+                }
+            },
+
+            save(settings) {
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(settings));
+            },
+
+            get() {
+                return this.load();
+            },
+
+            setModel(modelId) {
+                const settings = this.load();
+                settings.model = modelId;
+                this.save(settings);
+                tg.HapticFeedback?.selectionChanged();
+                Toast.show('Модель изменена');
+            },
+
+            setThinkingMode(mode) {
+                const settings = this.load();
+                settings.thinkingMode = mode;
+                this.save(settings);
+                tg.HapticFeedback?.selectionChanged();
+            },
+
+            getModel() {
+                return this.load().model;
+            },
+
+            getThinkingMode() {
+                return this.load().thinkingMode;
+            }
+        };
+
+        // ========== Toast Notifications ==========
+
+        const Toast = {
+            show(message, type = 'default', duration = 2000) {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = 'toast ' + type;
+
+                requestAnimationFrame(() => {
+                    toast.classList.add('show');
+                });
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, duration);
+            }
+        };
+
+        // ========== Bottom Sheet Controller ==========
+
+        const BottomSheet = {
+            sheet: null,
+            backdrop: null,
+            container: null,
+            startY: 0,
+            currentY: 0,
+            isDragging: false,
+
+            init() {
+                this.sheet = document.getElementById('settings-sheet');
+                this.backdrop = this.sheet.querySelector('.sheet-backdrop');
+                this.container = this.sheet.querySelector('.sheet-container');
+
+                this.backdrop.addEventListener('click', () => this.close());
+
+                const handle = this.sheet.querySelector('.sheet-handle');
+                const header = this.sheet.querySelector('.sheet-header');
+
+                [handle, header].forEach(el => {
+                    el.addEventListener('touchstart', (e) => this.onTouchStart(e), { passive: true });
+                    el.addEventListener('touchmove', (e) => this.onTouchMove(e), { passive: false });
+                    el.addEventListener('touchend', () => this.onTouchEnd());
+                });
+
+                // Telegram Back Button
+                tg.BackButton?.onClick(() => {
+                    if (this.sheet.classList.contains('open')) {
+                        this.close();
+                    }
+                });
+            },
+
+            open() {
+                this.render();
+                this.sheet.classList.add('open');
+                tg.HapticFeedback?.impactOccurred('light');
+                tg.BackButton?.show();
+                document.body.style.overflow = 'hidden';
+            },
+
+            close() {
+                this.sheet.classList.remove('open');
+                this.container.style.transform = '';
+                tg.HapticFeedback?.impactOccurred('light');
+                tg.BackButton?.hide();
+                document.body.style.overflow = '';
+            },
+
+            onTouchStart(e) {
+                this.startY = e.touches[0].clientY;
+                this.isDragging = true;
+                this.container.style.transition = 'none';
+            },
+
+            onTouchMove(e) {
+                if (!this.isDragging) return;
+
+                this.currentY = e.touches[0].clientY;
+                const deltaY = this.currentY - this.startY;
+
+                if (deltaY > 0) {
+                    e.preventDefault();
+                    this.container.style.transform = `translateY(${deltaY}px)`;
+                }
+            },
+
+            onTouchEnd() {
+                if (!this.isDragging) return;
+                this.isDragging = false;
+
+                const deltaY = this.currentY - this.startY;
+                this.container.style.transition = '';
+
+                if (deltaY > 100) {
+                    this.close();
+                } else {
+                    this.container.style.transform = '';
+                }
+            },
+
+            render() {
+                const content = this.sheet.querySelector('.sheet-content');
+                const settings = SettingsManager.get();
+
+                content.innerHTML = `
+                    ${this.renderModelSection(settings)}
+                    ${this.renderThinkingSection(settings)}
+                    ${this.renderCommandsSection()}
+                    ${this.renderSessionSection()}
+                `;
+
+                this.attachEventListeners();
+            },
+
+            renderModelSection(settings) {
+                const modelsHTML = AVAILABLE_MODELS.map(model => `
+                    <div class="model-option ${settings.model === model.id ? 'selected' : ''}"
+                         data-model="${model.id}">
+                        <div class="model-radio"></div>
+                        <div class="model-info">
+                            <span class="model-name">${model.name}</span>
+                            <span class="model-badge">${model.badge}</span>
+                        </div>
+                    </div>
+                `).join('');
+
+                return `
+                    <div class="settings-section">
+                        <div class="section-title">Модель</div>
+                        <div class="section-card">
+                            ${modelsHTML}
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderThinkingSection(settings) {
+                const segmentsHTML = THINKING_MODES.map(mode => `
+                    <button class="segment ${settings.thinkingMode === mode.id ? 'active' : ''}"
+                            data-thinking="${mode.id}">
+                        ${mode.name}
+                    </button>
+                `).join('');
+
+                return `
+                    <div class="settings-section">
+                        <div class="section-title">Режим мышления</div>
+                        <div class="segmented-control">
+                            ${segmentsHTML}
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderCommandsSection() {
+                const commandsHTML = BOT_COMMANDS.map(cmd => `
+                    <div class="command-item" data-command="${cmd.cmd}">
+                        <span class="command-emoji">${cmd.emoji}</span>
+                        <div class="command-info">
+                            <div class="command-name">${cmd.name}</div>
+                            <div class="command-desc">${cmd.desc}</div>
+                        </div>
+                        <span class="command-arrow">→</span>
+                    </div>
+                `).join('');
+
+                return `
+                    <div class="settings-section">
+                        <div class="section-title">Быстрые команды</div>
+                        <div class="section-card">
+                            ${commandsHTML}
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderSessionSection() {
+                return `
+                    <div class="settings-section">
+                        <div class="section-title">Сессия</div>
+                        <div class="section-card">
+                            <div class="session-status">
+                                <span class="status-indicator"></span>
+                                <span>Подключение: Активно</span>
+                            </div>
+                            <div class="session-action" data-action="reset-session">
+                                <span class="session-action-icon">🔄</span>
+                                <span>Сбросить сессию</span>
+                            </div>
+                            <div class="session-action danger" data-action="clear-history">
+                                <span class="session-action-icon">🗑</span>
+                                <span>Очистить историю</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+
+            attachEventListeners() {
+                // Model selection
+                this.sheet.querySelectorAll('.model-option').forEach(el => {
+                    el.addEventListener('click', () => {
+                        const modelId = el.dataset.model;
+                        SettingsManager.setModel(modelId);
+                        this.render();
+                    });
+                });
+
+                // Thinking mode
+                this.sheet.querySelectorAll('.segment').forEach(el => {
+                    el.addEventListener('click', () => {
+                        const mode = el.dataset.thinking;
+                        SettingsManager.setThinkingMode(mode);
+                        this.render();
+                    });
+                });
+
+                // Commands
+                this.sheet.querySelectorAll('.command-item').forEach(el => {
+                    el.addEventListener('click', () => {
+                        const cmd = el.dataset.command;
+                        this.close();
+                        sendCommand(cmd);
+                    });
+                });
+
+                // Session actions
+                this.sheet.querySelectorAll('.session-action').forEach(el => {
+                    el.addEventListener('click', () => {
+                        const action = el.dataset.action;
+                        if (action === 'reset-session') {
+                            this.confirmResetSession();
+                        } else if (action === 'clear-history') {
+                            this.confirmClearHistory();
+                        }
+                    });
+                });
+
+                // Close button
+                const closeBtn = this.sheet.querySelector('.sheet-close');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', () => this.close());
+                }
+            },
+
+            confirmResetSession() {
+                if (tg.showConfirm) {
+                    tg.showConfirm('Сбросить сессию? Контекст бота будет очищен.', (confirmed) => {
+                        if (confirmed) {
+                            sendCommand('/reset');
+                            this.close();
+                        }
+                    });
+                } else if (confirm('Сбросить сессию? Контекст бота будет очищен.')) {
+                    sendCommand('/reset');
+                    this.close();
+                }
+            },
+
+            confirmClearHistory() {
+                if (tg.showConfirm) {
+                    tg.showConfirm('Очистить историю чата?', (confirmed) => {
+                        if (confirmed) {
+                            clearChat();
+                            this.close();
+                            Toast.show('История очищена');
+                        }
+                    });
+                } else if (confirm('Очистить историю чата?')) {
+                    clearChat();
+                    this.close();
+                    Toast.show('История очищена');
+                }
+            }
+        };
+
+        // Send command helper
+        function sendCommand(cmd) {
+            const input = document.getElementById('message-input');
+            input.value = cmd;
+            sendMessage();
+        }
+
+        // Initialize Bottom Sheet
+        document.addEventListener('DOMContentLoaded', () => {
+            BottomSheet.init();
+        });
     </script>
+
+    <!-- Settings Bottom Sheet -->
+    <div class="bottom-sheet" id="settings-sheet">
+        <div class="sheet-backdrop"></div>
+        <div class="sheet-container">
+            <div class="sheet-handle"></div>
+            <div class="sheet-header">
+                <span class="sheet-title">Настройки</span>
+                <button class="sheet-close">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="sheet-content"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
 </body>
 </html>
