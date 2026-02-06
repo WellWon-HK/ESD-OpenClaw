@@ -1574,7 +1574,7 @@
                     Toast.show(m ? m.icon + ' ' + m.name + ' applied!' : 'Model applied!', 'success');
                 } else {
                     Haptic.error();
-                    Toast.show('Failed to apply model', 'error');
+                    Toast.show('Error: ' + (result.error?.message || result.error || 'Unknown'), 'error');
                 }
             },
 
@@ -1662,7 +1662,7 @@
                     Toast.show(m ? m.icon + ' ' + m.name + ' applied!' : 'Model applied!', 'success');
                 } else {
                     Haptic.error();
-                    Toast.show('Failed to apply model', 'error');
+                    Toast.show('Error: ' + (result.error?.message || result.error || 'Unknown'), 'error');
                 }
             }
         };
