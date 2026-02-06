@@ -1363,12 +1363,11 @@
         };
 
         const BotCommand = {
-            // Send data to bot via Telegram and close Mini App
-            send(data) {
+            // Send command to bot via Telegram and close Mini App
+            send(command) {
                 if (tg?.sendData) {
-                    const json = JSON.stringify(data);
-                    console.log('Sending to bot:', json);
-                    tg.sendData(json);
+                    console.log('Sending command to bot:', command);
+                    tg.sendData(command);
                     // Mini App will close automatically
                 } else {
                     Toast.show('Telegram API not available', 'error');
@@ -1376,20 +1375,17 @@
             },
 
             setModel(modelId) {
-                this.send({ action: 'set_model', model: modelId });
+                // Send as plain text command like user would type
+                this.send('/model ' + modelId);
             },
 
             setThinking(mode) {
-                this.send({ action: 'set_thinking', mode: mode });
+                this.send('/thinking ' + mode);
             },
 
             applySettings() {
-                this.send({
-                    action: 'apply_settings',
-                    model: State.get('model'),
-                    thinking: State.get('thinking'),
-                    prompt: State.get('prompt')
-                });
+                // Send model command
+                this.send('/model ' + State.get('model'));
             }
         };
 
