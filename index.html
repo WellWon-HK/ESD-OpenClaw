@@ -798,6 +798,30 @@
             color: white;
         }
 
+        .apply-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px;
+            margin-top: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(32, 178, 170, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .apply-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 8px rgba(32, 178, 170, 0.2);
+        }
+
         /* Toggle */
         .toggle-row {
             display: flex;
@@ -1236,8 +1260,6 @@
 
     <script>
         const tg = window.Telegram?.WebApp;
-        const API_URL = 'https://openclaw-production-ef1e.up.railway.app/chat';
-        const SESSION_KEY = 'agent:main:main';
 
         tg?.expand();
         tg?.ready();
@@ -1340,48 +1362,34 @@
             error: () => tg?.HapticFeedback?.notificationOccurred('error')
         };
 
-        const API = {
-            async sendCommand(command, model = null, thinking = null) {
-                try {
-                    const body = {
-                        message: command,
-                        sessionKey: SESSION_KEY
-                    };
-                    if (model) body.model = model;
-                    if (thinking) body.thinkingMode = thinking;
-
-                    console.log('API Request:', body);
-
-                    const response = await fetch(API_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Gateway-Token': 'Aarrcc11Aarrcc11'
-                        },
-                        body: JSON.stringify(body)
-                    });
-
-                    if (!response.ok) {
-                        console.error('API Response not OK:', response.status);
-                        return { success: false, error: 'HTTP ' + response.status };
-                    }
-
-                    const data = await response.json();
-                    console.log('API Response:', data);
-                    return { success: true, data };
-                } catch (error) {
-                    console.error('API Error:', error);
-                    return { success: false, error };
+        const BotCommand = {
+            // Send data to bot via Telegram and close Mini App
+            send(data) {
+                if (tg?.sendData) {
+                    const json = JSON.stringify(data);
+                    console.log('Sending to bot:', json);
+                    tg.sendData(json);
+                    // Mini App will close automatically
+                } else {
+                    Toast.show('Telegram API not available', 'error');
                 }
             },
 
-            async setModel(modelId) {
-                // Send command with model parameter in body
-                return this.sendCommand('/model ' + modelId, modelId, State.get('thinking'));
+            setModel(modelId) {
+                this.send({ action: 'set_model', model: modelId });
             },
 
-            async setThinking(mode) {
-                return this.sendCommand('/thinking ' + mode);
+            setThinking(mode) {
+                this.send({ action: 'set_thinking', mode: mode });
+            },
+
+            applySettings() {
+                this.send({
+                    action: 'apply_settings',
+                    model: State.get('model'),
+                    thinking: State.get('thinking'),
+                    prompt: State.get('prompt')
+                });
             }
         };
 
@@ -1557,25 +1565,13 @@
                 document.getElementById('char-count').textContent = el.value.length + ' / 4000';
             },
 
-            async selectModel(id) {
+            selectModel(id) {
                 const m = MODELS.find(x => x.id === id);
                 Haptic.light();
-
-                // Update UI immediately
                 State.set('model', id);
                 this.renderModels();
                 Dashboard.updateModel();
-                Toast.show('Applying ' + (m ? m.icon + ' ' + m.name : 'model') + '...');
-
-                // Send to API
-                const result = await API.setModel(id);
-                if (result.success) {
-                    Haptic.success();
-                    Toast.show(m ? m.icon + ' ' + m.name + ' applied!' : 'Model applied!', 'success');
-                } else {
-                    Haptic.error();
-                    Toast.show('Error: ' + (result.error?.message || result.error || 'Unknown'), 'error');
-                }
+                Toast.show(m ? m.icon + ' ' + m.name + ' selected' : 'Model selected');
             },
 
             selectThinking(id) {
@@ -1630,11 +1626,16 @@
             open() {
                 Haptic.light();
                 const curr = State.get('model');
-                document.getElementById('model-sheet-body').innerHTML = '<div class="settings-card">' + MODELS.map(m =>
-                    '<div class="settings-item' + (m.id === curr ? ' selected' : '') + '" onclick="ModelSheet.select(\'' + m.id + '\')">' +
-                    '<div class="settings-radio"></div>' +
-                    '<div class="settings-content"><div class="settings-name">' + m.icon + ' ' + m.name + '</div><div class="settings-desc">' + m.badge + '</div></div></div>'
-                ).join('') + '</div>';
+                document.getElementById('model-sheet-body').innerHTML =
+                    '<div class="settings-card">' + MODELS.map(m =>
+                        '<div class="settings-item' + (m.id === curr ? ' selected' : '') + '" onclick="ModelSheet.select(\'' + m.id + '\')">' +
+                        '<div class="settings-radio"></div>' +
+                        '<div class="settings-content"><div class="settings-name">' + m.icon + ' ' + m.name + '</div><div class="settings-desc">' + m.badge + '</div></div></div>'
+                    ).join('') + '</div>' +
+                    '<button class="apply-btn" onclick="ModelSheet.apply()">' +
+                        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>' +
+                        'Apply & Send to Bot' +
+                    '</button>';
                 document.getElementById('model-sheet').classList.add('open');
                 tg?.BackButton?.show();
             },
@@ -1645,25 +1646,19 @@
                 tg?.BackButton?.hide();
             },
 
-            async select(id) {
+            select(id) {
                 const m = MODELS.find(x => x.id === id);
                 Haptic.light();
-
-                // Update UI immediately
                 State.set('model', id);
                 Dashboard.updateModel();
                 this.close();
-                Toast.show('Applying ' + (m ? m.icon + ' ' + m.name : 'model') + '...');
+                Toast.show(m ? m.icon + ' ' + m.name + ' selected' : 'Model selected');
+            },
 
-                // Send to API
-                const result = await API.setModel(id);
-                if (result.success) {
-                    Haptic.success();
-                    Toast.show(m ? m.icon + ' ' + m.name + ' applied!' : 'Model applied!', 'success');
-                } else {
-                    Haptic.error();
-                    Toast.show('Error: ' + (result.error?.message || result.error || 'Unknown'), 'error');
-                }
+            apply() {
+                Haptic.success();
+                BotCommand.setModel(State.get('model'));
+                // Mini App will close after sendData
             }
         };
 
